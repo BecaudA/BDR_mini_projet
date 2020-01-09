@@ -3,7 +3,7 @@ require_once('views/View.php');
 
 // controlleur de la page Accueil, initialise les manageurs pour la vue Accueil
 class ControllerAccueil {
-	private $_exempleManager;
+	private $_compteManager;
 	private $_view;
 	
 	public function __construct($url) {
@@ -15,12 +15,12 @@ class ControllerAccueil {
 	}
 	
 	private function exemples() {
-		// création d'une instance de ExempleManager qui va récupérer les données de la base de données
-		$this->_exempleManager = new ExempleManager;
-		$exemples = $this->_exempleManager->getExemples();
+		// création d'une instance de CompteManager qui va récupérer les données de la base de données
+		$this->_compteManager = new CompteManager;
+		$comptes = $this->_compteManager->getComptes();
 		
 		// 
 		$this->_view = new View('Accueil');
-		$this->_view->generate(array('exemples' => $exemples));
+		$this->_view->generate(array('comptes' => $comptes));
 	}
 }

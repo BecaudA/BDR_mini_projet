@@ -9,7 +9,7 @@ abstract class Model {
 	private static $_user;
 	private static $_passwd;
 
-    // constructeur préparant les paramètre de connexion à la BD
+    // constructeur préparant les paramètres de connexion à la BD
     public function __construct() {
         $config = parse_ini_file('dbConfig.ini');
 
