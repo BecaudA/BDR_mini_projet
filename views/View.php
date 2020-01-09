@@ -20,19 +20,20 @@ class View {
 	}
 	
 	// génère un fichier vue et renvoie le résultat produit
-	private function generateFile($file, $data) {
-		if (file_exists($file)) {
-			extract($data);
-		}
-		
-		// mise en tampon
-		ob_start();
-		
-		// inclut le fichier vue
-		require $file;
-		
-		return ob_get_clean();
-	} else {
-		throw new Exception('Fichier '.$file.' introuvable');
-	}
+	private function generateFile($file, $data)
+    {
+        if (file_exists($file)) {
+            extract($data);
+
+            // mise en tampon
+            ob_start();
+
+            // inclut le fichier vue
+            require $file;
+
+            return ob_get_clean();
+        } else {
+            throw new Exception('Fichier ' . $file . ' introuvable');
+        }
+    }
 }
