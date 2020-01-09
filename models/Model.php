@@ -19,10 +19,6 @@ abstract class Model {
         self::$_passwd = $config['db_password'];
     }
 
-    private static function getDBConf(){
-
-    }
-
 	// instancie la connexion à la base de données
 	private static function setDB() {
 		self::$_db = new PDO('mysql:host=' . self::$_host . ';dbname=' . self::$_dbName . ';charset=utf8', self::$_user, self::$_passwd);
@@ -38,9 +34,10 @@ abstract class Model {
 	}
 	
 	// fait une requête (SELECT) à la base de donnée
+    // résultat socké dans un array d'objet $class
 	protected function reqSelectDB($select, $class) {
 		$var = [];
-		//self::setDB();
+		self::$_db == $this->getDB();
 		$req = self::$_db->prepare($select);
 		$req->execute();
 		
