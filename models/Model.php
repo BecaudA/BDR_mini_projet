@@ -11,7 +11,7 @@ abstract class Model {
 
     // constructeur préparant les paramètre de connexion à la BD
     public function __construct() {
-        $config = parse_ini_file('../dbConfig.ini');
+        $config = parse_ini_file('dbConfig.ini');
 
         self::$_host = $config['db_host'];
         self::$_dbName = $config['db_name'];
