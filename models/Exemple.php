@@ -13,8 +13,8 @@ class Exemple {
 	
 	// hydratation (initialise les champs de cette objets)
 	public function hydrate(array $data) {
-		foreach ($data as $key => value) {
-			$method = 'set'ucfirst($key);
+		foreach ($data as $key => $value) {
+			$method = 'set'.ucfirst($key);
 			
 			if (method-exists($this, $method)) {
 				$this->method($value);

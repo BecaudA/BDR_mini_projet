@@ -17,10 +17,10 @@ class ControllerAccueil {
 	private function exemples() {
 		// création d'une instance de ExempleManager qui va récupérer les données de la base de données
 		$this->_exempleManager = new ExempleManager;
-		$exemples = $this->exempleManager->getExemples();
+		$exemples = $this->_exempleManager->getExemples();
 		
 		// 
 		$this->_view = new View('Accueil');
-		this->_view->generate(array('exemples' => $exemples));
+		$this->_view->generate(array('exemples' => $exemples));
 	}
 }

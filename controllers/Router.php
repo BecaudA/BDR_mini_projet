@@ -11,8 +11,8 @@ class Router {
 	public function routeReq() {
 		try {
 			// chargement automatique des classes
-			spl_autoload_register(function($class)) {
-				require_once('models/'.$class',php';
+			spl_autoload_register(function($class) {
+				require_once('models/'.$class.'.php');
 			});
 			
 			$url = '';
@@ -35,9 +35,10 @@ class Router {
 					throw new Exception('Page introuvable');
 				}
 			} else {
-				// execute le controlleur par défaut
-				require_once('controllers/ControllerAccueil.php');
-				$this->_ctrl = new ControllerAccueil($url);
+                // execute le controlleur par défaut
+                require_once('controllers/ControllerAccueil.php');
+                $this->_ctrl = new ControllerAccueil($url);
+            }
 		}
 		catch (Exception $e) {
 			$errorMsg = $e->getMessage();

@@ -4,7 +4,7 @@ abstract class Model {
 	
 	private static $_db;
 	
-	// instancie la connexion à la base de donnée
+	// instancie la connexion à la base de données
 	private static function setDB() {
 		self::$_db = new PDO('mysql:host=localhost;dbname=stome;charset=utf8', 'root', 'root');
 		self::$_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
@@ -21,6 +21,7 @@ abstract class Model {
 	// fait une requête (SELECT) à la base de donnée
 	protected function reqSelectDB($select, $class) {
 		$var = [];
+		//self::setDB();
 		$req = self::$_db->prepare($select);
 		$req->execute();
 		
