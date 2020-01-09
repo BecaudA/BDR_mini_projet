@@ -16,8 +16,8 @@ class Exemple {
 		foreach ($data as $key => $value) {
 			$method = 'set'.ucfirst($key);
 			
-			if (method-exists($this, $method)) {
-				$this->method($value);
+			if (method_exists($this, $method)) {
+				$this->$method($value);
 			}
 		}
 	}

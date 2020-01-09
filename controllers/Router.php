@@ -30,7 +30,7 @@ class Router {
 				// vérifie si le fichier du controlleur existe
 				if (file_exists($controllerFile)) {
 					require_once($controllerFile);
-					$this->_ctrl = new controllerClass($url);
+					$this->_ctrl = new $controllerClass($url);
 				} else {
 					throw new Exception('Page introuvable');
 				}

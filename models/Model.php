@@ -47,7 +47,7 @@ abstract class Model {
 		while ($data = $req->fetch(PDO::FETCH_ASSOC)) {
 			$var[] = new $class($data);
 		}
-		return $var;
-		$req->closeCursor();
+        $req->closeCursor();
+        return $var;
 	}
  }
