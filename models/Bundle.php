@@ -1,7 +1,6 @@
 <?php
 
 
-class Bundle
-{
+class Bundle extends Produit {
 
 }

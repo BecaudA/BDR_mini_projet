@@ -64,5 +64,4 @@ class Compte {
     public function dateNaissance() {
         return $this->_dateNaissance;
     }
-
 }
