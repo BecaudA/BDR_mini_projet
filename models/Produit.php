@@ -3,7 +3,6 @@
 
 class Produit {
     private $_titre;
-    private $_img;
 
     // constructeur
     public function __construct(array $data) {
