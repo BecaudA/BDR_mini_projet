@@ -1,6 +1,5 @@
 <?php
-// classe d'exemple, le but ici est de représenter un objet 
-// comme un compte avec les champs correspondants à ceux de la base de données.
+
 class Compte {
 	private $_id;
 	private $_nom;

@@ -1,6 +1,5 @@
 <?php
 
-
 class Produit {
     private $_titre;
     private $_prixInitial;

@@ -1,7 +1,7 @@
 <?php
 
 
-class Contenu
+class Contenu extends Produit
 {
-
+        
 }

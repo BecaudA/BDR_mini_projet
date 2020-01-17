@@ -2,6 +2,7 @@
 
 class ProduitManager extends Model {
     public function getProduits() {
-        return $this->reqSelectDB('SELECT * FROM stome.Produit', 'Produit');
+        $request = parse_ini_file('requests.ini')['getAllProduits'];
+        return $this->reqSelectDB($request, 'Produit');
     }
 }
