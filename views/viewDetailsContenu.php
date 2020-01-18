@@ -1,7 +1,9 @@
 <div class="container">
 
     <?php
-            $titre = $contenu[0]->titre();
+    foreach ($cont as $contenu) {
+        $titre = $cont->titre();
+    }
     ?>
     <h1 class="font-weight-light text-center text-lg-left mt-4 mb-0"><?php echo $titre; ?></h1>
     <hr class="mt-2 mb-5">
