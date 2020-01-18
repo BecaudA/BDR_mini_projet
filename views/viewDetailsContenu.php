@@ -1,11 +1,12 @@
 <div class="container">
 
     <?php
-    foreach ($cont as $contenu) {
+    foreach ($contenus as $cont) {
         $titre = $cont->titre();
+        $ageLegal  = $cont->ageLegal();
     }
     ?>
-    <h1 class="font-weight-light text-center text-lg-left mt-4 mb-0"><?php echo $titre; ?></h1>
+    <h1 class="font-weight-light text-center text-lg-left mt-4 mb-0"><?php echo $titre; ?> (+<?php echo $ageLegal; ?>)</h1>
     <hr class="mt-2 mb-5">
     <div class="row text-center text-lg-left">
 
