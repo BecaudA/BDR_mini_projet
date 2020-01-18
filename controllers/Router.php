@@ -36,8 +36,8 @@ class Router {
 				}
 			} else {
                 // execute le controlleur par défaut
-                require_once('controllers/ControllerAccueil.php');
-                $this->_ctrl = new ControllerAccueil($url);
+                require_once('controllers/ControllerBoutique.php');
+                $this->_ctrl = new ControllerBoutique($url);
             }
 		}
 		catch (Exception $e) {
