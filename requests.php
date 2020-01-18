@@ -1,6 +1,7 @@
 <?php
-function getAllProduits($id){
-    return "S"."ELECT * FROM stome.vueProduit";
+
+function getAllProduits(){
+    return "SELECT * FROM stome.vueProduit";
 }
 
 function getContenu($id){
