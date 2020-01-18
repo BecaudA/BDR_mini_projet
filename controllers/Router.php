@@ -21,18 +21,43 @@ class Router {
 			if (isset($_GET['url'])) {
 				// filtre l'url
 				$url = explode('/', filter_var($_GET['url'], FILTER_SANITIZE_URL));
-				
+
+				echo "url[0]=".$url[0].", "; // DEBUG
 				// trouve le controlleur correspondant à l'url
+                // crée un string "controllers/Controller<url[0]>.php
+                // url[0] peut valoir:
+                // - Boutique
+                // - titre d'un jeu
+                // - valeur inconnue (exemple: acfgjvkuil)
 				$controller = ucfirst(strtolower($url[0]));
 				$controllerClass = "Controller".$controller;
 				$controllerFile = "controllers/".$controllerClass.".php";
-				
+
+				echo "controllerFile=".$controllerFile.", "; // DEBUG
+
 				// vérifie si le fichier du controlleur existe
 				if (file_exists($controllerFile)) {
+				    echo "exist"; //DEBUG
+				    // construction du controlleur
 					require_once($controllerFile);
 					$this->_ctrl = new $controllerClass($url);
 				} else {
-					throw new Exception('Page introuvable');
+				    // trouve le controlleur correspondant à l'url entrée
+                    // valeur prise en charge pour l'url:
+                    // - titre d'un contenu (jeu, dlc) ou d'un bundle
+				    $controller = $this->findController(str_replace('_', ' ', $url[0]));
+                    $controllerClass = "Controller".$controller;
+                    $controllerFile = "controllers/".$controllerClass.".php";
+
+                    echo "new controllerFile=".$controllerFile.", "; //DEBUG
+
+                    // vérifie à nouveau si le fichier du controlleur existe
+                    if (file_exists($controllerFile)) {
+                        echo "exist"; // DEBUG
+                        // construction du controlleur
+                        require_once($controllerFile);
+                        $this->_ctrl = new $controllerClass($url);
+                    } else throw new Exception('Page introuvable');
 				}
 			} else {
                 // execute le controlleur par défaut
@@ -45,5 +70,23 @@ class Router {
 			$this->_view = new View('Error');
 			$this->_view->generate(array('errorMsg' => $errorMsg));
 		}
+	}
+
+	private function findController($controller_id) {
+	    $produitManager = new ProduitManager();
+        $bundleManager = new BundleManager();
+
+        echo "given id=".$controller_id.", ";
+
+        // vérifie si un produit du même titre que l'id existe
+        if ($produitManager->doesProduitExist($controller_id)) {
+            if ($bundleManager->doesBundleExist($controller_id)) {
+                return "Bundle";
+            } else {
+                return "Contenu";
+            }
+        }
+
+        return "";
 	}
 }

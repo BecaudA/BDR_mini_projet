@@ -2,7 +2,7 @@
 require_once('views/View.php');
 
 // controlleur de la page Accueil, initialise les manageurs pour la vue Accueil
-class ControllerDetailsContenu {
+class ControllerContenu {
     private $_contenuManager;
     private $_view;
 
