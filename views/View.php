@@ -24,7 +24,6 @@ class View {
     {
         if (file_exists($file)) {
             extract($data);
-
             // mise en tampon
             ob_start();
 

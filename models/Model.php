@@ -47,4 +47,30 @@ abstract class Model {
         $req->closeCursor();
         return $var;
 	}
+
+    protected function reqSelectDB_Tuple($select, $class) {
+        $var = [];
+        self::$_db == $this->getDB();
+        $req = self::$_db->prepare($select);
+        $req->execute();
+
+        $data = $req->fetch(PDO::FETCH_ASSOC);
+        $req->closeCursor();
+        return $data;
+    }
+
+    // fait une requête (SELECT) à la base de donnée
+    // résultat socké dans un array d'objet $class
+    protected function reqSelectDB_Tuples($select) {
+        $var = [];
+        self::$_db == $this->getDB();
+        $req = self::$_db->prepare($select);
+        $req->execute();
+
+        while ($data = $req->fetch(PDO::FETCH_ASSOC)) {
+            $var[] = $data;
+        }
+        $req->closeCursor();
+        return $var;
+    }
  }
