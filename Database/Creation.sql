@@ -331,34 +331,28 @@ CREATE TABLE EstAmi (
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
+INSERT INTO produit(titre) VALUES ("Borderlands");
+INSERT INTO produit(titre) VALUES ("Borderlands 2");
+INSERT INTO produit(titre) VALUES ("Borderlands 3");
+INSERT INTO produit(titre) VALUES ("Monster Hunter World");
+INSERT INTO produit(titre) VALUES ("Monster Hunter Iceborne");
+INSERT INTO produit(titre) VALUES ("Bundle Borderlands");
+INSERT INTO produit(titre) VALUES ("Bundle Monster Hunter World");
 
-INSERT INTO produit(titre, prix) VALUES ("Borderlands", 60);
-INSERT INTO produit(titre, prix) VALUES ("Borderlands 2", 80);
-INSERT INTO produit(titre, prix) VALUES ("Borderlands 3", 90);
-INSERT INTO produit(titre, prix) VALUES ("Monster Hunter World", 70);
-INSERT INTO produit(titre, prix) VALUES ("Monster Hunter Iceborn", 60);
-INSERT INTO produit(titre, prix) VALUES ("Bundle Boderlands", 0);
-INSERT INTO produit(titre, prix) VALUES ("Bundle Monster Hunter World", 0);
+INSERT INTO contenu(titre, agelegal, prix, description) VALUES ("Borderlands", 16, 60, "Will see");
+INSERT INTO contenu(titre, agelegal, prix, description) VALUES ("Borderlands 2", 16, 80, "Will see");
+INSERT INTO contenu(titre, agelegal, prix, description) VALUES ("Borderlands 3", 18, 90, "Will see");
+INSERT INTO contenu(titre, agelegal, prix, description) VALUES ("Monster Hunter World", 16, 70, "Will see");
+INSERT INTO contenu(titre, agelegal, prix, description) VALUES ("Monster Hunter Iceborne", 16, 50, "DLC of Monster Hunter");
 
-UPDATE produit SET prix = 0 WHERE titre = "Bundle Borderlands";
-
-INSERT INTO contenu(titre, agelegal, description) VALUES ("Borderlands", 16, "Will see");
-INSERT INTO contenu(titre, agelegal, description) VALUES ("Borderlands 2", 16, "Will see");
-INSERT INTO contenu(titre, agelegal, description) VALUES ("Borderlands 3", 18, "Will see");
-INSERT INTO contenu(titre, agelegal, description) VALUES ("Monster Hunter World", 16, "Will see");
-INSERT INTO contenu(titre, agelegal, description) VALUES ("Monster Hunter Iceborn", 16, "DLC of Monster Hunter");
-
-INSERT INTO bundle(titre) VALUES ("Bundle Boderlands");
+INSERT INTO bundle(titre) VALUES ("Bundle Borderlands");
 INSERT INTO bundle(titre) VALUES ("Bundle Monster Hunter World");
 
-INSERT INTO bundlecomprend(titreBundle, titreProduit) VALUES ("Bundle Boderlands", "Borderlands 2");
-INSERT INTO bundlecomprend(titreBundle, titreProduit) VALUES ("Bundle Boderlands", "Borderlands 3");
-INSERT INTO bundlecomprend(titreBundle, titreProduit) VALUES ("Bundle Boderlands", "Borderlands");
-INSERT INTO bundlecomprend(titreBundle, titreProduit) VALUES ("Bundle Boderlands", "Borderlands");
+INSERT INTO bundlecomprend(titreBundle, titreProduit) VALUES ("Bundle Borderlands", "Borderlands");
+INSERT INTO bundlecomprend(titreBundle, titreProduit) VALUES ("Bundle Borderlands", "Borderlands 2");
+INSERT INTO bundlecomprend(titreBundle, titreProduit) VALUES ("Bundle Borderlands", "Borderlands 3");
 INSERT INTO bundlecomprend(titreBundle, titreProduit) VALUES ("Bundle Monster Hunter World", "Monster Hunter World");
-INSERT INTO bundlecomprend(titreBundle, titreProduit) VALUES ("Bundle Monster Hunter World", "Monster Hunter Iceborn");
-
-DELETE FROM bundlecomprend;
+INSERT INTO bundlecomprend(titreBundle, titreProduit) VALUES ("Bundle Monster Hunter World", "Monster Hunter Iceborne");
 
 INSERT INTO compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Teixeira Carvalho", "Stephane", "test@gmail.com", 100, '2010-04-02');
 INSERT INTO compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Egremy", "Bruno", "test2@gmail.com", 100, '1999-04-02');
@@ -366,10 +360,11 @@ INSERT INTO compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Bec
 
 INSERT INTO achat(idCompte, titreProduit, date) VALUES (2, "Borderlands", '2010-04-03');
 INSERT INTO achat(idCompte, titreProduit, date) VALUES (2, "Borderlands", '2010-04-04');
-INSERT INTO estnote(titreProduit, idCompte, note) VALUES ("Monster Hunter Iceborn", 1, 6);
 
-INSERT INTO promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborn", 50, '2010-05-06', '2010-06-06');
-INSERT INTO promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborn", 60, '2010-05-06', '2010-06-06');
+INSERT INTO estnote(titreProduit, idCompte, note) VALUES ("Monster Hunter Iceborne", 1, 6);
+
+INSERT INTO promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 50, '2010-05-06', '2010-06-06');
+INSERT INTO promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 60, '2010-05-06', '2010-06-06');
 INSERT INTO promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Bundle Monster Hunter World", 60, '2010-05-06', '2010-06-06');
 
 INSERT INTO entreprise(nom) VALUES ("Capcom");
@@ -378,11 +373,9 @@ INSERT INTO franchise(titre, nomEntreprise) VALUES ("Monster Hunter", "Capcom");
 
 INSERT INTO jeu(titre, developpeur, editeur, franchise) VALUES ("Monster Hunter World", "Capcom","Capcom", "Monster Hunter");
 
-INSERT INTO dlc(titre, titreJeu) VALUES ("Monster Hunter Iceborn", "Monster Hunter World");
+INSERT INTO dlc(titre, titreJeu) VALUES ("Monster Hunter Iceborne", "Monster Hunter World");
 
 UPDATE compte SET porteMonnaie = 100 WHERE id = 2;
-
-DELETE FROM jeu;
 
 
 
