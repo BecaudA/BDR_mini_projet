@@ -523,6 +523,43 @@ LEFT JOIN Promotion
 GROUP BY titreBundle;
 $$
 
+DELIMITER $$
+CREATE VIEW vueProduit(titre, prixInitial, age, prixFinal, promotion) AS
+
+SELECT Produit.titre,
+       CASE WHEN Produit.titre = bundlePrix.titre
+                THEN bundlePrix.prixBundle
+            ELSE Contenu.prix
+           END AS prix,
+
+       CASE WHEN Produit.titre = bundlePrix.titre
+                THEN bundlePrix.ageLegal
+            ELSE Contenu.ageLegal
+           END AS ageLegal,
+
+       calculPrixPromo(Produit.titre,
+                       CASE WHEN Produit.titre = bundlePrix.titre
+                                THEN bundlePrix.prixBundle
+                            ELSE Contenu.prix
+                           END) AS prixReel, COALESCE(
+               (SELECT SUM(Promotion.pourcentage)
+                FROM Promotion
+                WHERE Promotion.titreProduit = Produit.titre AND
+                    CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin), 0) AS pourcentagePromo
+        FROM Produit
+                 LEFT JOIN bundlePrix
+                           ON Produit.titre = bundlePrix.titre
+                 LEFT JOIN Contenu
+                           ON Contenu.titre = Produit.titre
+                 LEFT JOIN Promotion
+                           ON Promotion.titreProduit = Produit.titre
+                 LEFT JOIN Jeu
+                           ON Jeu.titre = Contenu.titre
+                 LEFT JOIN DLC
+                           ON DLC.titre = Contenu.titre
+        GROUP BY Produit.titre
+$$
+
 #CREATE VIEW promotionActu AS
 
 #DROP FUNCTION IF EXISTS calculPrixPromo;
