@@ -1,78 +1,78 @@
 USE stome;
 
-#Affichage d'un bundle
+#Affichage d'un Bundle
 SELECT *
-FROM bundlePrix;
+FROM BundlePrix;
 
 #Promotion à part car sinon poucentage * nombre de tuple
-SELECT SUM(promotion.pourcentage) AS promotion
-	FROM promotion
+SELECT SUM(Promotion.pourcentage) AS Promotion
+	FROM Promotion
 WHERE titreProduit = "Bundle Monster Hunter World";
 
-#Liste des jeux dans Bundle
-SELECT titreProduit, produit.prix AS prixInitial, contenu.ageLegal, contenu.description
-FROM bundlecomprend
-INNER JOIN produit
-	ON produit.titre = titreProduit
-INNER JOIN bundle
-	ON bundle.titre = titreBundle
-INNER JOIN contenu
-    ON contenu.titre = produit.titre
-LEFT JOIN jeu
-    ON jeu.titre = contenu.titre
-LEFT JOIN dlc
-    ON dlc.titre = contenu.titre
+#Liste des Jeux dans Bundle
+SELECT titreProduit, Produit.prix AS prixInitial, Contenu.ageLegal, Contenu.description
+FROM BundleComprend
+INNER JOIN Produit
+	ON Produit.titre = titreProduit
+INNER JOIN Bundle
+	ON Bundle.titre = titreBundle
+INNER JOIN Contenu
+    ON Contenu.titre = Produit.titre
+LEFT JOIN Jeu
+    ON Jeu.titre = Contenu.titre
+LEFT JOIN DLC
+    ON DLC.titre = Contenu.titre
 WHERE titreBundle = "Bundle Monster Hunter World";
 
-#nom produit, prix, prix calculé, promotion, âge
-SELECT produit.titre,
-				CASE WHEN produit.titre = bundlePrix.titre
-	            THEN bundlePrix.prixBundle
-	            ELSE produit.prix
+#nom Produit, prix, prix calculé, Promotion, âge
+SELECT Produit.titre,
+				CASE WHEN Produit.titre = BundlePrix.titre
+	            THEN BundlePrix.prixBundle
+	            ELSE Produit.prix
                 END AS prix,
 
-                CASE WHEN produit.titre = bundlePrix.titre
-	            THEN bundlePrix.ageLegal
-	            ELSE contenu.ageLegal
+                CASE WHEN Produit.titre = BundlePrix.titre
+	            THEN BundlePrix.ageLegal
+	            ELSE Contenu.ageLegal
                 END AS ageLegal,
 
-                calculPrixPromo(produit.titre,
-                CASE WHEN produit.titre = bundlePrix.titre
-	            THEN bundlePrix.prixBundle
-	            ELSE produit.prix
+                calculPrixPromo(Produit.titre,
+                CASE WHEN Produit.titre = BundlePrix.titre
+	            THEN BundlePrix.prixBundle
+	            ELSE Produit.prix
                 END) AS prixReel, COALESCE(
-                (SELECT SUM(promotion.pourcentage)
-				FROM promotion
-				WHERE titreProduit = produit.titre AND
-                CURRENT_TIMESTAMP() BETWEEN promotion.dateDebut AND promotion.dateFin), 0) AS pourcentagePromo
-FROM produit
-LEFT JOIN bundlePrix
-	ON produit.titre = bundlePrix.titre
-LEFT JOIN contenu
-    ON contenu.titre = produit.titre
-LEFT JOIN promotion
-	ON promotion.titreProduit = produit.titre
-LEFT JOIN jeu
-    ON jeu.titre = contenu.titre
-LEFT JOIN dlc
-    ON dlc.titre = contenu.titre
-GROUP BY produit.titre;
+                (SELECT SUM(Promotion.pourcentage)
+				FROM Promotion
+				WHERE titreProduit = Produit.titre AND
+                CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin), 0) AS pourcentagePromo
+FROM Produit
+LEFT JOIN BundlePrix
+	ON Produit.titre = BundlePrix.titre
+LEFT JOIN Contenu
+    ON Contenu.titre = Produit.titre
+LEFT JOIN Promotion
+	ON Promotion.titreProduit = Produit.titre
+LEFT JOIN Jeu
+    ON Jeu.titre = Contenu.titre
+LEFT JOIN DLC
+    ON DLC.titre = Contenu.titre
+GROUP BY Produit.titre;
 
 #Age legal max d'un compte
-SELECT MAX(contenu.ageLegal) INTO ageProduit
-    FROM bundlecomprend
-    INNER JOIN produit
-    ON bundlecomprend.titreProduit = produit.titre
-    INNER JOIN bundle
-    ON bundlecomprend.titreBundle = bundle.titre
-    INNER JOIN contenu
-    ON contenu.titre = produit.titre
-    WHERE bundlecomprend.titreBundle = NEW.titreProduit;
+SELECT MAX(Contenu.ageLegal) INTO ageProduit
+    FROM BundleComprend
+    INNER JOIN Produit
+    ON BundleComprend.titreProduit = Produit.titre
+    INNER JOIN Bundle
+    ON BundleComprend.titreBundle = Bundle.titre
+    INNER JOIN Contenu
+    ON Contenu.titre = Produit.titre
+    WHERE BundleComprend.titreBundle = NEW.titreProduit;
 
 #Produit le plus vendus
 SELECT titre, COUNT(*),AVG(prix)
-FROM produit;
+FROM Produit;
 
-SELECT SUM(promotion.pourcentage)
-	FROM promotion
-	WHERE titreProduit = "Monster Hunter Iceborn" AND CURRENT_TIMESTAMP() BETWEEN promotion.dateDebut AND promotion.dateFin;
+SELECT SUM(Promotion.pourcentage)
+	FROM Promotion
+	WHERE titreProduit = "Monster Hunter Iceborn" AND CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin;
