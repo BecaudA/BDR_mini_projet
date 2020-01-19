@@ -1,94 +1,82 @@
 <?php
-foreach ($contenus as $cont) {
-    $titre = $cont->titre();
-    $prixInitial = $cont->prixInitial();
-    $ageLegal  = $cont->age();
-    $prix = $cont->prixFinal();
-    $promotion = $cont->promotion();
-    $description = $cont->description();
-    $traductions = $cont->langues();
-    $genres = $cont->genres();
-    $developpeur = $cont->developpeur();
-    $editeur = $cont->editeur();
-    $franchise = $cont->franchise();
-}
+    $titre       = $contenus[0]->titre();
+    $prixInitial = $contenus[0]->prixInitial();
+    $age    = $contenus[0]->age();
+    $prix        = $contenus[0]->prixFinal();
+    $promotion   = $contenus[0]->promotion();
+    $description = $contenus[0]->description();
+    $traductions = $contenus[0]->langues();
+    $genres      = $contenus[0]->genres();
+    $developpeur = $contenus[0]->developpeur();
+    $editeur     = $contenus[0]->editeur();
+    $franchise   = $contenus[0]->franchise();
 ?>
-<h1 class="font-weight-light text-center text-lg-left mt-4 mb-0"><?php echo $titre; ?> (+<?php echo $ageLegal; ?>)</h1>
-<h1 class="font-weight-light text-center text-lg-right mt-4 mb-0">Prix : <?php echo $prix; ?>.-</h1>
-<hr class="mt-2 mb-5">
-<div class="row text-center text-lg-left">
-    <?php
-        if($titre != null) {
-            // Affiche une image de forme "titre.jpg" le nom de l'image doit correspondre au Titre du produit mais sans espace et en minuscule
-            echo "  <div class=\"col-lg-3 col-md-4 col-6\">
-                    <a href=\"" . $titre . "\" class=\"d-block mb-4 h-100\">
-                        <img class=\"img-fluid img-thumbnail\" src=\"../img/thumbnails/" . strtolower(str_replace(' ', '', $titre)) . ".jpg\" alt=\"\"></a>
-                </div>";
-        }
-    ?>
-    <div class="row text-center text-lg-right">
-        <h3 class="font-weight-light text-center text-lg-left mt-0 mb-0" style="width:160px;">Description : </h3>
-        <div class="font-weight-light text-center text-lg-right mt-2 mb-0"><?php
-            echo $description;
-            ?></div>
-    </div>
-</div>
-<div class="row text-center text-lg-left">
-    <div class="row text-center text-lg-left">
-        <h3 class="font-weight-light text-center text-lg-left mt-0 mb-0">Traduction : </h3>
-        <div class="font-weight-light text-center text-lg-right mt-2 mb-0"><?php
-            $compteur = 0;
-            foreach ($traductions as $traduction) {
-                if($compteur != 0){
-                    echo ",";
-                }
-                echo $traduction;
-                $compteur += 1;
-            }
-            ?></div>
-    </div>
-    <div class="row text-center text-lg-right">
-        <h3 class="font-weight-light text-center text-lg-right mt-0 mb-0" style="width:150px;">Genre : </h3>
-        <div class="font-weight-light text-center text-lg-right mt-2 mb-0"><?php
-            $compteur = 0;
-            foreach ($genres as $genre) {
-                if($compteur != 0){
-                    echo ",";
-                }
-                echo $genre;
-                $compteur += 1;
-            }
-            ?></div>
-    </div>
-</div>
-
-<div class="row text-center text-lg-left">
-    <div class="row text-center text-lg-left">
-        <h3 class="font-weight-light text-center text-lg-left mt-0 mb-0">Editeur : </h3>
-        <div class="font-weight-light text-center text-lg-right mt-2 mb-0"><?php
-            echo $editeur;
-            ?></div>
-    </div>
-    <div class="row text-center text-lg-right">
-        <h3 class="font-weight-light text-center text-lg-right mt-0 mb-0" style="width:250px;">Developpeur : </h3>
-        <div class="font-weight-light text-center text-lg-right mt-2 mb-0"><?php
-            echo $developpeur;
-            ?></div>
-    </div>
-    <?php
-        if($franchise != null){
-    ?>
-            <div class="row text-center text-lg-right">
-                <h3 class="font-weight-light text-center text-lg-right mt-0 mb-0" style="width:250px;">Franchise : </h3>
-                <div class="font-weight-light text-center text-lg-right mt-2 mb-0"><?php
-                    echo $franchise;
-                    ?></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 blog-main">
+                <h1 class="pb-3 mb-4 font-italic border-bottom">
+                    <?= $titre." (-".$age.")"?>
+                </h1>
+                <div class="blog-post">
+                    <h2 class="blog-post-title">Description</h2>
+                    <p><?= $description; ?></p>
+                </div>
             </div>
-    <?php }?>
-</div>
 
-</div>
+            <aside class="col-md-4 blog-sidebar">
+                <button class="btn btn-primary btn-lg btn-block" type="submit" href="#">Acheter pour moi</button>
+                <button class="btn btn-primary btn-lg btn-block mb-2" type="submit" href="#">Acheter pour un ami</button>
+                <div class="p-3 mb-3 bg-light rounded">
+                    <h4 class="font-italic">Détails</h4>
+                    <h6>Langue
+                    <?php
+                    $sizeTradArray = sizeof($traductions);
+                    if ($sizeTradArray > 1) {
+                        echo "s";
+                    }
+                    echo " : ";
+                    if ($sizeTradArray == 0) {
+                        echo "aucune";
+                    } else {
+                        for ($i = 0; $i < sizeof($traductions); ++$i) {
+                            echo $traductions[$i];
+                            if ($i < sizeof($traductions) - 1) {
+                                echo ", ";
+                            }
+                        }
+                    }
+                    ?>
 
+                    <h6>Genre
+                    <?php
+                    $sizeGenreArray = sizeof($genres);
+                    if ($sizeGenreArray > 1) {
+                        echo "s";
+                    }
+                    echo " : ";
+                    if ($sizeGenreArray == 0) {
+                        echo "aucun";
+                    } else {
+                        for ($i = 0; $i < sizeof($genres); ++$i) {
+                            echo $genres[$i];
+                            if ($i < sizeof($genres) - 1) {
+                                echo ", ";
+                            }
+                        }
+                    }
+                    ?>
+                    </h6>
+                    <h6>
+                        Franchise : <?= $franchise; ?>
+                    </h6>
+                    <h6>
+                        Editeur : <?= $editeur; ?>
+                    </h6>
+                    <h6>
+                        Developpeur : <?= $developpeur; ?>
+                    </h6>
+                </div>
+            </aside><!-- /.blog-sidebar -->
 
-
-<?php
+        </div>
+    </div>
