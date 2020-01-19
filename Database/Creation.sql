@@ -560,6 +560,33 @@ SELECT Produit.titre,
         GROUP BY Produit.titre
 $$
 
+DELIMITER $$
+CREATE VIEW vueDLC(titre, developpeur, editeur, franchise) AS
+SELECT Dlc.titre, Jeu.Editeur, Jeu.Developpeur, Jeu.Franchise
+FROM DLC
+         INNER JOIN Jeu ON Jeu.titre = Dlc.titreJeu;
+$$
+
+DELIMITER $$
+CREATE VIEW vueContenu(titre, prixInitial, age, prixFinal, promotion, franchise, developpeur, editeur, description) AS
+SELECT vueProduit.titre, vueProduit.prixInitial, vueProduit.age, vueProduit.prixFinal, vueProduit.promotion,
+       CASE WHEN Contenu.titre = Jeu.titre THEN Jeu.franchise ELSE vueDlc.franchise END AS franchise,
+       CASE WHEN Contenu.titre = Jeu.titre THEN Jeu.developpeur ELSE vueDlc.developpeur END AS developpeur,
+       CASE WHEN Contenu.titre = Jeu.titre THEN Jeu.editeur ELSE vueDlc.editeur END AS editeur,
+       Contenu.Description
+FROM vueProduit
+         LEFT JOIN Contenu
+                   ON Contenu.titre = vueProduit.titre
+         LEFT JOIN Promotion
+                   ON Promotion.titreProduit = vueProduit.titre
+         LEFT JOIN Jeu
+                   ON Jeu.titre = Contenu.titre
+         LEFT JOIN vueDlc
+                   ON vueDlc.titre = Contenu.titre
+WHERE vueProduit.titre = Contenu.titre
+GROUP BY vueProduit.titre;
+$$
+
 #CREATE VIEW promotionActu AS
 
 #DROP FUNCTION IF EXISTS calculPrixPromo;
