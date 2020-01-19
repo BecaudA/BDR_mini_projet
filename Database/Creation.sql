@@ -368,12 +368,32 @@ INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Mo
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Bundle Monster Hunter World", 60, '2010-05-06', '2010-06-06');
 
 INSERT INTO Entreprise(nom) VALUES ("Capcom");
+INSERT INTO Entreprise(nom) VALUES ("2K");
+INSERT INTO Entreprise(nom) VALUES ("Gearbox Software");
 
 INSERT INTO Franchise(titre, nomEntreprise) VALUES ("Monster Hunter", "Capcom");
+INSERT INTO Franchise(titre, nomEntreprise) VALUES ("Borderlands", "2K");
 
 INSERT INTO Jeu(titre, developpeur, editeur, franchise) VALUES ("Monster Hunter World", "Capcom","Capcom", "Monster Hunter");
+INSERT INTO Jeu(titre, developpeur, editeur, franchise) VALUES ("Borderlands", "Gearbox Software", "2K", "Borderlands");
+INSERT INTO Jeu(titre, developpeur, editeur, franchise) VALUES ("Borderlands 2", "Gearbox Software", "2K", "Borderlands");
 
 INSERT INTO DLC(titre, titreJeu) VALUES ("Monster Hunter Iceborne", "Monster Hunter World");
+
+INSERT INTO Langue(nom) VALUES ("Français");
+INSERT INTO Langue(nom) VALUES ("Anglais");
+INSERT INTO Langue(nom) VALUES ("Allemand");
+INSERT INTO Langue(nom) VALUES ("Italien");
+
+INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Borderlands", "Anglais");
+
+INSERT INTO Genre(nom) VALUES ("Action");
+INSERT INTO Genre(nom) VALUES ("RPG");
+INSERT INTO Genre(nom) VALUES ("FPS");
+INSERT INTO Genre(nom) VALUES ("Horreur");
+
+INSERT INTO Possedegenre(titreContenu, nomGenre) VALUES ("Borderlands", "Action");
+INSERT INTO Possedegenre(titreContenu, nomGenre) VALUES ("Borderlands", "RPG");
 
 UPDATE Compte SET porteMonnaie = 100 WHERE id = 2;
 
@@ -585,6 +605,212 @@ FROM vueProduit
                    ON vueDlc.titre = Contenu.titre
 WHERE vueProduit.titre = Contenu.titre
 GROUP BY vueProduit.titre;
+$$
+
+/*Trigger pour l'héritage Produit->Bundle,Contenu*/
+DELIMITER $$
+/*  Trigger sur bundle pour contrôler l'insertion  */
+CREATE TRIGGER TRG_BundleProduit
+    BEFORE INSERT
+    ON Bundle
+    FOR EACH ROW
+BEGIN
+    DECLARE erreur TINYINT;
+
+    SET @erreur = 0;
+
+/*  La clef de "Produit" doit exister pour la création de "Bundle"  */
+    IF NEW.titre NOT IN (SELECT *
+                         FROM  produit P1
+                         WHERE P1.titre = NEW.titre)
+    THEN
+        SET @erreur = 1;
+    END IF;
+
+    /* l'identifiant de bundle ne doit pas être utilisé par les autres tables filles */
+    IF NEW.titre IN (SELECT Contenu.titre
+                     FROM Contenu
+                     WHERE NEW.titre = Contenu.titre)
+    THEN
+        SET @erreur = 1;
+    END IF;
+
+    IF @erreur = 1 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Insertion de Bundle Impossible';
+    END IF;
+
+END
+$$
+
+DELIMITER $$
+/*  Trigger sur Contenu pour contrôler l'insertion  */
+CREATE TRIGGER TRG_ContenuProduit
+    BEFORE INSERT
+    ON Contenu
+    FOR EACH ROW
+BEGIN
+    DECLARE erreur TINYINT;
+
+    SET @erreur = 0;
+
+/*  La clef de "Produit" doit exister pour la création d'un "Contenu"  */
+    IF NEW.titre NOT IN (SELECT *
+                         FROM  produit P1
+                         WHERE P1.titre = NEW.titre)
+    THEN
+        SET @erreur = 1;
+    END IF;
+
+    /* l'identifiant du contenu ne doit pas être utilisé par les autres tables filles */
+    IF NEW.titre IN (SELECT Bundle.titre
+                     FROM Bundle
+                     WHERE NEW.titre = Bundle.titre)
+    THEN
+        SET @erreur = 1;
+    END IF;
+
+    IF @erreur = 1 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Insertion de Contenu Impossible';
+    END IF;
+
+END
+$$
+
+/*Triger d'héritage Contenu -> Jeu,DLC*/
+DELIMITER $$
+/*  Trigger sur jeu pour contrôler l'insertion  */
+CREATE TRIGGER TRG_JeuContenu
+    BEFORE INSERT
+    ON Jeu
+    FOR EACH ROW
+BEGIN
+    DECLARE erreur TINYINT;
+
+    SET @erreur = 0;
+
+/*  La clef de "Contenu" doit exister pour la création de "jeu"  */
+    IF NEW.titre NOT IN (SELECT C1.titre
+                         FROM  Contenu C1
+                         WHERE C1.titre = NEW.titre)
+    THEN
+        SET @erreur = 1;
+    END IF;
+
+    /* l'identifiant de jeu ne doit pas être utilisé par les autres tables filles */
+    IF NEW.titre IN (SELECT DLC.titre
+                     FROM DLC
+                     WHERE DLC.titre = NEW.titre)
+    THEN
+        SET @erreur = 1;
+    END IF;
+
+    IF @erreur = 1 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Insertion de Jeu Impossible';
+    END IF;
+
+END
+$$
+
+DELIMITER $$
+/*  Trigger sur DLC pour contrôler l'insertion  */
+CREATE TRIGGER TRG_DLCContenu
+    BEFORE INSERT
+    ON DLC
+    FOR EACH ROW
+BEGIN
+    DECLARE erreur TINYINT;
+
+    SET @erreur = 0;
+
+/*  La clef de "Contenu" doit exister pour la création de "DLC"  */
+    IF NEW.titre NOT IN (SELECT C1.titre
+                         FROM  Contenu C1
+                         WHERE C1.titre = NEW.titre)
+    THEN
+        SET @erreur = 1;
+    END IF;
+
+    /* l'identifiant de DLC ne doit pas être utilisé par les autres tables filles */
+    IF NEW.titre IN (SELECT Jeu.titre
+                     FROM Jeu
+                     WHERE Jeu.titre = NEW.titre)
+    THEN
+        SET @erreur = 1;
+    END IF;
+
+    IF @erreur = 1 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Insertion de DLC Impossible';
+    END IF;
+
+END
+$$
+/*Trigger pour l'héritage achat->achatPersonnel,AchatAmi*/
+DELIMITER $$
+/*  Trigger sur Achatpersonnel pour contrôler l'insertion  */
+CREATE TRIGGER TRG_AchatPerso
+    BEFORE INSERT
+    ON Achatpersonnel
+    FOR EACH ROW
+BEGIN
+    DECLARE erreur TINYINT;
+
+    SET @erreur = 0;
+
+/*  La clef de Achat doit exister pour la création de AchatPersonnel  */
+    IF NEW.id NOT IN (SELECT A1.id
+                      FROM  Achat A1
+                      WHERE A1.id = NEW.id)
+    THEN
+        SET @erreur = 1;
+    END IF;
+
+    /* l'identifiant de AchatPersonnel ne doit pas être utilisé par les autres tables filles */
+    IF NEW.id IN (SELECT Achatami.id
+                  FROM Achatami
+                  WHERE Achatami.id = NEW.id)
+    THEN
+        SET @erreur = 1;
+    END IF;
+
+    IF @erreur = 1 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Insertion de l\'achat personnel impossible';
+    END IF;
+
+END
+$$
+
+DELIMITER $$
+/*  Trigger sur AchatAmi pour contrôler l'insertion  */
+CREATE TRIGGER TRG_AchatAmi
+    BEFORE INSERT
+    ON Achatami
+    FOR EACH ROW
+BEGIN
+    DECLARE erreur TINYINT;
+
+    SET @erreur = 0;
+
+/*  La clef de Achat doit exister pour la création de AchatAmi  */
+    IF NEW.id NOT IN (SELECT A1.id
+                      FROM  Achat A1
+                      WHERE A1.id = NEW.id)
+    THEN
+        SET @erreur = 1;
+    END IF;
+
+    /* l'identifiant de AchatAmi ne doit pas être utilisé par les autres tables filles */
+    IF NEW.id IN (SELECT Achatpersonnel.id
+                  FROM Achatpersonnel
+                  WHERE Achatpersonnel.id = NEW.id)
+    THEN
+        SET @erreur = 1;
+    END IF;
+
+    IF @erreur = 1 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Insertion de l\'achat ami impossible';
+    END IF;
+
+END
 $$
 
 #CREATE VIEW promotionActu AS

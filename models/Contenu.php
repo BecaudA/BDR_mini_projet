@@ -48,7 +48,7 @@ class Contenu extends Produit {
             foreach ($row as $key => $value){
                 //Si le nom de colonne est changée il faut changer également l'éaglité
                 if($key == "nomLangue")
-                    array_push($this->_langue,$value);
+                    array_push($this->_langues,$value);
             }
         }
     }
@@ -58,7 +58,7 @@ class Contenu extends Produit {
             foreach ($row as $key => $value){
                 //Si le nom de colonne est changée il faut changer également l'éaglité
                 if($key == "nomGenre")
-                    array_push($this->_genre,$value);
+                    array_push($this->_genres,$value);
             }
         }
     }
