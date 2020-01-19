@@ -5,15 +5,15 @@ function getAllProduits(){
 }
 
 function getContenu($id){
-    return "S"."ELECT * FROM stome.vuecontenu WHERE titre = \"".$id."\"";
+    return "SELECT * FROM stome.vueContenu WHERE titre = \"".$id."\"";
 }
 
 function getLanguesContenu($id){
-    return "S"."ELECT * FROM stome.Esttraduit WHERE titreContenu = \"". $id. "\"";
+    return "SELECT * FROM stome.EstTraduit WHERE titreContenu = \"". $id. "\"";
 }
 
 function getGenreContenu($id){
-    return "S"."ELECT * FROM stome.PossedeGenre WHERE titreContenu = \"". $id. "\"";
+    return "SELECT * FROM stome.PossedeGenre WHERE titreContenu = \"". $id. "\"";
 }
 
 function getProduit($titre) {

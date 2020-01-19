@@ -55,6 +55,7 @@ class Router {
                     if (file_exists($controllerFile)) {
                         echo "exist"; // DEBUG
                         // construction du controlleur
+
                         require_once($controllerFile);
                         $this->_ctrl = new $controllerClass($url);
                     } else throw new Exception('Page introuvable');

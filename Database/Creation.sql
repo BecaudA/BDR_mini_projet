@@ -562,17 +562,17 @@ $$
 
 DELIMITER $$
 CREATE VIEW vueDLC(titre, developpeur, editeur, franchise) AS
-SELECT Dlc.titre, Jeu.Editeur, Jeu.Developpeur, Jeu.Franchise
+SELECT DLC.titre, Jeu.Editeur, Jeu.Developpeur, Jeu.Franchise
 FROM DLC
-         INNER JOIN Jeu ON Jeu.titre = Dlc.titreJeu;
+         INNER JOIN Jeu ON Jeu.titre = DLC.titreJeu;
 $$
 
 DELIMITER $$
 CREATE VIEW vueContenu(titre, prixInitial, age, prixFinal, promotion, franchise, developpeur, editeur, description) AS
 SELECT vueProduit.titre, vueProduit.prixInitial, vueProduit.age, vueProduit.prixFinal, vueProduit.promotion,
-       CASE WHEN Contenu.titre = Jeu.titre THEN Jeu.franchise ELSE vueDlc.franchise END AS franchise,
-       CASE WHEN Contenu.titre = Jeu.titre THEN Jeu.developpeur ELSE vueDlc.developpeur END AS developpeur,
-       CASE WHEN Contenu.titre = Jeu.titre THEN Jeu.editeur ELSE vueDlc.editeur END AS editeur,
+       CASE WHEN Contenu.titre = Jeu.titre THEN Jeu.franchise ELSE vueDLC.franchise END AS franchise,
+       CASE WHEN Contenu.titre = Jeu.titre THEN Jeu.developpeur ELSE vueDLC.developpeur END AS developpeur,
+       CASE WHEN Contenu.titre = Jeu.titre THEN Jeu.editeur ELSE vueDLC.editeur END AS editeur,
        Contenu.Description
 FROM vueProduit
          LEFT JOIN Contenu
@@ -581,8 +581,8 @@ FROM vueProduit
                    ON Promotion.titreProduit = vueProduit.titre
          LEFT JOIN Jeu
                    ON Jeu.titre = Contenu.titre
-         LEFT JOIN vueDlc
-                   ON vueDlc.titre = Contenu.titre
+         LEFT JOIN vueDLC
+                   ON vueDLC.titre = Contenu.titre
 WHERE vueProduit.titre = Contenu.titre
 GROUP BY vueProduit.titre;
 $$
