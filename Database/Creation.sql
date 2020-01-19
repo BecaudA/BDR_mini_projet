@@ -368,12 +368,32 @@ INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Mo
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Bundle Monster Hunter World", 60, '2010-05-06', '2010-06-06');
 
 INSERT INTO Entreprise(nom) VALUES ("Capcom");
+INSERT INTO Entreprise(nom) VALUES ("2K");
+INSERT INTO Entreprise(nom) VALUES ("Gearbox Software");
 
 INSERT INTO Franchise(titre, nomEntreprise) VALUES ("Monster Hunter", "Capcom");
+INSERT INTO Franchise(titre, nomEntreprise) VALUES ("Borderlands", "2K");
 
 INSERT INTO Jeu(titre, developpeur, editeur, franchise) VALUES ("Monster Hunter World", "Capcom","Capcom", "Monster Hunter");
+INSERT INTO Jeu(titre, developpeur, editeur, franchise) VALUES ("Borderlands", "Gearbox Software", "2K", "Borderlands");
+INSERT INTO Jeu(titre, developpeur, editeur, franchise) VALUES ("Borderlands 2", "Gearbox Software", "2K", "Borderlands");
 
 INSERT INTO DLC(titre, titreJeu) VALUES ("Monster Hunter Iceborne", "Monster Hunter World");
+
+INSERT INTO Langue(nom) VALUES ("Français");
+INSERT INTO Langue(nom) VALUES ("Anglais");
+INSERT INTO Langue(nom) VALUES ("Allemand");
+INSERT INTO Langue(nom) VALUES ("Italien");
+
+INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Borderlands", "Anglais");
+
+INSERT INTO Genre(nom) VALUES ("Action");
+INSERT INTO Genre(nom) VALUES ("RPG");
+INSERT INTO Genre(nom) VALUES ("FPS");
+INSERT INTO Genre(nom) VALUES ("Horreur");
+
+INSERT INTO Possedegenre(titreContenu, nomGenre) VALUES ("Borderlands", "Action");
+INSERT INTO Possedegenre(titreContenu, nomGenre) VALUES ("Borderlands", "RPG");
 
 UPDATE Compte SET porteMonnaie = 100 WHERE id = 2;
 
