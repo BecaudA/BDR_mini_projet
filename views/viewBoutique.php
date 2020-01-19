@@ -29,7 +29,7 @@
                                     </div> -->
                                     <?php if($promotion): ?>
                                         <small class="text-muted"><s><?php echo $prixInitial; ?> CHF</s></small>
-                                        <span class="badge badge-danger"><?php echo $prixFinal; ?> CHF</small></span>
+                                        <span class="badge badge-danger"><?php echo $prixFinal; ?> CHF</small> <sup>-<?php echo $promotion; ?>%</sup></span>
                                     <?php else: ?>
                                         <small class="text-muted"><?php echo $prixFinal; ?> CHF</small>
                                     <?php endif; ?>

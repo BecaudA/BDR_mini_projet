@@ -621,7 +621,7 @@ BEGIN
 
 /*  La clef de "Produit" doit exister pour la création de "Bundle"  */
     IF NEW.titre NOT IN (SELECT *
-                         FROM  produit P1
+                         FROM  Produit P1
                          WHERE P1.titre = NEW.titre)
     THEN
         SET @erreur = 1;
@@ -655,7 +655,7 @@ BEGIN
 
 /*  La clef de "Produit" doit exister pour la création d'un "Contenu"  */
     IF NEW.titre NOT IN (SELECT *
-                         FROM  produit P1
+                         FROM  Produit P1
                          WHERE P1.titre = NEW.titre)
     THEN
         SET @erreur = 1;
@@ -749,7 +749,7 @@ DELIMITER $$
 /*  Trigger sur Achatpersonnel pour contrôler l'insertion  */
 CREATE TRIGGER TRG_AchatPerso
     BEFORE INSERT
-    ON Achatpersonnel
+    ON AchatPersonnel
     FOR EACH ROW
 BEGIN
     DECLARE erreur TINYINT;
@@ -765,7 +765,7 @@ BEGIN
     END IF;
 
     /* l'identifiant de AchatPersonnel ne doit pas être utilisé par les autres tables filles */
-    IF NEW.id IN (SELECT Achatami.id
+    IF NEW.id IN (SELECT AchatAmi.id
                   FROM Achatami
                   WHERE Achatami.id = NEW.id)
     THEN
