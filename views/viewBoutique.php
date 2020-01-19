@@ -1,4 +1,4 @@
-    <main role="main">
+
         <div class="container center">
             <h1 class="font-weight-light text-center text-lg-left mt-4 mb-0">Boutique</h1>
             <hr class="mt-2 mb-5">
@@ -12,37 +12,32 @@
                         $prixInitial = $produit->prixInitial();
                         $prixFinal = $produit->prixFinal();
                         $promotion = $produit->promotion();
-                        $img = "img/thumbnails/" . strtolower(str_replace(' ', '', $titre)) . "jpg";
-                        $img = "img/thumbnails/borderlands";
+                        $img = "img/thumbnails/" . strtolower(str_replace(' ', '', $titre)) . ".jpg";
                         $link = str_replace(' ', '_', $titre);
                     ?>
                     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">
-                            <a href="<? echo $link; ?>" class="d-block mb-4 h-100">
-                                <img class="card-img-top" alt="Thumbnail [100%x225]" style="height: 225px; width: 100%; display: block;" src="<? echo $img; ?>" data-holder-rendered="true">
+                            <a href="<?php echo $link; ?>" class="d-block mb-4 h-100">
+                                <img class="card-img-top" alt="Thumbnail [100%x225]" style="height: 225px; width: 100%; display: block;" src="<?php echo $img; ?>" data-holder-rendered="true">
                             </a>
                             <div class="card-body">
-                                <h1 class="card-text"><? echo $titre; ?></h1>
+                                <h1 class="card-text"><?php echo $titre; ?></h1>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <!-- <div class="btn-group">
                                         <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
                                         <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
                                     </div> -->
-                                    <? if(!$promotion): ?>
-                                        <small class="text-muted"><s><? echo $prixInitial; ?> CHF</s></small><small class="text-muted"><? echo $prixFinal; ?> CHF</small>
-                                    <? else: ?>
-                                        <small class="text-muted"><? echo $prixFinal; ?> CHF</small>
-                                    <? endif; ?>
+                                    <?php if($promotion): ?>
+                                        <small class="text-muted"><s><?php echo $prixInitial; ?> CHF</s></small>
+                                        <span class="badge badge-danger"><?php echo $prixFinal; ?> CHF</small></span>
+                                    <?php else: ?>
+                                        <small class="text-muted"><?php echo $prixFinal; ?> CHF</small>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <? endforeach; ?>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>
-
-    </main>
-
-
-
