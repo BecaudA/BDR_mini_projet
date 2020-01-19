@@ -48,7 +48,7 @@ abstract class Model {
         return $var;
 	}
 
-    protected function reqSelectDB_Tuple($select, $class) {
+    protected function reqSelectDB_Tuple($select) {
         $var = [];
         self::$_db == $this->getDB();
         $req = self::$_db->prepare($select);
@@ -56,7 +56,11 @@ abstract class Model {
 
         $data = $req->fetch(PDO::FETCH_ASSOC);
         $req->closeCursor();
-        return $data;
+        //foreach car data[0] ne marchait pas renvoie un seul tuple
+        foreach ($data as $row){
+            $result = $row;
+        }
+        return $result;
     }
 
     // fait une requête (SELECT) à la base de donnée
