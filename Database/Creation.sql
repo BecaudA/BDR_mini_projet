@@ -744,7 +744,7 @@ BEGIN
 
 END
 $$
-
+/*Trigger pour l'héritage achat->achatPersonnel,AchatAmi*/
 DELIMITER $$
 /*  Trigger sur Achatpersonnel pour contrôler l'insertion  */
 CREATE TRIGGER TRG_AchatPerso
