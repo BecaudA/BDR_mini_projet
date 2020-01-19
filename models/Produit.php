@@ -5,7 +5,7 @@ class Produit {
     private $_prixInitial;
     private $_prixFinal;
     private $_promotion;
-    private $_age;
+    private $age;
 
     // constructeur
     public function __construct(array $data) {
@@ -43,7 +43,7 @@ class Produit {
 
     public function set_age($age)
     {
-        $this->_age = $age;
+        $this->age = $age;
     }
 
     // getters
@@ -66,6 +66,6 @@ class Produit {
 
     public function age()
     {
-        return $this->_age;
+        return $this->age;
     }
 }

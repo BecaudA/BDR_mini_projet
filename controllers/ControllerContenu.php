@@ -18,7 +18,7 @@ class ControllerContenu {
         $contenus = $this->_contenuManager->getDetailsContenu($titre);
 
         //
-        $this->_view = new View('DetailsContenu');
+        $this->_view = new View('Contenu');
         $this->_view->generate(array('contenus' => $contenus));
     }
 }

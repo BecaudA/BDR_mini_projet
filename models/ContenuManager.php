@@ -2,11 +2,15 @@
 class ContenuManager extends Model {
 
     public function getDetailsContenu($titre) {
-        $contenu = $this->reqSelectDB(getContenu($titre[0]), "Contenu");
+        $contenus = $this->reqSelectDB(getContenu($titre), "Contenu");
+        if (empty($contenus)) {
+            echo "contenus is empty!, ";
+            return null;
+        }
 
-        $data = $this->reqSelectDB_Tuples(getLanguesContenu($contenu[0]->titre()));
-        $contenu[0]->set_langues($data);
-        $contenu[0]->set_genres($this->reqSelectDB_Tuples(getGenreContenu($contenu[0]->titre())));
-        return $contenu;
+        $data = $this->reqSelectDB_Tuples(getLanguesContenu($contenus[0]->titre()));
+        $contenus[0]->set_langues($data);
+        $contenus[0]->set_genres($this->reqSelectDB_Tuples(getGenreContenu($contenus[0]->titre())));
+        return $contenus;
     }
 }
