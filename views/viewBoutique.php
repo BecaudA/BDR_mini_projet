@@ -1,41 +1,48 @@
-<div class="container">
-
-    <h1 class="font-weight-light text-center text-lg-left mt-4 mb-0">Boutique</h1>
-    <hr class="mt-2 mb-5">
-    <div class="row text-center text-lg-left">
-
-        <?php
-        foreach ($produits as $produit){
-
-            $titre = $produit->titre();
-
-            if($titre != null) {
-                // Affiche une image de forme "titre.jpg" le nom de l'image doit correspondre au Titre du produit mais sans espace et en minuscule
-                /*
-                echo "  <div class=\"col-lg-3 col-md-4 col-6\">
-                        <a href=\"" . str_replace(' ', '_', $titre) . "\" class=\"d-block mb-4 h-100\">
-                            <img class=\"img-fluid img-thumbnail\" src=\"../img/thumbnails/" . strtolower(str_replace(' ', '', $titre)) . ".jpg\" alt=\"\"></a>
-                    </div>";
-                */?>
-
-                        <div class="col-lg-3 col-md-4 col-6 ">
-                            <div class="container-fluid">
-                            <a href="<?php echo str_replace(' ', '_', $titre); ?>" class="d-block mb-4 h-100">
-                                <img alt="Bootstrap Image Preview" src="../img/thumbnails/<?php echo strtolower(str_replace(' ', '', $titre));?>.jpg" class="img-thumbnail"/></a>
-                            <h2>
-                                <?php echo $titre; ?>
-                            </h2>
-                            <p>
-                                <?php echo $produit->prixFinal(); ?> CHF
-                            </p>
+    <main role="main">
+        <div class="container center">
+            <h1 class="font-weight-light text-center text-lg-left mt-4 mb-0">Boutique</h1>
+            <hr class="mt-2 mb-5">
+        </div>
+        <div class="album py-5 bg-light">
+            <div class="container">
+                <div class="row">
+                    <?php
+                    foreach ($produits as $produit):
+                        $titre = $produit->titre();
+                        $prixInitial = $produit->prixInitial();
+                        $prixFinal = $produit->prixFinal();
+                        $promotion = $produit->promotion();
+                        $img = "img/thumbnails/" . strtolower(str_replace(' ', '', $titre)) . "jpg";
+                        $img = "img/thumbnails/borderlands";
+                        $link = str_replace(' ', '_', $titre);
+                    ?>
+                    <div class="col-md-4">
+                        <div class="card mb-4 box-shadow">
+                            <a href="<? echo $link; ?>" class="d-block mb-4 h-100">
+                                <img class="card-img-top" alt="Thumbnail [100%x225]" style="height: 225px; width: 100%; display: block;" src="<? echo $img; ?>" data-holder-rendered="true">
+                            </a>
+                            <div class="card-body">
+                                <h1 class="card-text"><? echo $titre; ?></h1>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <!-- <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                    </div> -->
+                                    <? if(!$promotion): ?>
+                                        <small class="text-muted"><s><? echo $prixInitial; ?> CHF</s></small><small class="text-muted"><? echo $prixFinal; ?> CHF</small>
+                                    <? else: ?>
+                                        <small class="text-muted"><? echo $prixFinal; ?> CHF</small>
+                                    <? endif; ?>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                    <? endforeach; ?>
                 </div>
-        <?php
-            }
-        }
-        ?>
-    </div>
-</div>
+            </div>
+        </div>
+
+    </main>
 
 
 
