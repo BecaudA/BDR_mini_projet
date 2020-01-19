@@ -1,7 +1,7 @@
 <?php
     $titre       = $contenus[0]->titre();
     $prixInitial = $contenus[0]->prixInitial();
-    $age    = $contenus[0]->age();
+    $age         = $contenus[0]->age();
     $prix        = $contenus[0]->prixFinal();
     $promotion   = $contenus[0]->promotion();
     $description = $contenus[0]->description();
@@ -11,6 +11,17 @@
     $editeur     = $contenus[0]->editeur();
     $franchise   = $contenus[0]->franchise();
 ?>
+    <style type="text/css">
+        .jumbotron {
+            height: 30vh;
+            background-image: url('img/thumbnails/<?= str_replace(' ', '', strtolower($titre)); ?>.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-width: 1px !important;
+        }
+    </style>
+    <div class="jumbotron mb-3 rounded-0 border-bottom border-light"></div>
     <div class="container">
         <div class="row">
             <div class="col-md-8 blog-main">
@@ -24,6 +35,7 @@
             </div>
 
             <aside class="col-md-4 blog-sidebar">
+                <h2 class=text-center"><span class="badge badge-secondary"><?= $prix; ?> CHF</span></h2>
                 <button class="btn btn-primary btn-lg btn-block" type="submit" href="#">Acheter pour moi</button>
                 <button class="btn btn-primary btn-lg btn-block mb-2" type="submit" href="#">Acheter pour un ami</button>
                 <div class="p-3 mb-3 bg-light rounded">
@@ -76,7 +88,7 @@
                         Developpeur : <?= $developpeur; ?>
                     </h6>
                 </div>
-            </aside><!-- /.blog-sidebar -->
+            </aside>
 
         </div>
     </div>
