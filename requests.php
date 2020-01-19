@@ -9,11 +9,11 @@ function getContenu($id){
 }
 
 function getLanguesContenu($id){
-    return "SELECT * FROM stome.EstTraduit WHERE titreContenu = \"". $id. "\"";
+    return "SELECT * FROM stome.EstTraduit WHERE EstTraduit.titreContenu = \"". $id. "\"";
 }
 
 function getGenreContenu($id){
-    return "SELECT * FROM stome.PossedeGenre WHERE titreContenu = \"". $id. "\"";
+    return "SELECT * FROM stome.PossedeGenre WHERE PossedeGenre.titreContenu = \"". $id. "\"";
 }
 
 function getProduit($titre) {

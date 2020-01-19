@@ -42,22 +42,24 @@ class Router {
 					require_once($controllerFile);
 					$this->_ctrl = new $controllerClass($url);
 				} else {
+				    $id = str_replace('_', ' ', $url[0]);
 				    // trouve le controlleur correspondant à l'url entrée
                     // valeur prise en charge pour l'url:
                     // - titre d'un contenu (jeu, dlc) ou d'un bundle
-				    $controller = $this->findController(str_replace('_', ' ', $url[0]));
+				    $controller = $this->findController($id);
                     $controllerClass = "Controller".$controller;
                     $controllerFile = "controllers/".$controllerClass.".php";
 
                     echo "new controllerFile=".$controllerFile.", "; //DEBUG
+                    echo "title=".$id.", ";
 
                     // vérifie à nouveau si le fichier du controlleur existe
                     if (file_exists($controllerFile)) {
-                        echo "exist"; // DEBUG
+                        echo "exist, "; // DEBUG
                         // construction du controlleur
 
                         require_once($controllerFile);
-                        $this->_ctrl = new $controllerClass($url);
+                        $this->_ctrl = new $controllerClass($id);
                     } else throw new Exception('Page introuvable');
 				}
 			} else {

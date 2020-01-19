@@ -1,22 +1,17 @@
 <?php
 
 
-class Contenu extends Produit
-{
-    private $_titre;
-    private $_prixInital;
-    private $_age;
-    private $_prixFinal;
-    private $_promotion;
+class Contenu extends Produit {
     private $_franchise;
     private $_developpeur;
     private $_editeur;
     private $_description;
-    private $_genre = array();
-    private $_langue = array();
+    private $_genres = array();
+    private $_langues = array();
 
     // constructeur
     public function __construct(array $data) {
+        parent::__construct($data);
         $this->hydrate($data);
     }
 
@@ -32,26 +27,6 @@ class Contenu extends Produit
     }
 
     // setters
-    public function set_titre($titre) {
-        $this->_titre = $titre;
-    }
-
-    public function set_prixInital($prixInitial) {
-        $this->_prixInital = $prixInitial;
-    }
-
-    public function set_age($age) {
-        $this->_age = $age;
-    }
-
-    public function set_prixFinal($prixFinal) {
-        $this->_prixFinal = $prixFinal;
-    }
-
-    public function set_promotion($promotion) {
-        $this->_promotion = $promotion;
-    }
-
     public function set_franchise($franchise) {
         $this->_franchise = $franchise;
     }
@@ -89,26 +64,6 @@ class Contenu extends Produit
     }
 
     // getters
-    public function titre() {
-        return $this->_titre;
-    }
-
-    public function prixInitial() {
-        return $this->_prixInital;
-    }
-
-    public function age() {
-        return $this->_age;
-    }
-
-    public function prixFinal() {
-        return $this->_prixFinal;
-    }
-
-    public function promotion() {
-        return $this->_promotion;
-    }
-
     public function franchise() {
         return $this->_franchise;
     }
@@ -127,11 +82,11 @@ class Contenu extends Produit
 
     public function genres()
     {
-        return $this->_genre;
+        return $this->_genres;
     }
 
     public function langues()
     {
-        return $this->_langue;
+        return $this->_langues;
     }
 }
