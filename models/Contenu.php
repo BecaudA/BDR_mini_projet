@@ -4,14 +4,16 @@
 class Contenu extends Produit
 {
     private $_titre;
-    private $_ageLegal;
-    private $_prix;
+    private $_prixInital;
+    private $_age;
+    private $_prixFinal;
+    private $_promotion;
+    private $_franchise;
+    private $_developpeur;
+    private $_editeur;
     private $_description;
     private $_genre = array();
     private $_langue = array();
-    private $_franchise;
-    private $_editeur;
-    private $_developpeur;
 
     // constructeur
     public function __construct(array $data) {
@@ -34,12 +36,32 @@ class Contenu extends Produit
         $this->_titre = $titre;
     }
 
-    public function set_ageLegal($agelegal) {
-        $this->_ageLegal = $agelegal;
+    public function set_prixInital($prixInitial) {
+        $this->_prixInital = $prixInitial;
     }
 
-    public function set_prix($prix) {
-        $this->_prix = $prix;
+    public function set_age($age) {
+        $this->_age = $age;
+    }
+
+    public function set_prixFinal($prixFinal) {
+        $this->_prixFinal = $prixFinal;
+    }
+
+    public function set_promotion($promotion) {
+        $this->_promotion = $promotion;
+    }
+
+    public function set_franchise($franchise) {
+        $this->_franchise = $franchise;
+    }
+
+    public function set_developpeur($developpeur) {
+        $this->_developpeur = $developpeur;
+    }
+
+    public function set_editeur($editeur) {
+        $this->_editeur = $editeur;
     }
 
     public function set_description($description) {
@@ -66,35 +88,41 @@ class Contenu extends Produit
         }
     }
 
-    public function set_franchise($data){
-        $this->_franchise = $data;
-    }
-
-    public function set_editeur($data){
-        $this->_editeur = $data;
-    }
-
-    public function set_developpeur($data){
-        $this->_developpeur = $data;
-    }
-
     // getters
     public function titre() {
         return $this->_titre;
     }
 
+    public function prixInitial() {
+        return $this->_prixInital;
+    }
+
+    public function age() {
+        return $this->_age;
+    }
+
+    public function prixFinal() {
+        return $this->_prixFinal;
+    }
+
+    public function promotion() {
+        return $this->_promotion;
+    }
+
+    public function franchise() {
+        return $this->_franchise;
+    }
+
+    public function developpeur() {
+        return $this->_developpeur;
+    }
+
+    public function editeur() {
+        return $this->_editeur;
+    }
+
     public function description() {
         return $this->_description;
-    }
-
-    public function prix()
-    {
-        return $this->_prix;
-    }
-
-    public function ageLegal()
-    {
-        return $this->_ageLegal;
     }
 
     public function genres()
@@ -105,17 +133,5 @@ class Contenu extends Produit
     public function langues()
     {
         return $this->_langue;
-    }
-
-    public function developpeur(){
-        return $this->_developpeur;
-    }
-
-    public function editeur(){
-        return $this->_editeur;
-    }
-
-    public function franchise(){
-        return $this->_franchise;
     }
 }

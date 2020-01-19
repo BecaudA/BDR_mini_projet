@@ -3,13 +3,16 @@
     <?php
     foreach ($contenus as $cont) {
         $titre = $cont->titre();
-        $ageLegal  = $cont->ageLegal();
-        $prix = $cont->prix();
+        $prixInitial = $cont->prixInitial();
+        $ageLegal  = $cont->age();
+        $prix = $cont->prixFinal();
+        $promotion = $cont->promotion();
         $description = $cont->description();
         $traductions = $cont->langues();
         $genres = $cont->genres();
         $developpeur = $cont->developpeur();
         $editeur = $cont->editeur();
+        $franchise = $cont->franchise();
     }
     ?>
     <h1 class="font-weight-light text-center text-lg-left mt-4 mb-0"><?php echo $titre; ?> (+<?php echo $ageLegal; ?>)</h1>
@@ -74,6 +77,16 @@
                 echo $developpeur;
                 ?></div>
         </div>
+        <?php
+            if($franchise != null){
+        ?>
+                <div class="row text-center text-lg-right">
+                    <h3 class="font-weight-light text-center text-lg-right mt-0 mb-0" style="width:250px;">Franchise : </h3>
+                    <div class="font-weight-light text-center text-lg-right mt-2 mb-0"><?php
+                        echo $franchise;
+                        ?></div>
+                </div>
+        <?php }?>
     </div>
 
 </div>
