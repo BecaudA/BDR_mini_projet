@@ -26,7 +26,7 @@
         <div class="row">
             <div class="col-md-8 blog-main">
                 <h1 class="pb-3 mb-4 font-italic border-bottom">
-                    <?= $titre." (-".$age.")"?>
+                    <?= $titre?>
                 </h1>
                 <div class="blog-post">
                     <h2 class="blog-post-title">Description</h2>
@@ -35,11 +35,23 @@
             </div>
 
             <aside class="col-md-4 blog-sidebar">
-                <h2 class=text-center"><span class="badge badge-secondary"><?= $prix; ?> CHF</span></h2>
+                <?php if($promotion): ?>
+                    <h2 class=text-center"><span class="badge badge-danger"><small class="text-muted">
+                        <s><?php echo $prixInitial; ?> CHF</s></small> <?= $prix; ?> CHF</span>
+                        <span class="badge badge-danger">
+                            <span class="glyphicon glyphicon-align-left" aria-hidden="true">
+                                <?= $promotion; ?>%
+                            </span>
+                        </span>
+                    </h2>
+                <?php else: ?>
+                    <h2 class=text-center"><span class="badge badge-secondary"><?= $prix; ?> CHF </span></h2>
+                <?php endif; ?>
                 <button class="btn btn-primary btn-lg btn-block" type="submit" href="#">Acheter pour moi</button>
                 <button class="btn btn-primary btn-lg btn-block mb-2" type="submit" href="#">Acheter pour un ami</button>
                 <div class="p-3 mb-3 bg-light rounded">
                     <h4 class="font-italic">Détails</h4>
+                    <h6>Age légal : <?= $age; ?> ans</h6>
                     <h6>Langue
                     <?php
                     $sizeTradArray = sizeof($traductions);
@@ -92,7 +104,3 @@
 
         </div>
     </div>
-
-
-
-<?php
