@@ -45,20 +45,24 @@ function getCompte($id) {
 }
 
 function getAchatsCompte($idCompte) {
-    return "SELECT * FROM stome.vueAchats WHERE  vueAchats.id = \"" . $idCompte . "\"";
+    return "SELECT * FROM stome.vueAchats WHERE  vueAchats.idCompte = \"" . $idCompte . "\"";
 }
 
-function getJeuxCompte($idCompte) {
-    // TODO
-    return "WITH RECURSIVE cte_POB(titre) AS (
-    SELECT DISTINCT vPC.titreProduit FROM stome.vueProduitsComptes AS vPC
-        WHERE vPC.idProprietaire = ". $idCompte ."
-    UNION ALL
-    SELECT BC.titreProduit
-        FROM cte_POB JOIN stome.BundleComprend as BC
-                ON cte_POB.titre = BC.titreBundle
-) SELECT cte_POB.titre FROM cte_POB
-    INNER JOIN stome.Contenu
-            ON Contenu.titre = cte_POB.titre;";
+function getJeuxCompte($idCompte){
+    return "WITH RECURSIVE cte_COB(titre) AS (
+                SELECT DISTINCT vPC.titreProduit FROM stome.vueProduitsComptes AS vPC
+                    WHERE vPC.idProprietaire = ". $idCompte . "
+                UNION ALL
+                SELECT BC.titreProduit
+                    FROM cte_COB JOIN stome.BundleComprend as BC
+                            ON cte_COB.titre = BC.titreBundle
+            ) SELECT cte_COB.titre FROM cte_COB
+                INNER JOIN stome.Contenu
+                        ON Contenu.titre = cte_COB.titre
+                GROUP BY cte_COB.titre;";
+}
+
+function getAcheteurContenuCompte($titreContenu, $idCompte){
+    return "";
 }
 

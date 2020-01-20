@@ -1,7 +1,7 @@
 <?php
 
 class BundleManager extends Model {
-    public function getBundleM($titre) {
+    public function getBundle($titre) {
         $bundle = $this->reqSelectDB(getBundleById($titre), "Bundle");
         if (empty($bundle)) {
             echo "Bundle is empty!, ";

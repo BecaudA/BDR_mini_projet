@@ -21,7 +21,7 @@ $nb_jeu          = 0;
             </h1>
             <div class="blog-post">
                 <h2 class="blog-post-title mb-3">Bibliotèque de jeux</h2>
-                <?php if(!empty($bibliotheque)): ?>
+                <?php if(!empty($jeux)): ?>
                     <table class="table table-hover table-striped">
                         <thead>
                         <tr>

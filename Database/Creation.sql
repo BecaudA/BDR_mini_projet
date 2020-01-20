@@ -6,7 +6,7 @@
 -- -----------------------------------------------------
 -- Schema stome
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS stome DEFAULT CHARACTER SET utf8 ;
+CREATE SCHEMA IF NOT EXISTS stome DEFAULT CHARACTER SET utf8MB4;
 USE stome ;
 
 -- -----------------------------------------------------
@@ -343,12 +343,12 @@ INSERT INTO Produit(titre) VALUES ("Deep Rock Galactic");
 INSERT INTO Produit(titre) VALUES ("Bundle Root Test");
 INSERT INTO Produit(titre) VALUES ("Bundle Child Test");
 
-INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Borderlands", 16, 60, "Will see");
-INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Borderlands 2", 16, 80, "Will see");
-INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Borderlands 3", 18, 90, "Will see");
-INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Monster Hunter World", 16, 70, "Will see");
-INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Monster Hunter Iceborne", 16, 50, "DLC of Monster Hunter");
-INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Deep Rock Galactic", 14, 25, "Dwarves mining in outer space ... and beers ! Rock N Stone !");
+INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Borderlands", 16, 60, "Borderlands est un jeu de tir à la première personne mâtiné de jeu de rôle (expérience, spécialisations) qui vous entraîne sur une planète mystérieuse, aux allures de Far West futuriste. Il offre au joueur la possibilité de piloter des véhicules et de manipuler une grande variété d''armes afin de remplir de très nombreuses quêtes. Jouable en solo, Borderlands permet également à quatre participants de compléter l''aventure ensemble, en coopération.");
+INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Borderlands 2", 16, 80,"Borderlands 2 est un mélange de jeu de tir à la première personne et de jeu de rôle. Le joueur doit s''aventurer dans les mondes inexplorés de Pandora et percer les secrets de l''univers de Borderlands.");
+INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Borderlands 3", 18, 90, "Borderlands 3 est un RPG en vue FPS. Contrairement aux épisodes précédents, les joueurs vont pouvoir visiter Prométhée. Cette planète est la zone où Atlas a découvert la première Arche, une des éléments importants de la série.");
+INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Monster Hunter World", 16, 70, "La dernière entrée de la série Monster Hunter. Plus complet que jamais, le jeu transporte le joueur au travers de batailles contre de terribles monstres et de magnifiques paysages. Récupérerez des objets sur vos ennemis, créez de nouveaux équipements et armures, explorez tous les territoires disponibles. Saurez vous devenir le chasseur ultime ?");
+INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Monster Hunter Iceborne", 16, 50,"Monster Hunter World : Iceborne est la première extension pour le RPG de Capcom Monster Hunter World. Annoncée pour l''automne 2019, elle s’annonce massive avec une toute nouvelle histoire se déroulant après les événements du jeu, des nouveaux rangs de chasse et des nouveaux monstres comme le Nargacuga.");
+INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Deep Rock Galactic", 14, 25,"Deep Rock Galactic est un jeu d''action en coopération situé dans un univers de science-fiction. Vous incarnez une troupe de nains de l''espace qui n''a pas du tout envie de se laisser faire. Terrassez-vos ennemis dans des niveaux générés procéduralement et ce, de la meilleure des manières : en détruisant tout sur votre passage.");
 
 INSERT INTO Bundle(titre) VALUES ("Bundle Borderlands");
 INSERT INTO Bundle(titre) VALUES ("Bundle Monster Hunter World");
@@ -364,10 +364,10 @@ INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Monster Hu
 INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Monster Hunter World", "Monster Hunter Iceborne");
 
 # DEBUG
-INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Root Test", "Bundle Child Test");
-INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Root Test", "Borderlands 3");
 INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Child Test", "Borderlands");
 INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Child Test", "Borderlands 2");
+INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Root Test", "Bundle Child Test");
+INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Root Test", "Borderlands 3");
 
 INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Teixeira Carvalho", "Stephane", "test@gmail.com", 100, '2010-04-02');
 INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Egremy", "Bruno", "test2@gmail.com", 100, '1999-04-02');
@@ -416,8 +416,8 @@ INSERT INTO Genre(nom) VALUES ("RPG");
 INSERT INTO Genre(nom) VALUES ("FPS");
 INSERT INTO Genre(nom) VALUES ("Horreur");
 
-INSERT INTO Possedegenre(titreContenu, nomGenre) VALUES ("Borderlands", "Action");
-INSERT INTO Possedegenre(titreContenu, nomGenre) VALUES ("Borderlands", "RPG");
+INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Borderlands", "Action");
+INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Borderlands", "RPG");
 
 UPDATE Compte SET porteMonnaie = 100 WHERE id = 2;
 
@@ -469,47 +469,7 @@ BEGIN
 END
 $$
 
-DELIMITER $$
-CREATE TRIGGER achat_age
-BEFORE INSERT
-ON Achat
-FOR EACH ROW
-BEGIN
-	DECLARE ageCompte TINYINT;
-    DECLARE ageProduit TINYINT;
 
-    SELECT TIMESTAMPDIFF(YEAR ,Compte.dateNaissance, CURRENT_DATE()) INTO ageCompte
-    FROM Compte
-    WHERE id= NEW.idCompte;
-
-    #Calcul de l'âge d'achat pour un bundle
-    SELECT MAX(Contenu.ageLegal) INTO ageProduit
-    FROM BundleComprend
-    INNER JOIN Produit
-    ON BundleComprend.titreProduit = Produit.titre
-    INNER JOIN Bundle
-    ON BundleComprend.titreBundle = Bundle.titre
-    INNER JOIN Contenu
-    ON Contenu.titre = Produit.titre
-    WHERE BundleComprend.titreBundle = NEW.titreProduit;
-
-    #Si l'âge du produit veut null cela veut dire que le produit acheter n'est pas un bundle
-    if(ageProduit IS NULL) THEN
-		#Calcul de l'âge d'achat pour un jeu
-		SELECT ageLegal INTO ageProduit
-		FROM Contenu
-		WHERE titre = NEW.titreProduit;
-	END IF;
-
-	IF (ageCompte < ageProduit) THEN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Compte trop jeune';
-	ELSE
-		UPDATE Compte
-		SET Compte.porteMonnaie = Compte.PorteMonnaie - (SELECT prix FROM Produit WHERE NEW.titreProduit = Produit.titre)
-		WHERE NEW.idCompte = id;
-    END IF;
-END
-$$
 
 DELIMITER $$
 CREATE TRIGGER double_Achat_Produit
@@ -836,7 +796,7 @@ END
 $$
 
 DELIMITER $$
-CREATE VIEW vueAchats(id, titre, prixInitial, prixFinal, promotion, date, idAmi) AS
+CREATE VIEW vueAchats(idCompte, titre, prixInitial, prixFinal, promotion, date, idAmi) AS
 SELECT Achat.idCompte, vueProduit.titre, vueProduit.prixInitial, vueProduit.prixFinal, vueProduit.promotion, Achat.date, AchatAmi.idAmi
 FROM Achat
          LEFT JOIN AchatAmi
@@ -846,18 +806,19 @@ FROM Achat
 $$
 
 DELIMITER $$
-CREATE VIEW vueProduitsComptes(titreProduit, idProprietaire) AS
+CREATE VIEW vueProduitsComptes(titreProduit, idProprietaire, idAcheteur) AS
     SELECT Achat.titreProduit,
     CASE
         WHEN Achat.id = AA.id THEN AA.idAmi
         ELSE Achat.idCompte
-    END
+    END, Achat.idCompte
     FROM stome.Achat
     LEFT JOIN AchatAmi AA on Achat.id = AA.id
 $$
 
 #CREATE VIEW promotionActu AS
 #DROP VIEW IF EXISTS vueProduitsComptes;
+#DROP VIEW IF EXISTS vueAchats;
 #DROP FUNCTION IF EXISTS calculPrixPromo;
 #DROP TRIGGER IF EXISTS bundle_luiMeme;
 #DROP TRIGGER IF EXISTS achat_age;
