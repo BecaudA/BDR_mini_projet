@@ -33,9 +33,9 @@
                             <?php
                             foreach ($listeProduits as $produit):
                                 $titre       = $produit->titre();
-                                $prixInitial = $produit->prixInitial();
-                                $prixFinal   = $produit->prixFinal();
-                                $promotion   = $produit->promotion();
+                                $prixInitialP = $produit->prixInitial();
+                                $prixFinalP   = $produit->prixFinal();
+                                $promotionProduit   = $produit->promotion();
                                 $img         = "img/thumbnails/" . strtolower(str_replace(' ', '', $titre)) . ".jpg";
                                 $link        = str_replace(' ', '_', $titre);
                                 ?>
@@ -51,11 +51,11 @@
                                                     <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
                                                     <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
                                                 </div> -->
-                                                <?php if($promotion): ?>
-                                                    <small class="text-muted"><s><?php echo $prixInitial; ?> CHF</s></small>
-                                                    <span class="badge badge-danger"><?php echo $prixFinal; ?> CHF</small> <sup>-<?php echo $promotion; ?>%</sup></span>
+                                                <?php if($promotionProduit): ?>
+                                                    <small class="text-muted"><s><?php echo $prixInitialP; ?> CHF</s></small>
+                                                    <span class="badge badge-danger"><?php echo $prixFinalP; ?> CHF</small> <sup>-<?php echo $promotionProduit; ?>%</sup></span>
                                                 <?php else: ?>
-                                                    <small class="text-muted"><?php echo $prixFinal; ?> CHF</small>
+                                                    <small class="text-muted"><?php echo $prixFinalP; ?> CHF</small>
                                                 <?php endif; ?>
                                             </div>
                                         </div>

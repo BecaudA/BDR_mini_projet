@@ -542,7 +542,7 @@ SELECT Produit.titre,
            END AS age,
 
        CASE WHEN Produit.titre = vueBundle2.titre
-                THEN vueBundle2.prixReel
+                THEN calculPrixPromo(Produit.titre, vueBundle2.prixReel)
             ELSE calculPrixPromo(Produit.titre, Contenu.prix) END AS prixReel,
        COALESCE((SELECT SUM(Promotion.pourcentage)
                  FROM Promotion
@@ -823,10 +823,10 @@ SELECT titreBundle, prixInitial + SUM(CASE WHEN BundleComprend.titreProduit IN (
                                                     FROM vueBundle
                                                     WHERE titre = BundleComprend.titreProduit)
                                            ELSE 0 END) AS prixInitial,
-       prixReel + SUM(CASE WHEN BundleComprend.titreProduit IN (SELECT Bundle.titre FROM Bundle) THEN
-                               (	SELECT prixReel
-                                    FROM vueBundle
-                                    WHERE titre = BundleComprend.titreProduit) ELSE 0 END) AS prixReel,
+       calculPrixPromo(titreBundle, prixReel + SUM(CASE WHEN BundleComprend.titreProduit IN (SELECT Bundle.titre FROM Bundle) THEN
+                                                            (	SELECT prixReel
+                                                                 FROM vueBundle
+                                                                 WHERE titre = BundleComprend.titreProduit) ELSE 0 END)) AS prixReel,
        MAX(vueBundle.age) AS age
 FROM BundleComprend
          INNER JOIN Produit
