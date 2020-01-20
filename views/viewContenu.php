@@ -47,58 +47,57 @@
                 <?php else: ?>
                     <h2 class=text-center"><span class="badge badge-secondary"><?= $prix; ?> CHF </span></h2>
                 <?php endif; ?>
-                <button class="btn btn-primary btn-lg btn-block" type="submit" href="#">Acheter pour moi</button>
-                <button class="btn btn-primary btn-lg btn-block mb-2" type="submit" href="#">Acheter pour un ami</button>
+                <button class="btn btn-primary btn-lg btn-block mb-2" type="submit" href="#">Acheter</button>
                 <div class="p-3 mb-3 bg-light rounded">
                     <h4 class="font-italic">Détails</h4>
                     <h6>Age légal : <?= $age; ?> ans</h6>
                     <h6>Langue
-                    <?php
-                    $sizeTradArray = sizeof($traductions);
-                    if ($sizeTradArray > 1) {
-                        echo "s";
-                    }
-                    echo " : ";
-                    if ($sizeTradArray == 0) {
-                        echo "aucune";
-                    } else {
-                        for ($i = 0; $i < sizeof($traductions); ++$i) {
-                            echo $traductions[$i];
-                            if ($i < sizeof($traductions) - 1) {
-                                echo ", ";
+                        <?php
+                        $sizeTradArray = sizeof($traductions);
+                        if ($sizeTradArray > 1) {
+                            echo "s";
+                        }
+                        echo " : ";
+                        if ($sizeTradArray == 0) {
+                            echo "aucune";
+                        } else {
+                            for ($i = 0; $i < sizeof($traductions); ++$i) {
+                                echo $traductions[$i];
+                                if ($i < sizeof($traductions) - 1) {
+                                    echo ", ";
+                                }
                             }
                         }
-                    }
-                    ?>
+                        ?>
 
-                    <h6>Genre
-                    <?php
-                    $sizeGenreArray = sizeof($genres);
-                    if ($sizeGenreArray > 1) {
-                        echo "s";
-                    }
-                    echo " : ";
-                    if ($sizeGenreArray == 0) {
-                        echo "aucun";
-                    } else {
-                        for ($i = 0; $i < sizeof($genres); ++$i) {
-                            echo $genres[$i];
-                            if ($i < sizeof($genres) - 1) {
-                                echo ", ";
+                        <h6>Genre
+                            <?php
+                            $sizeGenreArray = sizeof($genres);
+                            if ($sizeGenreArray > 1) {
+                                echo "s";
                             }
-                        }
-                    }
-                    ?>
-                    </h6>
-                    <h6>
-                        Franchise : <?= $franchise; ?>
-                    </h6>
-                    <h6>
-                        Editeur : <?= $editeur; ?>
-                    </h6>
-                    <h6>
-                        Developpeur : <?= $developpeur; ?>
-                    </h6>
+                            echo " : ";
+                            if ($sizeGenreArray == 0) {
+                                echo "aucun";
+                            } else {
+                                for ($i = 0; $i < sizeof($genres); ++$i) {
+                                    echo $genres[$i];
+                                    if ($i < sizeof($genres) - 1) {
+                                        echo ", ";
+                                    }
+                                }
+                            }
+                            ?>
+                        </h6>
+                        <h6>
+                            Franchise : <?= $franchise; ?>
+                        </h6>
+                        <h6>
+                            Editeur : <?= $editeur; ?>
+                        </h6>
+                        <h6>
+                            Developpeur : <?= $developpeur; ?>
+                        </h6>
                 </div>
             </aside>
 

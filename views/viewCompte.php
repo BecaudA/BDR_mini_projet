@@ -3,7 +3,7 @@ $id              = $comptes[0]->id();
 $nom             = $comptes[0]->nom();
 $prenom          = $comptes[0]->prenom();
 $email           = $comptes[0]->email();
-$portMonnaie     = $comptes[0]->porteMonnaie();
+$porteMonnaie    = $comptes[0]->porteMonnaie();
 $dateNaissance   = $comptes[0]->dateNaissance();
 $achats          = $comptes[0]->achats();
 $bibliotheque    = $comptes[0]->bibliotheque();
@@ -125,7 +125,7 @@ $nb_jeu          = 0;
         </div>
 
         <aside class="col-md-4 blog-sidebar">
-            <h2><span class="badge badge-secondary">Porte monnaie : <?= $portMonnaie; ?> CHF</span></h2>
+            <h2><span class="badge badge-secondary">Porte monnaie : <?= $porteMonnaie; ?> CHF</span></h2>
             <div class="p-3 mb-3">
                 <h4 class="font-italic">Détails</h4>
                     <h6>

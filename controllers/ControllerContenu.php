@@ -10,13 +10,13 @@ class ControllerContenu {
         if (isset($url) && (count($url) > 1)) {
             throw new Exception('Page introuvable');
         } else {
-            $this->showDetailsContenu($url);
+            $this->showContenu($url);
         }
     }
 
-    private function showDetailsContenu($titre) {
+    private function showContenu($titre) {
         $this->_contenuManager = new ContenuManager();
-        $contenus = $this->_contenuManager->getDetailsContenu($titre);
+        $contenus = $this->_contenuManager->getContenu($titre);
 
         //
         $this->_view = new View('Contenu');
