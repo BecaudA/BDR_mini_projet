@@ -811,6 +811,16 @@ BEGIN
 END
 $$
 
+DELIMITER $$
+CREATE VIEW vueCompteAchat(id, titre, prixInitial, prixFinal, promotion, date) AS
+SELECT Achat.idCompte, vueProduit.titre, vueProduit.prixInitial, vueProduit.prixFinal, vueProduit.promotion, Achat.date
+FROM Achat
+         LEFT JOIN AchatAmi
+                   ON Achat.id = idAmi
+         INNER JOIN vueProduit
+                    ON vueProduit.titre = Achat.titreProduit;
+$$
+
 #CREATE VIEW promotionActu AS
 
 #DROP FUNCTION IF EXISTS calculPrixPromo;
