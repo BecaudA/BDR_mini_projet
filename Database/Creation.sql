@@ -812,8 +812,8 @@ END
 $$
 
 DELIMITER $$
-CREATE VIEW vueAchats(id, titre, prixInitial, prixFinal, promotion, date) AS
-SELECT Achat.idCompte, vueProduit.titre, vueProduit.prixInitial, vueProduit.prixFinal, vueProduit.promotion, Achat.date
+CREATE VIEW vueAchats(id, titre, prixInitial, prixFinal, promotion, date, idAmi) AS
+SELECT Achat.idCompte, vueProduit.titre, vueProduit.prixInitial, vueProduit.prixFinal, vueProduit.promotion, Achat.date, AchatAmi.idAmi
 FROM Achat
          LEFT JOIN AchatAmi
                    ON Achat.id = idAmi
