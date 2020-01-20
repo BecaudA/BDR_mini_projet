@@ -48,6 +48,14 @@ abstract class Model {
         return $var;
 	}
 
+    protected function insertElementDB($insert) {
+        $var = [];
+        self::$_db == $this->getDB();
+        $req = self::$_db->prepare($insert);
+        $req->execute();
+        $req->closeCursor();
+    }
+
     protected function reqSelectDB_Tuple($select) {
         $var = [];
         self::$_db == $this->getDB();

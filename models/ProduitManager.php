@@ -3,6 +3,7 @@ include 'requests.php';
 
 class ProduitManager extends Model {
     public function getProduits() {
+        //$this->insertElementDB("INSERT INTO bundlecomprend(titreBundle, titreProduit) VALUES (\"Bundle Borderlands\", \"Bundle Borderlands\");");
         return $this->reqSelectDB(getAllProduits(), 'Produit');
     }
 
