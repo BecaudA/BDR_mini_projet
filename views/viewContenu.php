@@ -1,4 +1,12 @@
 <?php
+    if(count($_REQUEST) >= 1){
+        $this->_AchatManager = new AchatManager();
+        $this->_comptes = $this->_AchatManager->setAchatPerso(2,"Borderlands 2");
+        if(count($_REQUEST) == 2){
+
+        }
+
+    }
     $titre       = $contenus[0]->titre();
     $prixInitial = $contenus[0]->prixInitial();
     $age         = $contenus[0]->age();

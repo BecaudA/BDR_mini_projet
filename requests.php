@@ -72,3 +72,18 @@ function getAmisCompte($id) {
                 WHERE EstAmi.idCompte = ".$id;
 }
 
+function addNewAchat($idCompte, $titreProduit){
+    return "INSERT INTO Achat(idCompte, titreProduit, date) VALUES (". $idCompte .", \"". $titreProduit . "\", NOW())";
+}
+
+function addNewAchatAmi($idAchat, $idCompte){
+    return "INSERT INTO AchatAmi(id, idAmi) VALUES (".$idAchat . ", ".$idCompte.")";
+}
+
+function addNewAchatPerso($idAchat){
+    return "INSERT INTO AchatPersonnel(id) VALUES (".$idAchat . ")";
+}
+
+function getAchatLastId(){
+    return "SELECT id FROM Achat ORDER BY id DESC LIMIT 1";
+}
