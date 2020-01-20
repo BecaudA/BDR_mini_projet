@@ -5,11 +5,11 @@ function getAllProduits(){
 }
 
 function getBundleById($id){
-    return "SELECT * FROM stome.vueproduit WHERE titre = \"".$id."\"";
+    return "SELECT * FROM stome.vueProduit WHERE titre = \"".$id."\"";
 }
 
 function getBundleProduits($id){
-    return "SELECT titreProduit FROM stome.bundlecomprend WHERE titreBundle = \"".$id."\"";
+    return "SELECT titreProduit FROM stome.BundleComprend WHERE titreBundle = \"".$id."\"";
 }
 
 function getContenu($id){
@@ -29,7 +29,7 @@ function getProduit($titre) {
 }
 
 function getProduitFromView($titre) {
-    return "SELECT * FROM stome.vueproduit WHERE vueproduit.titre = \"".$titre."\"";
+    return "SELECT * FROM stome.vueProduit WHERE vueProduit.titre = \"".$titre."\"";
 }
 
 function getBundle($titre) {
