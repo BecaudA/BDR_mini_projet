@@ -764,8 +764,8 @@ BEGIN
 
     /* l'identifiant de AchatPersonnel ne doit pas être utilisé par les autres tables filles */
     IF NEW.id IN (SELECT AchatAmi.id
-                  FROM Achatami
-                  WHERE Achatami.id = NEW.id)
+                  FROM AchatAmi
+                  WHERE AchatAmi.id = NEW.id)
     THEN
         SET @erreur = 1;
     END IF;
@@ -781,7 +781,7 @@ DELIMITER $$
 /*  Trigger sur AchatAmi pour contrôler l'insertion  */
 CREATE TRIGGER TRG_AchatAmi
     BEFORE INSERT
-    ON Achatami
+    ON AchatAmi
     FOR EACH ROW
 BEGIN
     DECLARE erreur TINYINT;
@@ -797,9 +797,9 @@ BEGIN
     END IF;
 
     /* l'identifiant de AchatAmi ne doit pas être utilisé par les autres tables filles */
-    IF NEW.id IN (SELECT Achatpersonnel.id
-                  FROM Achatpersonnel
-                  WHERE Achatpersonnel.id = NEW.id)
+    IF NEW.id IN (SELECT AchatPersonnel.id
+                  FROM AchatPersonnel
+                  WHERE AchatPersonnel.id = NEW.id)
     THEN
         SET @erreur = 1;
     END IF;
@@ -812,7 +812,7 @@ END
 $$
 
 DELIMITER $$
-CREATE VIEW vueCompteAchat(id, titre, prixInitial, prixFinal, promotion, date) AS
+CREATE VIEW vueAchats(id, titre, prixInitial, prixFinal, promotion, date) AS
 SELECT Achat.idCompte, vueProduit.titre, vueProduit.prixInitial, vueProduit.prixFinal, vueProduit.promotion, Achat.date
 FROM Achat
          LEFT JOIN AchatAmi

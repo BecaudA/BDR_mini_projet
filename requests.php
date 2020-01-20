@@ -36,3 +36,15 @@ function getBundle($titre) {
     return "SELECT * FROM stome.Bundle WHERE Bundle.titre = \"".$titre."\"";
 }
 
+function getComptes() {
+    return "SELECT * FROM stome.Compte";
+}
+
+function getCompte($id) {
+    return "SELECT * FROM stome.Compte WHERE Compte.id = \"" . $id . "\"";
+}
+
+function getAchatsCompte($idCompte) {
+    return "SELECT * FROM stome.vueAchats WHERE  vueAchats.id = \"" . $idCompte . "\"";
+}
+

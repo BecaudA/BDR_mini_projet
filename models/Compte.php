@@ -7,6 +7,7 @@ class Compte {
 	private $_email;
 	private $_porteMonnaie;
 	private $_dateNaissance;
+	private $_achats = array();
 	
 	// constructeur
 	public function __construct(array $data) {
@@ -31,17 +32,20 @@ class Compte {
     public function set_nom($value) {
         $this->_nom = $value;
     }
-    public function set_prenom($value) {
-        $this->_prenom = $value;
+    public function set_prenom($prenom) {
+        $this->_prenom = $prenom;
     }
-    public function set_email($value) {
-        $this->_email = $value;
+    public function set_email($email) {
+        $this->_email = $email;
     }
-    public function set_porteMonnaie($value) {
-        $this->_porteMonnaie = $value;
+    public function set_porteMonnaie($porteMonnaie) {
+        $this->_porteMonnaie = $porteMonnaie;
     }
-    public function set_dateNaissance($value) {
-        $this->_dateNaissance = $value;
+    public function set_dateNaissance($dateNaissance) {
+        $this->_dateNaissance = $dateNaissance;
+    }
+    public function set_achats(array $achats){
+        $this->_achats = $achats;
     }
 	
 	// getters
@@ -62,5 +66,8 @@ class Compte {
     }
     public function dateNaissance() {
         return $this->_dateNaissance;
+    }
+    public function achats() {
+	    return $this->_achats;
     }
 }
