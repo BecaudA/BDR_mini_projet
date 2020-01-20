@@ -66,3 +66,9 @@ function getAcheteurContenuCompte($titreContenu, $idCompte){
     return "";
 }
 
+function getAmisCompte($id) {
+    return "SELECT C.id, C.nom, C.prenom, C.email, c.porteMonnaie, c.dateNaissance FROM Compte AS C
+                INNER JOIN EstAmi ON C.id = EstAmi.idAmi
+                WHERE EstAmi.idCompte = ".$id;
+}
+

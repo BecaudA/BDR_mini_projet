@@ -9,6 +9,7 @@ class CompteManager extends Model {
 	    $comptes = $this->reqSelectDB(getCompte($id), 'Compte');
 	    $comptes[0]->set_achats($this->getAchatsCompte($comptes[0]->id()));
         $comptes[0]->set_bibliotheque($this->getJeuxCompte($comptes[0]->id()));
+        $comptes[0]->set_amis($this->reqSelectDB(getAmisCompte($id), 'Compte'));
 
 	    return $comptes;
     }
