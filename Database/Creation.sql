@@ -364,10 +364,10 @@ INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Monster Hu
 INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Monster Hunter World", "Monster Hunter Iceborne");
 
 # DEBUG
-INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Root Test", "Bundle Child Test");
-INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Root Test", "Borderlands 3");
 INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Child Test", "Borderlands");
 INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Child Test", "Borderlands 2");
+INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Root Test", "Bundle Child Test");
+INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Root Test", "Borderlands 3");
 
 INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Teixeira Carvalho", "Stephane", "test@gmail.com", 100, '2010-04-02');
 INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Egremy", "Bruno", "test2@gmail.com", 100, '1999-04-02');
@@ -416,8 +416,8 @@ INSERT INTO Genre(nom) VALUES ("RPG");
 INSERT INTO Genre(nom) VALUES ("FPS");
 INSERT INTO Genre(nom) VALUES ("Horreur");
 
-INSERT INTO Possedegenre(titreContenu, nomGenre) VALUES ("Borderlands", "Action");
-INSERT INTO Possedegenre(titreContenu, nomGenre) VALUES ("Borderlands", "RPG");
+INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Borderlands", "Action");
+INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Borderlands", "RPG");
 
 UPDATE Compte SET porteMonnaie = 100 WHERE id = 2;
 
@@ -469,47 +469,7 @@ BEGIN
 END
 $$
 
-DELIMITER $$
-CREATE TRIGGER achat_age
-BEFORE INSERT
-ON Achat
-FOR EACH ROW
-BEGIN
-	DECLARE ageCompte TINYINT;
-    DECLARE ageProduit TINYINT;
 
-    SELECT TIMESTAMPDIFF(YEAR ,Compte.dateNaissance, CURRENT_DATE()) INTO ageCompte
-    FROM Compte
-    WHERE id= NEW.idCompte;
-
-    #Calcul de l'âge d'achat pour un bundle
-    SELECT MAX(Contenu.ageLegal) INTO ageProduit
-    FROM BundleComprend
-    INNER JOIN Produit
-    ON BundleComprend.titreProduit = Produit.titre
-    INNER JOIN Bundle
-    ON BundleComprend.titreBundle = Bundle.titre
-    INNER JOIN Contenu
-    ON Contenu.titre = Produit.titre
-    WHERE BundleComprend.titreBundle = NEW.titreProduit;
-
-    #Si l'âge du produit veut null cela veut dire que le produit acheter n'est pas un bundle
-    if(ageProduit IS NULL) THEN
-		#Calcul de l'âge d'achat pour un jeu
-		SELECT ageLegal INTO ageProduit
-		FROM Contenu
-		WHERE titre = NEW.titreProduit;
-	END IF;
-
-	IF (ageCompte < ageProduit) THEN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Compte trop jeune';
-	ELSE
-		UPDATE Compte
-		SET Compte.porteMonnaie = Compte.PorteMonnaie - (SELECT prix FROM Produit WHERE NEW.titreProduit = Produit.titre)
-		WHERE NEW.idCompte = id;
-    END IF;
-END
-$$
 
 DELIMITER $$
 CREATE TRIGGER double_Achat_Produit
