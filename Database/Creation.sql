@@ -494,85 +494,6 @@ BEGIN
 END
 $$
 
-DELIMITER $$
-CREATE FUNCTION calculPrixPromo(titreP VARCHAR(80), prixT INT)
-RETURNS INT
-READS SQL DATA
-DETERMINISTIC
-BEGIN
-    DECLARE pourcentage2 INT;
-
-	SELECT SUM(Promotion.pourcentage) INTO pourcentage2
-	FROM Promotion
-	WHERE titreProduit = titreP AND CURRENT_TIMESTAMP()	BETWEEN Promotion.dateDebut AND Promotion.dateFin;
-    IF (pourcentage2 IS NULL) THEN
-		RETURN prixT;
-	END IF;
-    RETURN prixT - (prixT * (pourcentage2 / 100));
-END
-$$
-
-DELIMITER $$
-CREATE VIEW vueProduit(titre, prixInitial, age, prixFinal, promotion) AS
-
-SELECT Produit.titre,
-       CASE WHEN Produit.titre = vueBundle.titre
-                THEN vueBundle.prixInitial
-            ELSE Contenu.prix
-           END AS prixInitial,
-
-       CASE WHEN Produit.titre = vueBundle.titre
-                THEN vueBundle.age
-            ELSE Contenu.ageLegal
-           END AS age,
-
-       CASE WHEN Produit.titre = vueBundle.titre
-                THEN calculPrixPromo(Produit.titre, vueBundle.prixReel)
-            ELSE calculPrixPromo(Produit.titre, Contenu.prix) END AS prixReel,
-       COALESCE((SELECT SUM(Promotion.pourcentage)
-                 FROM Promotion
-                 WHERE Promotion.titreProduit = Produit.titre AND
-                     CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin), 0) AS pourcentagePromo
-FROM Produit
-         LEFT JOIN vueBundle
-                   ON Produit.titre = vueBundle.titre
-         LEFT JOIN Contenu
-                   ON Contenu.titre = Produit.titre
-         LEFT JOIN Promotion
-                   ON Promotion.titreProduit = Produit.titre
-         LEFT JOIN Jeu
-                   ON Jeu.titre = Contenu.titre
-         LEFT JOIN DLC
-                   ON DLC.titre = Contenu.titre
-GROUP BY Produit.titre
-$$
-
-DELIMITER $$
-CREATE VIEW vueDLC(titre, developpeur, editeur, franchise) AS
-SELECT DLC.titre, Jeu.Editeur, Jeu.Developpeur, Jeu.Franchise
-FROM DLC
-         INNER JOIN Jeu ON Jeu.titre = DLC.titreJeu;
-$$
-
-DELIMITER $$
-CREATE VIEW vueContenu(titre, prixInitial, age, prixFinal, promotion, franchise, developpeur, editeur, description) AS
-SELECT vueProduit.titre, vueProduit.prixInitial, vueProduit.age, vueProduit.prixFinal, vueProduit.promotion,
-       CASE WHEN Contenu.titre = Jeu.titre THEN Jeu.franchise ELSE vueDLC.franchise END AS franchise,
-       CASE WHEN Contenu.titre = Jeu.titre THEN Jeu.developpeur ELSE vueDLC.developpeur END AS developpeur,
-       CASE WHEN Contenu.titre = Jeu.titre THEN Jeu.editeur ELSE vueDLC.editeur END AS editeur,
-       Contenu.Description
-FROM vueProduit
-         LEFT JOIN Contenu
-                   ON Contenu.titre = vueProduit.titre
-         LEFT JOIN Promotion
-                   ON Promotion.titreProduit = vueProduit.titre
-         LEFT JOIN Jeu
-                   ON Jeu.titre = Contenu.titre
-         LEFT JOIN vueDLC
-                   ON vueDLC.titre = Contenu.titre
-WHERE vueProduit.titre = Contenu.titre
-GROUP BY vueProduit.titre;
-$$
 
 /*Trigger pour l'héritage Produit->Bundle,Contenu*/
 DELIMITER $$
@@ -781,37 +702,21 @@ END
 $$
 
 DELIMITER $$
-CREATE VIEW vueAchats(idCompte, titre, prixInitial, prixFinal, promotion, date, idAmi) AS
-SELECT Achat.idCompte, vueProduit.titre, vueProduit.prixInitial, vueProduit.prixFinal, vueProduit.promotion, Achat.date, AchatAmi.idAmi
-FROM Achat
-         LEFT JOIN AchatAmi
-                   ON Achat.id = idAmi
-         INNER JOIN vueProduit
-                    ON vueProduit.titre = Achat.titreProduit;
-$$
+CREATE FUNCTION calculPrixPromo(titreP VARCHAR(80), prixT INT)
+RETURNS INT
+READS SQL DATA
+DETERMINISTIC
+BEGIN
+    DECLARE pourcentage2 INT;
 
-DELIMITER $$
-CREATE VIEW vueProduitsComptes(titreProduit, idProprietaire, idAcheteur) AS
-    SELECT Achat.titreProduit,
-    CASE
-        WHEN Achat.id = AA.id THEN AA.idAmi
-        ELSE Achat.idCompte
-    END, Achat.idCompte
-    FROM stome.Achat
-    LEFT JOIN AchatAmi AA on Achat.id = AA.id
-$$
-
-DELIMITER $$
-CREATE VIEW vueBundle(titre, prixInitial, prixReel, age) AS
-SELECT titreBundle, calculPrixInitialContenusBundle(titreBundle) + calculPrixInitialBundlesBundle(titreBundle)  AS prixInitial,
-       calculPrixReelBundle(titreBundle) AS prixReel,
-       MAX(Contenu.ageLegal) AS age
-FROM BundleComprend
-         INNER JOIN Produit
-                    ON Produit.titre = titreProduit
-         INNER JOIN Contenu
-                    ON Contenu.titre = Produit.titre
-GROUP BY BundleComprend.titreBundle;
+	SELECT SUM(Promotion.pourcentage) INTO pourcentage2
+	FROM Promotion
+	WHERE titreProduit = titreP AND CURRENT_TIMESTAMP()	BETWEEN Promotion.dateDebut AND Promotion.dateFin;
+    IF (pourcentage2 IS NULL) THEN
+		RETURN prixT;
+	END IF;
+    RETURN prixT - (prixT * (pourcentage2 / 100));
+END
 $$
 
 DELIMITER $$
@@ -834,22 +739,6 @@ END
 $$
 
 DELIMITER $$
-CREATE FUNCTION calculPrixReelBundle(titreB VARCHAR(80))
-    RETURNS INT
-    READS SQL DATA
-    DETERMINISTIC
-BEGIN
-    DECLARE prixFinalTotalBundle INT;
-
-    SELECT calculPrixPromo(titreB, calculPrixInitialBundlesBundle(titreB) + calculPrixInitialContenusBundle(titreB)) INTO prixFinalTotalBundle
-    FROM BundleComprend
-    GROUP BY BundleComprend.titreBundle
-    HAVING titreBundle = titreB;
-    RETURN prixFinalTotalBundle;
-END
-$$
-
-DELIMITER $$
 CREATE FUNCTION calculPrixInitialContenusBundle(titreB VARCHAR(80))
     RETURNS INT
     READS SQL DATA
@@ -859,17 +748,125 @@ BEGIN
 
     SELECT SUM(calculPrixPromo(Contenu.titre, Contenu.prix)) INTO prixInitialTotalContenu
     FROM BundleComprend
-             INNER JOIN Produit
-                        ON Produit.titre = titreProduit
              INNER JOIN Contenu
-                        ON Contenu.titre = Produit.titre
-             LEFT JOIN Promotion
-                       ON Promotion.titreProduit = BundleComprend.titreBundle
+                        ON Contenu.titre = BundleComprend.titreProduit
     GROUP BY titreBundle
     HAVING titreBundle = titreB;
 
     RETURN prixInitialTotalContenu;
 END
+$$
+
+DELIMITER $$
+CREATE FUNCTION calculPrixReelBundle(titreB VARCHAR(80))
+    RETURNS INT
+    READS SQL DATA
+    DETERMINISTIC
+BEGIN
+    DECLARE prixFinalTotalBundle INT;
+
+    SELECT calculPrixInitialBundlesBundle(titreB) + calculPrixInitialContenusBundle(titreB) INTO prixFinalTotalBundle
+    FROM BundleComprend
+    GROUP BY BundleComprend.titreBundle
+    HAVING titreBundle = titreB;
+    RETURN prixFinalTotalBundle;
+END
+$$
+
+DELIMITER $$
+CREATE VIEW vueBundle(titre, prixInitial, prixReel, age) AS
+SELECT titreBundle, calculPrixInitialContenusBundle(titreBundle) + calculPrixInitialBundlesBundle(titreBundle)  AS prixInitial,
+       calculPrixReelBundle(titreBundle) AS prixReel,
+       MAX(Contenu.ageLegal) AS age
+FROM BundleComprend
+         INNER JOIN Produit
+                    ON Produit.titre = titreProduit
+         INNER JOIN Contenu
+                    ON Contenu.titre = Produit.titre
+GROUP BY BundleComprend.titreBundle;
+$$
+
+DELIMITER $$
+CREATE VIEW vueProduit(titre, prixInitial, age, prixFinal, promotion) AS
+
+SELECT Produit.titre,
+       CASE WHEN Produit.titre = vueBundle.titre
+                THEN vueBundle.prixInitial
+            ELSE Contenu.prix
+           END AS prixInitial,
+
+       CASE WHEN Produit.titre = vueBundle.titre
+                THEN vueBundle.age
+            ELSE Contenu.ageLegal
+           END AS age,
+
+       CASE WHEN Produit.titre = vueBundle.titre
+                THEN calculPrixPromo(Produit.titre, vueBundle.prixReel)
+            ELSE calculPrixPromo(Produit.titre, Contenu.prix) END AS prixReel,
+       COALESCE((SELECT SUM(Promotion.pourcentage)
+                 FROM Promotion
+                 WHERE Promotion.titreProduit = Produit.titre AND
+                     CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin), 0) AS pourcentagePromo
+FROM Produit
+         LEFT JOIN vueBundle
+                   ON Produit.titre = vueBundle.titre
+         LEFT JOIN Contenu
+                   ON Contenu.titre = Produit.titre
+         LEFT JOIN Promotion
+                   ON Promotion.titreProduit = Produit.titre
+         LEFT JOIN Jeu
+                   ON Jeu.titre = Contenu.titre
+         LEFT JOIN DLC
+                   ON DLC.titre = Contenu.titre
+GROUP BY Produit.titre
+$$
+
+DELIMITER $$
+CREATE VIEW vueDLC(titre, developpeur, editeur, franchise) AS
+SELECT DLC.titre, Jeu.Editeur, Jeu.Developpeur, Jeu.Franchise
+FROM DLC
+         INNER JOIN Jeu ON Jeu.titre = DLC.titreJeu;
+$$
+
+DELIMITER $$
+CREATE VIEW vueContenu(titre, prixInitial, age, prixFinal, promotion, franchise, developpeur, editeur, description) AS
+SELECT vueProduit.titre, vueProduit.prixInitial, vueProduit.age, vueProduit.prixFinal, vueProduit.promotion,
+       CASE WHEN Contenu.titre = Jeu.titre THEN Jeu.franchise ELSE vueDLC.franchise END AS franchise,
+       CASE WHEN Contenu.titre = Jeu.titre THEN Jeu.developpeur ELSE vueDLC.developpeur END AS developpeur,
+       CASE WHEN Contenu.titre = Jeu.titre THEN Jeu.editeur ELSE vueDLC.editeur END AS editeur,
+       Contenu.Description
+FROM vueProduit
+         LEFT JOIN Contenu
+                   ON Contenu.titre = vueProduit.titre
+         LEFT JOIN Promotion
+                   ON Promotion.titreProduit = vueProduit.titre
+         LEFT JOIN Jeu
+                   ON Jeu.titre = Contenu.titre
+         LEFT JOIN vueDLC
+                   ON vueDLC.titre = Contenu.titre
+WHERE vueProduit.titre = Contenu.titre
+GROUP BY vueProduit.titre;
+$$
+
+DELIMITER $$
+CREATE VIEW vueAchats(idCompte, titre, prixInitial, prixFinal, promotion, date, idAmi) AS
+SELECT Achat.idCompte, vueProduit.titre, vueProduit.prixInitial, vueProduit.prixFinal, vueProduit.promotion, Achat.date, AchatAmi.idAmi
+FROM Achat
+         LEFT JOIN AchatAmi
+                   ON Achat.id = idAmi
+         INNER JOIN vueProduit
+                    ON vueProduit.titre = Achat.titreProduit;
+$$
+
+DELIMITER $$
+CREATE VIEW vueProduitsComptes(titreProduit, idProprietaire, idAcheteur) AS
+    SELECT Achat.titreProduit,
+    CASE
+        WHEN Achat.id = AA.id THEN AA.idAmi
+        ELSE Achat.idCompte
+    END, Achat.idCompte
+    FROM stome.Achat
+    LEFT JOIN AchatAmi AA on Achat.id = AA.id
 $$
 
 #CREATE VIEW promotionActu AS
