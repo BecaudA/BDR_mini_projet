@@ -796,7 +796,7 @@ END
 $$
 
 DELIMITER $$
-CREATE VIEW vueAchats(id, titre, prixInitial, prixFinal, promotion, date, idAmi) AS
+CREATE VIEW vueAchats(idCompte, titre, prixInitial, prixFinal, promotion, date, idAmi) AS
 SELECT Achat.idCompte, vueProduit.titre, vueProduit.prixInitial, vueProduit.prixFinal, vueProduit.promotion, Achat.date, AchatAmi.idAmi
 FROM Achat
          LEFT JOIN AchatAmi
@@ -806,18 +806,19 @@ FROM Achat
 $$
 
 DELIMITER $$
-CREATE VIEW vueProduitsComptes(titreProduit, idProprietaire) AS
+CREATE VIEW vueProduitsComptes(titreProduit, idProprietaire, idAcheteur) AS
     SELECT Achat.titreProduit,
     CASE
         WHEN Achat.id = AA.id THEN AA.idAmi
         ELSE Achat.idCompte
-    END
+    END, Achat.idCompte
     FROM stome.Achat
     LEFT JOIN AchatAmi AA on Achat.id = AA.id
 $$
 
 #CREATE VIEW promotionActu AS
 #DROP VIEW IF EXISTS vueProduitsComptes;
+#DROP VIEW IF EXISTS vueAchats;
 #DROP FUNCTION IF EXISTS calculPrixPromo;
 #DROP TRIGGER IF EXISTS bundle_luiMeme;
 #DROP TRIGGER IF EXISTS achat_age;

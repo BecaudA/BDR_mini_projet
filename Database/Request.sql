@@ -79,3 +79,6 @@ WITH RECURSIVE cte_COB(titre) AS (
     INNER JOIN stome.Contenu
             ON Contenu.titre = cte_COB.titre
     GROUP BY cte_COB.titre;
+
+SELECT vA.idCompte FROM vueAchats AS vA
+    WHERE vA.titre = "Borderlands 2";
