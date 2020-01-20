@@ -78,6 +78,7 @@ class Router {
 	private function findController($controller_id) {
 	    $produitManager = new ProduitManager();
         $bundleManager = new BundleManager();
+        $compteManager = new CompteManager();
 
         echo "given id=".$controller_id.", ";
 
@@ -88,6 +89,11 @@ class Router {
             } else {
                 return "Contenu";
             }
+        }
+
+        // vérifie si un compte du même id existe
+        if ($compteManager->doesCompteExist($controller_id)) {
+            return "Compte";
         }
 
         return "";

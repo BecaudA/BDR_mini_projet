@@ -15,4 +15,8 @@ class CompteManager extends Model {
     public function getAchatsCompte($id) {
         return $this->reqSelectDB_Tuples(getAchatsCompte($id));
     }
+
+    public function doesCompteExist($id) {
+        return !empty($this->reqSelectDB(getCompte($id), 'Bundle'));
+    }
 }

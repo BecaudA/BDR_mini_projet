@@ -25,8 +25,9 @@
                 <h1 class="pb-3 mb-4 font-italic border-bottom">
                     <?= $titre?>
                 </h1>
-                <h2 class="pb-3 mb-4 font-italic">Produits inclus</h2>
-                <div class="album py-5">
+                <h2 class="font-italic">Produits inclus</h2>
+                <hr>
+                <div class="album py-3">
                     <div class="container">
                         <div class="row">
                             <?php

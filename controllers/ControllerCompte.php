@@ -10,7 +10,7 @@ class ControllerCompte
         if (isset($url) && count($url) > 1) {
             throw new Exception('Page introuvable');
         } else {
-            $this->showDetailsCompts($url);
+            $this->showDetailsCompte($url);
         }
     }
 
