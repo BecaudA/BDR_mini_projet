@@ -65,3 +65,20 @@ FROM Contenu;
 SELECT SUM(Promotion.pourcentage)
 	FROM Promotion
 	WHERE titreProduit = "Monster Hunter Iceborn" AND CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin;
+
+
+
+WITH RECURSIVE cte_COB(titre) AS (
+    SELECT DISTINCT vPC.titreProduit FROM stome.vueProduitsComptes AS vPC
+        WHERE vPC.idProprietaire = 2
+    UNION ALL
+    SELECT BC.titreProduit
+        FROM cte_COB JOIN stome.BundleComprend as BC
+                ON cte_COB.titre = BC.titreBundle
+) SELECT cte_COB.titre FROM cte_COB
+    INNER JOIN stome.Contenu
+            ON Contenu.titre = cte_COB.titre
+    GROUP BY cte_COB.titre;
+
+SELECT vA.idCompte FROM vueAchats AS vA
+    WHERE vA.titre = "Borderlands 2";

@@ -338,15 +338,24 @@ INSERT INTO Produit(titre) VALUES ("Monster Hunter World");
 INSERT INTO Produit(titre) VALUES ("Monster Hunter Iceborne");
 INSERT INTO Produit(titre) VALUES ("Bundle Borderlands");
 INSERT INTO Produit(titre) VALUES ("Bundle Monster Hunter World");
+INSERT INTO Produit(titre) VALUES ("Deep Rock Galactic");
+# DEBUG
+INSERT INTO Produit(titre) VALUES ("Bundle Root Test");
+INSERT INTO Produit(titre) VALUES ("Bundle Child Test");
 
 INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Borderlands", 16, 60, "Will see");
 INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Borderlands 2", 16, 80, "Will see");
 INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Borderlands 3", 18, 90, "Will see");
 INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Monster Hunter World", 16, 70, "Will see");
 INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Monster Hunter Iceborne", 16, 50, "DLC of Monster Hunter");
+INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Deep Rock Galactic", 14, 25, "Dwarves mining in outer space ... and beers ! Rock N Stone !");
 
 INSERT INTO Bundle(titre) VALUES ("Bundle Borderlands");
 INSERT INTO Bundle(titre) VALUES ("Bundle Monster Hunter World");
+# DEBUG
+INSERT INTO Bundle(titre) VALUES ("Bundle Root Test");
+INSERT INTO Bundle(titre) VALUES ("Bundle Child Test");
+
 
 INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Borderlands", "Borderlands");
 INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Borderlands", "Borderlands 2");
@@ -354,12 +363,23 @@ INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Borderland
 INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Monster Hunter World", "Monster Hunter World");
 INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Monster Hunter World", "Monster Hunter Iceborne");
 
+# DEBUG
+INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Child Test", "Borderlands");
+INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Child Test", "Borderlands 2");
+INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Root Test", "Bundle Child Test");
+INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Root Test", "Borderlands 3");
+
 INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Teixeira Carvalho", "Stephane", "test@gmail.com", 100, '2010-04-02');
 INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Egremy", "Bruno", "test2@gmail.com", 100, '1999-04-02');
 INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Becaud", "Arthur", "test3@gmail.com", 100, '1999-04-03');
 
 INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Borderlands", '2010-04-03');
 INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Borderlands", '2010-04-04');
+
+# DEBUG
+INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Bundle Root Test", '2010-04-04');
+INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Bundle Monster Hunter World", '2010-04-04');
+
 
 INSERT INTO EstNote(titreProduit, idCompte, note) VALUES ("Monster Hunter Iceborne", 1, 6);
 
@@ -370,13 +390,17 @@ INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Bu
 INSERT INTO Entreprise(nom) VALUES ("Capcom");
 INSERT INTO Entreprise(nom) VALUES ("2K");
 INSERT INTO Entreprise(nom) VALUES ("Gearbox Software");
+INSERT INTO Entreprise(nom) VALUES ("Coffee Stain Publishing");
+INSERT INTO Entreprise(nom) VALUES ("Ghost Ship Games");
 
 INSERT INTO Franchise(titre, nomEntreprise) VALUES ("Monster Hunter", "Capcom");
 INSERT INTO Franchise(titre, nomEntreprise) VALUES ("Borderlands", "2K");
+INSERT INTO Franchise(titre, nomEntreprise) VALUES ("Deep Rock Galactic", "Ghost Ship Games");
 
 INSERT INTO Jeu(titre, developpeur, editeur, franchise) VALUES ("Monster Hunter World", "Capcom","Capcom", "Monster Hunter");
 INSERT INTO Jeu(titre, developpeur, editeur, franchise) VALUES ("Borderlands", "Gearbox Software", "2K", "Borderlands");
 INSERT INTO Jeu(titre, developpeur, editeur, franchise) VALUES ("Borderlands 2", "Gearbox Software", "2K", "Borderlands");
+INSERT INTO Jeu(titre, developpeur, editeur, franchise) VALUES ("Deep Rock Galactic", "Ghost Ship Games", "Coffee Stain Publishing", "Deep Rock Galactic");
 
 INSERT INTO DLC(titre, titreJeu) VALUES ("Monster Hunter Iceborne", "Monster Hunter World");
 
@@ -392,8 +416,8 @@ INSERT INTO Genre(nom) VALUES ("RPG");
 INSERT INTO Genre(nom) VALUES ("FPS");
 INSERT INTO Genre(nom) VALUES ("Horreur");
 
-INSERT INTO Possedegenre(titreContenu, nomGenre) VALUES ("Borderlands", "Action");
-INSERT INTO Possedegenre(titreContenu, nomGenre) VALUES ("Borderlands", "RPG");
+INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Borderlands", "Action");
+INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Borderlands", "RPG");
 
 UPDATE Compte SET porteMonnaie = 100 WHERE id = 2;
 
@@ -445,47 +469,7 @@ BEGIN
 END
 $$
 
-DELIMITER $$
-CREATE TRIGGER achat_age
-BEFORE INSERT
-ON Achat
-FOR EACH ROW
-BEGIN
-	DECLARE ageCompte TINYINT;
-    DECLARE ageProduit TINYINT;
 
-    SELECT TIMESTAMPDIFF(YEAR ,Compte.dateNaissance, CURRENT_DATE()) INTO ageCompte
-    FROM Compte
-    WHERE id= NEW.idCompte;
-
-    #Calcul de l'âge d'achat pour un bundle
-    SELECT MAX(Contenu.ageLegal) INTO ageProduit
-    FROM BundleComprend
-    INNER JOIN Produit
-    ON BundleComprend.titreProduit = Produit.titre
-    INNER JOIN Bundle
-    ON BundleComprend.titreBundle = Bundle.titre
-    INNER JOIN Contenu
-    ON Contenu.titre = Produit.titre
-    WHERE BundleComprend.titreBundle = NEW.titreProduit;
-
-    #Si l'âge du produit veut null cela veut dire que le produit acheter n'est pas un bundle
-    if(ageProduit IS NULL) THEN
-		#Calcul de l'âge d'achat pour un jeu
-		SELECT ageLegal INTO ageProduit
-		FROM Contenu
-		WHERE titre = NEW.titreProduit;
-	END IF;
-
-	IF (ageCompte < ageProduit) THEN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Compte trop jeune';
-	ELSE
-		UPDATE Compte
-		SET Compte.porteMonnaie = Compte.PorteMonnaie - (SELECT prix FROM Produit WHERE NEW.titreProduit = Produit.titre)
-		WHERE NEW.idCompte = id;
-    END IF;
-END
-$$
 
 DELIMITER $$
 CREATE TRIGGER double_Achat_Produit
@@ -812,7 +796,7 @@ END
 $$
 
 DELIMITER $$
-CREATE VIEW vueAchats(id, titre, prixInitial, prixFinal, promotion, date, idAmi) AS
+CREATE VIEW vueAchats(idCompte, titre, prixInitial, prixFinal, promotion, date, idAmi) AS
 SELECT Achat.idCompte, vueProduit.titre, vueProduit.prixInitial, vueProduit.prixFinal, vueProduit.promotion, Achat.date, AchatAmi.idAmi
 FROM Achat
          LEFT JOIN AchatAmi
@@ -821,8 +805,20 @@ FROM Achat
                     ON vueProduit.titre = Achat.titreProduit;
 $$
 
-#CREATE VIEW promotionActu AS
+DELIMITER $$
+CREATE VIEW vueProduitsComptes(titreProduit, idProprietaire, idAcheteur) AS
+    SELECT Achat.titreProduit,
+    CASE
+        WHEN Achat.id = AA.id THEN AA.idAmi
+        ELSE Achat.idCompte
+    END, Achat.idCompte
+    FROM stome.Achat
+    LEFT JOIN AchatAmi AA on Achat.id = AA.id
+$$
 
+#CREATE VIEW promotionActu AS
+#DROP VIEW IF EXISTS vueProduitsComptes;
+#DROP VIEW IF EXISTS vueAchats;
 #DROP FUNCTION IF EXISTS calculPrixPromo;
 #DROP TRIGGER IF EXISTS bundle_luiMeme;
 #DROP TRIGGER IF EXISTS achat_age;

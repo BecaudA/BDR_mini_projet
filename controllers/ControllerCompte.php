@@ -1,6 +1,5 @@
 <?php
 
-
 class ControllerCompte
 {
     private $_compteManager;
@@ -18,7 +17,6 @@ class ControllerCompte
     }
 
     private function showDetailsCompte($id) {
-
         $comptes = $this->_compteManager->getCompte($id);
 
         $this->_view = new View('Compte');
