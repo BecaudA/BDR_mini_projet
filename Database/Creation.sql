@@ -338,21 +338,36 @@ INSERT INTO Produit(titre) VALUES ("Monster Hunter World");
 INSERT INTO Produit(titre) VALUES ("Monster Hunter Iceborne");
 INSERT INTO Produit(titre) VALUES ("Bundle Borderlands");
 INSERT INTO Produit(titre) VALUES ("Bundle Monster Hunter World");
+INSERT INTO Produit(titre) VALUES ("Deep Rock Galactic");
+# DEBUG
+INSERT INTO Produit(titre) VALUES ("Bundle Root Test");
+INSERT INTO Produit(titre) VALUES ("Bundle Child Test");
 
 INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Borderlands", 16, 60, "Will see");
 INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Borderlands 2", 16, 80, "Will see");
 INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Borderlands 3", 18, 90, "Will see");
 INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Monster Hunter World", 16, 70, "Will see");
 INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Monster Hunter Iceborne", 16, 50, "DLC of Monster Hunter");
+INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Deep Rock Galactic", 14, 25, "Dwarves mining in outer space ... and beers ! Rock N Stone !");
 
 INSERT INTO Bundle(titre) VALUES ("Bundle Borderlands");
 INSERT INTO Bundle(titre) VALUES ("Bundle Monster Hunter World");
+# DEBUG
+INSERT INTO Bundle(titre) VALUES ("Bundle Root Test");
+INSERT INTO Bundle(titre) VALUES ("Bundle Child Test");
+
 
 INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Borderlands", "Borderlands");
 INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Borderlands", "Borderlands 2");
 INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Borderlands", "Borderlands 3");
 INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Monster Hunter World", "Monster Hunter World");
 INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Monster Hunter World", "Monster Hunter Iceborne");
+
+# DEBUG
+INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Root Test", "Bundle Child Test");
+INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Root Test", "Borderlands 3");
+INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Child Test", "Borderlands");
+INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Child Test", "Borderlands 2");
 
 INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Teixeira Carvalho", "Stephane", "test@gmail.com", 100, '2010-04-02');
 INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Egremy", "Bruno", "test2@gmail.com", 100, '1999-04-02');
@@ -821,8 +836,19 @@ FROM Achat
                     ON vueProduit.titre = Achat.titreProduit;
 $$
 
-#CREATE VIEW promotionActu AS
+DELIMITER $$
+CREATE VIEW vueProduitsComptes(titreProduit, idProprietaire) AS
+    SELECT Achat.titreProduit,
+    CASE
+        WHEN Achat.id = AA.id THEN AA.idAmi
+        ELSE Achat.idCompte
+    END
+    FROM stome.Achat
+    LEFT JOIN AchatAmi AA on Achat.id = AA.id
+$$
 
+#CREATE VIEW promotionActu AS
+#DROP VIEW IF EXISTS vueProduitsComptes;
 #DROP FUNCTION IF EXISTS calculPrixPromo;
 #DROP TRIGGER IF EXISTS bundle_luiMeme;
 #DROP TRIGGER IF EXISTS achat_age;

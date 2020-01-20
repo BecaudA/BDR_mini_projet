@@ -80,7 +80,7 @@ $nb_jeu          = 0;
                     $nb_jeu += 1;
                     ?>
                         <tr>
-                            <td scope="row"><?= $achat_titre; ?></td>
+                            <td scope="row"><a class="black" href="<?= $achat_titre ?>"><?= $achat_titre; ?></a></td>
                             <td><?= $achat_date; ?></td>
                             <td>
                             <?php if($achat_promotion): ?>
