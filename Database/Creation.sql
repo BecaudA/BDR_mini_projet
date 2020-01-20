@@ -529,17 +529,17 @@ END
 $$
 #Promotion actue
 DELIMITER $$
-CREATE VIEW bundlePrix(titre, prixBundle, ageLegal) AS
-SELECT titreBundle, SUM(prix), MAX(Contenu.ageLegal)
+CREATE VIEW vueBundle(titre, prixInitial, prixReel, age) AS
+SELECT titreBundle, SUM(Contenu.prix) AS prixInitial, SUM(calculPrixPromo(Contenu.titre,Contenu.prix)) AS prixReel, MAX(Contenu.ageLegal) AS age
 FROM BundleComprend
-INNER JOIN Produit
-	ON Produit.titre = titreProduit
-INNER JOIN Bundle
-	ON Bundle.titre = titreBundle
-INNER JOIN Contenu
-    ON Contenu.titre = Produit.titre
-LEFT JOIN Promotion
-	ON Promotion.titreProduit = BundleComprend.titreBundle
+         INNER JOIN Produit
+                    ON Produit.titre = titreProduit
+         INNER JOIN Bundle
+                    ON Bundle.titre = titreBundle
+         INNER JOIN Contenu
+                    ON Contenu.titre = Produit.titre
+         LEFT JOIN Promotion
+                   ON Promotion.titreProduit = BundleComprend.titreBundle
 GROUP BY titreBundle;
 $$
 
@@ -547,37 +547,35 @@ DELIMITER $$
 CREATE VIEW vueProduit(titre, prixInitial, age, prixFinal, promotion) AS
 
 SELECT Produit.titre,
-       CASE WHEN Produit.titre = bundlePrix.titre
-                THEN bundlePrix.prixBundle
+       CASE WHEN Produit.titre = vueBundle.titre
+                THEN vueBundle.prixInitial
             ELSE Contenu.prix
-           END AS prix,
+           END AS prixInitial,
 
-       CASE WHEN Produit.titre = bundlePrix.titre
-                THEN bundlePrix.ageLegal
+       CASE WHEN Produit.titre = vueBundle.titre
+                THEN vueBundle.age
             ELSE Contenu.ageLegal
-           END AS ageLegal,
+           END AS age,
 
-       calculPrixPromo(Produit.titre,
-                       CASE WHEN Produit.titre = bundlePrix.titre
-                                THEN bundlePrix.prixBundle
-                            ELSE Contenu.prix
-                           END) AS prixReel, COALESCE(
-               (SELECT SUM(Promotion.pourcentage)
-                FROM Promotion
-                WHERE Promotion.titreProduit = Produit.titre AND
-                    CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin), 0) AS pourcentagePromo
-        FROM Produit
-                 LEFT JOIN bundlePrix
-                           ON Produit.titre = bundlePrix.titre
-                 LEFT JOIN Contenu
-                           ON Contenu.titre = Produit.titre
-                 LEFT JOIN Promotion
-                           ON Promotion.titreProduit = Produit.titre
-                 LEFT JOIN Jeu
-                           ON Jeu.titre = Contenu.titre
-                 LEFT JOIN DLC
-                           ON DLC.titre = Contenu.titre
-        GROUP BY Produit.titre
+       CASE WHEN Produit.titre = vueBundle.titre
+                THEN vueBundle.prixReel
+            ELSE calculPrixPromo(Produit.titre, Contenu.prix) END AS prixReel,
+       COALESCE((SELECT SUM(Promotion.pourcentage)
+                 FROM Promotion
+                 WHERE Promotion.titreProduit = Produit.titre AND
+                     CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin), 0) AS pourcentagePromo
+FROM Produit
+         LEFT JOIN vueBundle
+                   ON Produit.titre = vueBundle.titre
+         LEFT JOIN Contenu
+                   ON Contenu.titre = Produit.titre
+         LEFT JOIN Promotion
+                   ON Promotion.titreProduit = Produit.titre
+         LEFT JOIN Jeu
+                   ON Jeu.titre = Contenu.titre
+         LEFT JOIN DLC
+                   ON DLC.titre = Contenu.titre
+GROUP BY Produit.titre
 $$
 
 DELIMITER $$
