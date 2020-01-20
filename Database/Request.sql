@@ -69,7 +69,7 @@ SELECT SUM(Promotion.pourcentage)
 
 
 WITH RECURSIVE cte_POB(titre) AS (
-    SELECT vPC.titreProduit FROM stome.vueProduitsComptes AS vPC
+    SELECT DISTINCT vPC.titreProduit FROM stome.vueProduitsComptes AS vPC
         WHERE vPC.idProprietaire = 2
     UNION ALL
     SELECT BC.titreProduit
