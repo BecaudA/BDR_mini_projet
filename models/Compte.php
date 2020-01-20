@@ -79,7 +79,7 @@ class Compte {
 	    return $this->_achats;
     }
     public function bibliotheque() {
-
+	    return $this->_bibliotheque;
     }
     public function amis() {
 	    return $this->_amis;

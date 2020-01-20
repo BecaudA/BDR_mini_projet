@@ -50,6 +50,15 @@ function getAchatsCompte($idCompte) {
 
 function getJeuxCompte($idCompte) {
     // TODO
-    return "SELECT * FROM stome.vueBibliotheque WHERE  vueBibliotheque.idCompte = \"" . $idCompte . "\"";
+    return "WITH RECURSIVE cte_POB(titre) AS (
+    SELECT DISTINCT vPC.titreProduit FROM stome.vueProduitsComptes AS vPC
+        WHERE vPC.idProprietaire = ". $idCompte ."
+    UNION ALL
+    SELECT BC.titreProduit
+        FROM cte_POB JOIN stome.BundleComprend as BC
+                ON cte_POB.titre = BC.titreBundle
+) SELECT cte_POB.titre FROM cte_POB
+    INNER JOIN stome.Contenu
+            ON Contenu.titre = cte_POB.titre;";
 }
 

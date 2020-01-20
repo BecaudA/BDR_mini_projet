@@ -18,7 +18,7 @@ class CompteManager extends Model {
     }
 
     public function getJeuxCompte($id) {
-	    return $this->reqSelectDB(getJeuxCompte($id), 'Contenu');
+	    return $this->reqSelectDB_Tuples(getJeuxCompte($id));
     }
 
     public function doesCompteExist($id) {
