@@ -48,3 +48,8 @@ function getAchatsCompte($idCompte) {
     return "SELECT * FROM stome.vueAchats WHERE  vueAchats.id = \"" . $idCompte . "\"";
 }
 
+function getJeuxCompte($idCompte) {
+    // TODO
+    return "SELECT * FROM stome.vueBibliotheque WHERE  vueBibliotheque.idCompte = \"" . $idCompte . "\"";
+}
+
