@@ -41,10 +41,10 @@
                                 <div class="col-md-4">
                                     <div class="card mb-4 box-shadow">
                                         <a href="<?php echo $link; ?>" class="d-block mb-2 h-50">
-                                            <img class="card-img-top" alt="Thumbnail [60%x225]" style="height: 225px; width: 100%; display: block;" src="<?php echo $img; ?>" data-holder-rendered="true">
+                                            <img class="card-img-top" alt="Thumbnail [100%x225]" style="height: 140px; width: 100%; display: block;" src="<?php echo $img; ?>" data-holder-rendered="true">
                                         </a>
                                         <div class="card-body">
-                                            <h1 class="card-text"><?php echo $titre; ?></h1>
+                                            <h4 class="card-text"><?php echo $titre; ?></h4>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <!-- <div class="btn-group">
                                                     <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
