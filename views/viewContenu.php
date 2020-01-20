@@ -1,9 +1,14 @@
 <?php
     if(count($_REQUEST) >= 2){
         $this->_AchatManager = new AchatManager();
-        $this->_comptes = $this->_AchatManager->setAchatPerso(2,"Borderlands 2");
+        //Si seulement 2 paramètres sont passés alors c'est un achat perso
         if(count($_REQUEST) == 2){
+            $this->_comptes = $this->_AchatManager->setAchatPerso(2,"Borderlands 2");
+        }
+        //Si 3 argument sont passés alors c'est un achat pour un ami
+        elseif (count($_REQUEST) == 3){
 
+            $this->_comptes = $this->_AchatManager->setAchatAmi(idAcheteur,"Borderlands 2", idReceveur);
         }
 
     }
