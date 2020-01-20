@@ -1,5 +1,5 @@
 <?php
-    if(count($_REQUEST) >= 1){
+    if(count($_REQUEST) >= 2){
         $this->_AchatManager = new AchatManager();
         $this->_comptes = $this->_AchatManager->setAchatPerso(2,"Borderlands 2");
         if(count($_REQUEST) == 2){
