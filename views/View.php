@@ -2,10 +2,14 @@
 class View {
 	private $_file;
 	private $_t;
+	private $_compteManager;
+	private $_comptes;
 	
 	// constructeur
 	public function __construct($action) {
 		$this->_file = 'views/view'.$action.'.php';
+        $this->_compteManager = new CompteManager();
+        $this->_comptes = $this->_compteManager->getComptes();
 	}
 	
 	// génère et affiche la vue
@@ -14,7 +18,7 @@ class View {
 		$content = $this->generateFile($this->_file, $data);
 		
 		// template
-		$view = $this->generateFile('views/template.php', array('t' => $this->_t, 'content' => $content));
+		$view = $this->generateFile('views/template.php', array('t' => $this->_t, 'content' => $content, 'comptes' => $this->_comptes));
 		
 		echo $view;
 	}
