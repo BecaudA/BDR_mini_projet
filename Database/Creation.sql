@@ -376,6 +376,11 @@ INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Bec
 INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Borderlands", '2010-04-03');
 INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Borderlands", '2010-04-04');
 
+# DEBUG
+INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Bundle Root Test", '2010-04-04');
+INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Bundle Monster Hunter World", '2010-04-04');
+
+
 INSERT INTO EstNote(titreProduit, idCompte, note) VALUES ("Monster Hunter Iceborne", 1, 6);
 
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 50, '2010-05-06', '2010-06-06');
@@ -385,13 +390,17 @@ INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Bu
 INSERT INTO Entreprise(nom) VALUES ("Capcom");
 INSERT INTO Entreprise(nom) VALUES ("2K");
 INSERT INTO Entreprise(nom) VALUES ("Gearbox Software");
+INSERT INTO Entreprise(nom) VALUES ("Coffee Stain Publishing");
+INSERT INTO Entreprise(nom) VALUES ("Ghost Ship Games");
 
 INSERT INTO Franchise(titre, nomEntreprise) VALUES ("Monster Hunter", "Capcom");
 INSERT INTO Franchise(titre, nomEntreprise) VALUES ("Borderlands", "2K");
+INSERT INTO Franchise(titre, nomEntreprise) VALUES ("Deep Rock Galactic", "Ghost Ship Games");
 
 INSERT INTO Jeu(titre, developpeur, editeur, franchise) VALUES ("Monster Hunter World", "Capcom","Capcom", "Monster Hunter");
 INSERT INTO Jeu(titre, developpeur, editeur, franchise) VALUES ("Borderlands", "Gearbox Software", "2K", "Borderlands");
 INSERT INTO Jeu(titre, developpeur, editeur, franchise) VALUES ("Borderlands 2", "Gearbox Software", "2K", "Borderlands");
+INSERT INTO Jeu(titre, developpeur, editeur, franchise) VALUES ("Deep Rock Galactic", "Ghost Ship Games", "Coffee Stain Publishing", "Deep Rock Galactic");
 
 INSERT INTO DLC(titre, titreJeu) VALUES ("Monster Hunter Iceborne", "Monster Hunter World");
 
