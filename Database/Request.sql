@@ -64,7 +64,7 @@ FROM Contenu;
 
 SELECT SUM(Promotion.pourcentage)
 	FROM Promotion
-	WHERE titreProduit = "Monster Hunter Iceborn" AND CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin;
+	WHERE titreProduit = "Monster Hunter Iceborne" AND CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin;
 
 
 

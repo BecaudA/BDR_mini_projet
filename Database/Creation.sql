@@ -6,7 +6,7 @@
 -- -----------------------------------------------------
 -- Schema stome
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS stome DEFAULT CHARACTER SET utf8 ;
+CREATE SCHEMA IF NOT EXISTS stome DEFAULT CHARACTER SET utf8MB4;
 USE stome ;
 
 -- -----------------------------------------------------
@@ -343,12 +343,12 @@ INSERT INTO Produit(titre) VALUES ("Deep Rock Galactic");
 INSERT INTO Produit(titre) VALUES ("Bundle Root Test");
 INSERT INTO Produit(titre) VALUES ("Bundle Child Test");
 
-INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Borderlands", 16, 60, "Will see");
-INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Borderlands 2", 16, 80, "Will see");
-INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Borderlands 3", 18, 90, "Will see");
-INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Monster Hunter World", 16, 70, "Will see");
-INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Monster Hunter Iceborne", 16, 50, "DLC of Monster Hunter");
-INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Deep Rock Galactic", 14, 25, "Dwarves mining in outer space ... and beers ! Rock N Stone !");
+INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Borderlands", 16, 60, "Borderlands est un jeu de tir à la première personne mâtiné de jeu de rôle (expérience, spécialisations) qui vous entraîne sur une planète mystérieuse, aux allures de Far West futuriste. Il offre au joueur la possibilité de piloter des véhicules et de manipuler une grande variété d''armes afin de remplir de très nombreuses quêtes. Jouable en solo, Borderlands permet également à quatre participants de compléter l''aventure ensemble, en coopération.");
+INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Borderlands 2", 16, 80,"Borderlands 2 est un mélange de jeu de tir à la première personne et de jeu de rôle. Le joueur doit s''aventurer dans les mondes inexplorés de Pandora et percer les secrets de l''univers de Borderlands.");
+INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Borderlands 3", 18, 90, "Borderlands 3 est un RPG en vue FPS. Contrairement aux épisodes précédents, les joueurs vont pouvoir visiter Prométhée. Cette planète est la zone où Atlas a découvert la première Arche, une des éléments importants de la série.");
+INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Monster Hunter World", 16, 70, "La dernière entrée de la série Monster Hunter. Plus complet que jamais, le jeu transporte le joueur au travers de batailles contre de terribles monstres et de magnifiques paysages. Récupérerez des objets sur vos ennemis, créez de nouveaux équipements et armures, explorez tous les territoires disponibles. Saurez vous devenir le chasseur ultime ?");
+INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Monster Hunter Iceborne", 16, 50,"Monster Hunter World : Iceborne est la première extension pour le RPG de Capcom Monster Hunter World. Annoncée pour l''automne 2019, elle s’annonce massive avec une toute nouvelle histoire se déroulant après les événements du jeu, des nouveaux rangs de chasse et des nouveaux monstres comme le Nargacuga.");
+INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Deep Rock Galactic", 14, 25,"Deep Rock Galactic est un jeu d''action en coopération situé dans un univers de science-fiction. Vous incarnez une troupe de nains de l''espace qui n''a pas du tout envie de se laisser faire. Terrassez-vos ennemis dans des niveaux générés procéduralement et ce, de la meilleure des manières : en détruisant tout sur votre passage.");
 
 INSERT INTO Bundle(titre) VALUES ("Bundle Borderlands");
 INSERT INTO Bundle(titre) VALUES ("Bundle Monster Hunter World");
