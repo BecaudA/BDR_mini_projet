@@ -531,26 +531,26 @@ DELIMITER $$
 CREATE VIEW vueProduit(titre, prixInitial, age, prixFinal, promotion) AS
 
 SELECT Produit.titre,
-       CASE WHEN Produit.titre = vueBundle.titre
-                THEN vueBundle.prixInitial
+       CASE WHEN Produit.titre = vueBundle2.titre
+                THEN vueBundle2.prixInitial
             ELSE Contenu.prix
            END AS prixInitial,
 
-       CASE WHEN Produit.titre = vueBundle.titre
-                THEN vueBundle.age
+       CASE WHEN Produit.titre = vueBundle2.titre
+                THEN vueBundle2.age
             ELSE Contenu.ageLegal
            END AS age,
 
-       CASE WHEN Produit.titre = vueBundle.titre
-                THEN vueBundle.prixReel
+       CASE WHEN Produit.titre = vueBundle2.titre
+                THEN vueBundle2.prixReel
             ELSE calculPrixPromo(Produit.titre, Contenu.prix) END AS prixReel,
        COALESCE((SELECT SUM(Promotion.pourcentage)
                  FROM Promotion
                  WHERE Promotion.titreProduit = Produit.titre AND
                      CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin), 0) AS pourcentagePromo
 FROM Produit
-         LEFT JOIN vueBundle
-                   ON Produit.titre = vueBundle.titre
+         LEFT JOIN vueBundle2
+                   ON Produit.titre = vueBundle2.titre
          LEFT JOIN Contenu
                    ON Contenu.titre = Produit.titre
          LEFT JOIN Promotion
@@ -814,6 +814,26 @@ CREATE VIEW vueProduitsComptes(titreProduit, idProprietaire, idAcheteur) AS
     END, Achat.idCompte
     FROM stome.Achat
     LEFT JOIN AchatAmi AA on Achat.id = AA.id
+$$
+
+DELIMITER $$
+CREATE VIEW vueBundle2(titre, prixInitial, prixReel, age) AS
+SELECT titreBundle, prixInitial + SUM(CASE WHEN BundleComprend.titreProduit IN (SELECT Bundle.titre FROM Bundle) THEN
+                                               (	SELECT prixInitial
+                                                    FROM vueBundle
+                                                    WHERE titre = BundleComprend.titreProduit)
+                                           ELSE 0 END) AS prixInitial,
+       prixReel + SUM(CASE WHEN BundleComprend.titreProduit IN (SELECT Bundle.titre FROM Bundle) THEN
+                               (	SELECT prixReel
+                                    FROM vueBundle
+                                    WHERE titre = BundleComprend.titreProduit) ELSE 0 END) AS prixReel,
+       MAX(vueBundle.age) AS age
+FROM BundleComprend
+         INNER JOIN Produit
+                    ON Produit.titre = titreProduit
+         INNER JOIN vueBundle
+                    ON vueBundle.titre = titreBundle
+GROUP BY BundleComprend.titreBundle;
 $$
 
 #CREATE VIEW promotionActu AS
