@@ -8,8 +8,8 @@ class Compte {
 	private $_porteMonnaie;
 	private $_dateNaissance;
 	private $_achats = array();
-	private $_listAmis = array();
-	private $_jeux = array();
+	private $_amis = array();
+	private $_bibliotheque = array();
 	
 	// constructeur
 	public function __construct(array $data) {
@@ -49,6 +49,12 @@ class Compte {
     public function set_achats(array $achats){
         $this->_achats = $achats;
     }
+    public function set_bibliotheque(array $bibliotheque){
+        $this->_bibliotheque = $bibliotheque;
+    }
+    public function set_amis(array $amis){
+        $this->_amis = $amis;
+    }
 	
 	// getters
     public function id() {
@@ -72,7 +78,10 @@ class Compte {
     public function achats() {
 	    return $this->_achats;
     }
-    public function listeAmis() {
-	    return $this->_listAmis;
+    public function bibliotheque() {
+
+    }
+    public function amis() {
+	    return $this->_amis;
     }
 }

@@ -6,7 +6,8 @@ $email           = $comptes[0]->email();
 $portMonnaie     = $comptes[0]->porteMonnaie();
 $dateNaissance   = $comptes[0]->dateNaissance();
 $achats          = $comptes[0]->achats();
-$amis            = $comptes[0]->listeAmis();
+$bibliotheque    = $comptes[0]->bibliotheque();
+$amis            = $comptes[0]->amis();
 $total_depense   = 0;
 $total_economise = 0;
 $nb_jeu          = 0;
@@ -20,6 +21,31 @@ $nb_jeu          = 0;
             </h1>
             <div class="blog-post">
                 <h2 class="blog-post-title mb-3">Bibliotèque de jeux</h2>
+                <?php if(!empty($jeux)): ?>
+                    <table class="table table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Titre</th>
+                            <th scope="col">Offert par</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <?php
+                        foreach ($jeux as $jeu):
+                            ?>
+                            <tr>
+                                <td> to do
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php else: ?>
+                    <hr>
+                    Aucun jeu dans votre bibliothèque.
+                    <div class="mb-3"></div>
+                <?php endif; ?>
             </div>
             <div class="blog-post">
                 <h2 class="blog-post-title mb-3">Historique d'achats</h2>
