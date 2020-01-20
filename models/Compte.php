@@ -9,6 +9,7 @@ class Compte {
 	private $_dateNaissance;
 	private $_achats = array();
 	private $_listAmis = array();
+	private $_jeux = array();
 	
 	// constructeur
 	public function __construct(array $data) {
