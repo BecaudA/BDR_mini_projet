@@ -47,7 +47,32 @@
                 <?php else: ?>
                     <h2 class=text-center"><span class="badge badge-secondary"><?= $prix; ?> CHF </span></h2>
                 <?php endif; ?>
-                <button class="btn btn-primary btn-lg btn-block mb-2" type="submit" href="#">Acheter</button>
+                <div id="porteMonnaie"></div>
+                <button class="btn btn-primary btn-lg btn-block mb-2" type="submit" data-toggle="collapse" href="#acheter">Acheter</button>
+                <div class="collapse" id="acheter">
+                    <form>
+                        <div class="form-row">
+                            <input type="hidden" name="titre" value="<?= $titre; ?>>">
+                            <div class="form-group col-md-4">
+                                <select id="inputState" class="form-control" name="idAcheteur">
+                                    <option value="" disabled selected hidden oninput="">Acheteur</option>
+                                    <!--TODO: lister les acheteurs -->
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <select id="inputState" class="form-control" name="idReceveur">
+                                    <option value="" disabled selected hidden oninput="">Receveur</option>
+                                    <option>...</option>
+                                    <!--TODO: lister les receveurs -->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <!--TODO: faire l'achat -->
+                            <button type="submit" class="btn btn-primary btn-lg btn-block mb-2" id="confirmerAchat">Confirmer l'achat</button>
+                        </div>
+                    </form>
+                </div>
                 <div class="p-3 mb-3 bg-light rounded">
                     <h4 class="font-italic">Détails</h4>
                     <h6>Age légal : <?= $age; ?> ans</h6>
@@ -100,6 +125,28 @@
                         </h6>
                 </div>
             </aside>
-
         </div>
     </div>
+<!-- TODO: tentative de script pour ajax-->
+<script>
+    function majPorteMonnaieAcheteur(nom) {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("porteMonnaie").innerHTML = this.responseText;
+            }
+        };
+        xmlhttp.open("GET", "ajax/majPorteMonnaie.php?id=" + str, true);
+        xmlhttp.send();
+    }
+    function majBoutonConfirmerAchat(nom) {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("confirmerAchat").innerHTML = this.responseText;
+            }
+        };
+        xmlhttp.open("GET", "ajax/gethint.php?id=" + str, true);
+        xmlhttp.send();
+    }
+</script>

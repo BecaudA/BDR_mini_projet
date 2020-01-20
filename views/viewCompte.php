@@ -145,7 +145,7 @@ $nb_jeu          = 0;
                 <?php if(!empty($amis)):
                     foreach ($amis as $ami) {
                         ?>
-                    <h6><?= $listComptes[$ami - 1]->prenom()." ".$listComptes[$ami - 1]->nom();; ?></h6>
+                    <h6><?= $ami->prenom()." ".$ami->nom();; ?></h6>
                 <?php    }
                 else: ?>
                     Vous n'avez pas encore d'amis.
