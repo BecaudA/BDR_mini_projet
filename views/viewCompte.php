@@ -6,6 +6,7 @@ $email           = $comptes[0]->email();
 $portMonnaie     = $comptes[0]->porteMonnaie();
 $dateNaissance   = $comptes[0]->dateNaissance();
 $achats          = $comptes[0]->achats();
+$amis            = $comptes[0]->listeAmis();
 $total_depense   = 0;
 $total_economise = 0;
 $nb_jeu          = 0;
@@ -18,7 +19,10 @@ $nb_jeu          = 0;
                 <?= $prenom." ".$nom?>
             </h1>
             <div class="blog-post">
-                <h2 class="blog-post-title mb-3">Bibliothèque de jeux</h2>
+                <h2 class="blog-post-title mb-3">Bibliotèque de jeux</h2>
+            </div>
+            <div class="blog-post">
+                <h2 class="blog-post-title mb-3">Historique d'achats</h2>
                 <?php if(!empty($achats)): ?>
                 <table class="table table-hover table-striped">
                     <thead>
@@ -27,9 +31,11 @@ $nb_jeu          = 0;
                         <th scope="col">Date d'achat</th>
                         <th scope="col">Prix</th>
                         <th scope="col">Promotion</th>
+                        <th scope="col">Achat pour ami</th>
                     </tr>
                     </thead>
                     <tbody>
+
                     <?php
                     foreach ($achats as $achat):
                     $achat_id = $achat['id'];
@@ -38,6 +44,11 @@ $nb_jeu          = 0;
                     $achat_prixFinal = $achat['prixFinal'];
                     $achat_promotion = $achat['promotion'];
                     $achat_date = $achat['date'];
+                    $achat_idAmi = $achat['idAmi'];
+                    $achat_nomAmi = "";
+                    if ($achat_idAmi != null) {
+                        $achat_nomAmi = $listComptes[$achat_idAmi - 1]->prenom()." ".$listComptes[$achat_idAmi - 1]->nom();
+                    }
                     $total_depense += $achat_prixFinal;
                     $total_economise += $achat_prixInitial -$achat_prixFinal;
                     $nb_jeu += 1;
@@ -61,18 +72,25 @@ $nb_jeu          = 0;
                             aucune
                             <?php endif; ?>
                             </td>
+                            <td>
+                                <?php if($achat_idAmi != null): ?>
+                                    <a href="<?= $achat_idAmi ?>"><?= $achat_nomAmi; ?></a>
+                                <?php else: ?>
+                                    -
+                                <?php endif; ?>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
                 <?php else: ?>
                 <hr>
-                    Aucun jeu disponible  dans votre bibliothèque.
+                    Aucun jeu acheté.
                 <div class="mb-3"></div>
                 <?php endif; ?>
             </div>
             <div class="blog-post">
-                <h2 class="blog-post-title">Statistique</h2>
+                <h2 class="blog-post-title">Statistiques</h2>
                 <hr>
                 <h4>Total dépensé : <?= $total_depense; ?> CHF</h4>
                 <h4>Total économisé : <?= $total_economise; ?> CHF</h4>
@@ -82,7 +100,7 @@ $nb_jeu          = 0;
 
         <aside class="col-md-4 blog-sidebar">
             <h2><span class="badge badge-secondary">Porte monnaie : <?= $portMonnaie; ?> CHF</span></h2>
-            <div class="p-3 mb-3 bg-light rounded">
+            <div class="p-3 mb-3">
                 <h4 class="font-italic">Détails</h4>
                     <h6>
                         Identifiant : <?= $id; ?>
@@ -93,6 +111,17 @@ $nb_jeu          = 0;
                     <h6>
                         Date de naissance : <?= $dateNaissance; ?>
                     </h6>
+            </div>
+            <div class="p-3 mb-3">
+                <h4 class="font-italic">Amis</h4>
+                <?php if(!empty($amis)):
+                    foreach ($amis as $ami) {
+                        ?>
+                    <h6><?= $listComptes[$ami - 1]->prenom()." ".$listComptes[$ami - 1]->nom();; ?></h6>
+                <?php    }
+                else: ?>
+                    Vous n'avez pas encore d'amis.
+                <?php endif; ?>
             </div>
         </aside>
 

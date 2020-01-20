@@ -8,6 +8,7 @@ class Compte {
 	private $_porteMonnaie;
 	private $_dateNaissance;
 	private $_achats = array();
+	private $_listAmis = array();
 	
 	// constructeur
 	public function __construct(array $data) {
@@ -69,5 +70,8 @@ class Compte {
     }
     public function achats() {
 	    return $this->_achats;
+    }
+    public function listeAmis() {
+	    return $this->_listAmis;
     }
 }
