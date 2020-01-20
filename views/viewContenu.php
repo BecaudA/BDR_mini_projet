@@ -62,8 +62,10 @@
                         <div class="form-row">
                             <input type="hidden" name="titre" value="<?= $titre; ?>>">
                             <div class="form-group col-md-4">
-                                <select id="inputState" class="form-control" name="idAcheteur">
+                                <select id="inputState" class="form-control" name="idAcheteur" onchange="if (this.selectedIndex) majPorteMonnaieAcheteur(this.value)">
                                     <option value="" disabled selected hidden oninput="">Acheteur</option>
+                                    <option value="1">Stéphane</option>
+                                    <option value="2">Bruno</option>
                                     <!--TODO: lister les acheteurs -->
                                 </select>
                             </div>
@@ -138,13 +140,15 @@
 <!-- TODO: tentative de script pour ajax-->
 <script>
     function majPorteMonnaieAcheteur(nom) {
+        alert("maj porte monnaie en cours");
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 document.getElementById("porteMonnaie").innerHTML = this.responseText;
             }
         };
-        xmlhttp.open("GET", "ajax/majPorteMonnaie.php?id=" + str, true);
+        // j'arrive pas à ouvir majPorte...
+        xmlhttp.open("GET", "ajax\majPorteMonnaie.php?id=" + str, true);
         xmlhttp.send();
     }
     function majBoutonConfirmerAchat(nom) {
