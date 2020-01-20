@@ -139,6 +139,7 @@
                 document.getElementById("porteMonnaie").innerHTML = this.responseText;
             }
         };
+        // j'arrive pas à ouvir majPorte...
         xmlhttp.open("GET", "ajax\majPorteMonnaie.php?id=" + str, true);
         xmlhttp.send();
     }
