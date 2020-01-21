@@ -381,7 +381,7 @@ $$
 
 
 DELIMITER $$
-CREATE TRIGGER achat_age
+CREATE TRIGGER Verifachat
     BEFORE INSERT
     ON Achat
     FOR EACH ROW
