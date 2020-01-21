@@ -17,7 +17,7 @@
     }
 }
 
-    $titre_bundle  = $bundles[0]->titre();
+    $titre         = $bundles[0]->titre();
     $prixInitial   = $bundles[0]->prixInitial();
     $age           = $bundles[0]->age();
     $prix          = $bundles[0]->prixFinal();

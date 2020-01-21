@@ -805,7 +805,7 @@ CREATE TRIGGER Verifachat
 BEGIN
     DECLARE ageCompte TINYINT;
     DECLARE ageProduit TINYINT;
-    DECLARE porteMonnaieUser TINYINT;
+    DECLARE porteMonnaieUser INT;
 
     SELECT TIMESTAMPDIFF(YEAR ,Compte.dateNaissance, CURRENT_DATE()) INTO ageCompte
     FROM Compte
