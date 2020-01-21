@@ -21,19 +21,17 @@ $nb_jeu          = 0;
             </h1>
             <div class="blog-post">
                 <h2 class="blog-post-title mb-3">Bibliotèque de jeux</h2>
-                <?php if(!empty($bibliotheque)): ?>
+                <?php if (!empty($bibliotheque)): ?>
                     <table class="table table-hover table-striped">
                         <thead>
                         <tr>
                             <th scope="col">Titre</th>
-                            <th scope="col">Offert par</th>
                         </tr>
                         </thead>
                         <tbody>
 
-                        <?php
-                        foreach ($bibliotheque as $jeu):
-                            ?>
+                        <?php foreach ($bibliotheque as $jeu):
+                            ++$nb_jeu; ?>
                             <tr>
                                 <td>
                                     <a style="color: black" href="<?= strtolower(str_replace(' ', '_', $jeu['titre']))?>"><?=$jeu['titre'] ?></a>
@@ -81,7 +79,7 @@ $nb_jeu          = 0;
                     $nb_jeu += 1;
                     ?>
                         <tr>
-                            <td scope="row"><a class="black" href="<?= $achat_titre ?>"><?= $achat_titre; ?></a></td>
+                            <td scope="row"><a class="black" href="<?= str_replace(' ', '_',$achat_titre) ?>"><?= $achat_titre; ?></a></td>
                             <td><?= $achat_date; ?></td>
                             <td>
                             <?php if($achat_promotion): ?>

@@ -662,19 +662,23 @@ END
 $$
 
 DELIMITER $$
-CREATE FUNCTION calculPrixInitialContenusBundle(titreB VARCHAR(80))
+CREATE FUNCTION calculPrixInitialBundle(titreB VARCHAR(80))
     RETURNS INT
     READS SQL DATA
     DETERMINISTIC
 BEGIN
     DECLARE prixInitialTotalContenu INT;
 
-    SELECT SUM(calculPrixPromo(Contenu.titre, Contenu.prix)) INTO prixInitialTotalContenu
-    FROM BundleComprend
-             INNER JOIN Contenu
-                        ON Contenu.titre = BundleComprend.titreProduit
-    GROUP BY titreBundle
-    HAVING titreBundle = titreB;
+    WITH RECURSIVE cte_COB(titre) AS (
+        SELECT DISTINCT vPC.titreProduit FROM stome.bundlecomprend AS vPC
+        WHERE vPC.titreBundle = titreB
+        UNION ALL
+        SELECT BC.titreProduit
+        FROM cte_COB JOIN stome.BundleComprend as BC
+                          ON cte_COB.titre = BC.titreBundle
+    ) SELECT SUM(vueContenu.prixInitial) INTO prixInitialTotalContenu FROM cte_COB
+                                                                               INNER JOIN stome.vueContenu
+                                                                                          ON vueContenu.titre = cte_COB.titre;
 
     RETURN prixInitialTotalContenu;
 END
@@ -688,17 +692,23 @@ CREATE FUNCTION calculPrixReelBundle(titreB VARCHAR(80))
 BEGIN
     DECLARE prixFinalTotalBundle INT;
 
-    SELECT calculPrixInitialBundlesBundle(titreB) + calculPrixInitialContenusBundle(titreB) INTO prixFinalTotalBundle
-    FROM BundleComprend
-    GROUP BY BundleComprend.titreBundle
-    HAVING titreBundle = titreB;
+    WITH RECURSIVE cte_COB(titre) AS (
+        SELECT DISTINCT vPC.titreProduit FROM stome.bundlecomprend AS vPC
+        WHERE vPC.titreBundle = titreB
+        UNION ALL
+        SELECT BC.titreProduit
+        FROM cte_COB JOIN stome.BundleComprend as BC
+                          ON cte_COB.titre = BC.titreBundle
+    ) SELECT SUM(vueContenu.prixFinal) INTO  prixFinalTotalBundle FROM cte_COB
+                                                                           INNER JOIN stome.vueContenu
+                                                                                      ON vueContenu.titre = cte_COB.titre;
     RETURN prixFinalTotalBundle;
 END
 $$
 
 DELIMITER $$
 CREATE VIEW vueBundle(titre, prixInitial, prixReel, age) AS
-SELECT titreBundle, calculPrixInitialContenusBundle(titreBundle) + calculPrixInitialBundlesBundle(titreBundle)  AS prixInitial,
+SELECT titreBundle, calculPrixInitialContenusBundle(titreBundle) AS prixInitial,
        calculPrixReelBundle(titreBundle) AS prixReel,
        MAX(Contenu.ageLegal) AS age
 FROM BundleComprend
@@ -805,7 +815,7 @@ CREATE TRIGGER Verifachat
 BEGIN
     DECLARE ageCompte TINYINT;
     DECLARE ageProduit TINYINT;
-    DECLARE porteMonnaieUser TINYINT;
+    DECLARE porteMonnaieUser INT;
 
     SELECT TIMESTAMPDIFF(YEAR ,Compte.dateNaissance, CURRENT_DATE()) INTO ageCompte
     FROM Compte
@@ -888,15 +898,7 @@ INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Root Test"
 
 INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Teixeira Carvalho", "Stephane", "test@gmail.com", 100, '2010-04-02');
 INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Egremy", "Bruno", "test2@gmail.com", 100, '1999-04-02');
-INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Becaud", "Arthur", "test3@gmail.com", 100, '1999-04-03');
-
-INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Borderlands", '2010-04-03');
-INSERT INTO Achat(idCompte, titreProduit, date) VALUES (3, "Borderlands", '2010-04-04');
-
-# DEBUG
-INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Bundle Root Test", '2010-04-04');
-INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Bundle Monster Hunter World", '2010-04-04');
-
+INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Becaud", "Arthur", "test3@gmail.com", 400, '1999-04-03');
 
 INSERT INTO EstNote(titreProduit, idCompte, note) VALUES ("Monster Hunter Iceborne", 1, 5);
 
@@ -909,6 +911,8 @@ INSERT INTO Entreprise(nom) VALUES ("2K");
 INSERT INTO Entreprise(nom) VALUES ("Gearbox Software");
 INSERT INTO Entreprise(nom) VALUES ("Coffee Stain Publishing");
 INSERT INTO Entreprise(nom) VALUES ("Ghost Ship Games");
+
+
 
 INSERT INTO Franchise(titre, nomEntreprise) VALUES ("Monster Hunter", "Capcom");
 INSERT INTO Franchise(titre, nomEntreprise) VALUES ("Borderlands", "2K");
@@ -936,6 +940,18 @@ INSERT INTO Genre(nom) VALUES ("Horreur");
 
 INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Borderlands", "Action");
 INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Borderlands", "RPG");
+
+INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 50, '2010-05-06', '2010-06-06');
+INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 10, '2010-05-06', '2010-06-06');
+INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Bundle Monster Hunter World", 60, '2010-05-06', '2010-06-06');
+INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Borderlands", 60, NOW(), '2020-01-22');
+
+INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Borderlands", '2010-04-03');
+INSERT INTO Achat(idCompte, titreProduit, date) VALUES (3, "Borderlands", '2010-04-04');
+
+# DEBUG
+INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Bundle Root Test", '2010-04-04');
+INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Bundle Monster Hunter World", '2010-04-04');
 
 #CREATE VIEW promotionActu AS
 #DROP VIEW IF EXISTS vueProduitsComptes;
