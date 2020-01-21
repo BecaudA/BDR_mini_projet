@@ -789,17 +789,17 @@ DELIMITER $$
 CREATE VIEW vueAchats(id, titre, prixInitial, prixFinal, promotion, date, idAmi) AS
 SELECT Achat.idCompte, vueProduit.titre, vueProduit.prixInitial, vueProduit.prixFinal, vueProduit.promotion, Achat.date, AchatAmi.idAmi
 FROM Achat
-         INNER JOIN AchatAmi
-                    ON Achat.id = AchatAmi.id
-         INNER JOIN vueProduit
-                    ON vueProduit.titre = Achat.titreProduit
+INNER JOIN AchatAmi
+      ON Achat.id = AchatAmi.id
+INNER JOIN vueProduit
+      ON vueProduit.titre = Achat.titreProduit
 UNION
 SELECT Achat.idCompte, vueProduit.titre, vueProduit.prixInitial, vueProduit.prixFinal, vueProduit.promotion, Achat.date, null
 FROM Achat
-         INNER JOIN AchatPersonnel
-                    ON Achat.id = AchatPersonnel.id
-         INNER JOIN vueProduit
-                    ON vueProduit.titre = Achat.titreProduit;
+INNER JOIN AchatPersonnel
+      ON Achat.id = AchatPersonnel.id
+INNER JOIN vueProduit
+        ON vueProduit.titre = Achat.titreProduit;
 $$
 
 DELIMITER $$
@@ -820,8 +820,6 @@ CREATE TRIGGER verifAchat
     ON Achat
     FOR EACH ROW
 BEGIN
-    DECLARE ageCompte TINYINT;
-    DECLARE ageProduit TINYINT;
     DECLARE porteMonnaieUser INT;
 
     SELECT porteMonnaie INTO porteMonnaieUser
@@ -850,8 +848,8 @@ BEGIN
     /*Permet de trouver l'âge du compte de l'ami entré*/
     SELECT DISTINCT TIMESTAMPDIFF(YEAR ,Compte.dateNaissance, CURRENT_DATE()) INTO ageCompte
     FROM Compte
-             INNER JOIN EstAmi
-                        ON EstAmi.idAmi = NEW.idAmi
+    INNER JOIN EstAmi
+            ON EstAmi.idAmi = NEW.idAmi
     WHERE Compte.id = NEW.idAmi;
 
     /*Si l'âge est nul cela veut dire qu'aucun ami n'a été trouvé donc le compte entré ne fait pas parti des amis*/
@@ -862,8 +860,8 @@ BEGIN
     /*Trouve l'âge du produit grâce à la vue sur les Produits*/
     SELECT vueProduit.age INTO ageProduit
     FROM vueProduit
-             INNER JOIN Achat
-                        ON vueProduit.titre = Achat.titreProduit
+    INNER JOIN Achat
+          ON vueProduit.titre = Achat.titreProduit
     WHERE Achat.id = NEW.id;
 
     /*Vérification que l'âge du compte Ami est inférieur à l'age du produit acheté*/
@@ -910,8 +908,8 @@ BEGIN
     #Permet de calculer trouver l'âge du compte qui achète le jeu
     SELECT TIMESTAMPDIFF(YEAR ,Compte.dateNaissance, CURRENT_DATE()) INTO ageCompte
     FROM Compte
-             INNER JOIN Achat
-                        ON Achat.idCompte = Compte.id
+    INNER JOIN Achat
+            ON Achat.idCompte = Compte.id
     WHERE Achat.id = NEW.id;
 
     SELECT vueProduit.age INTO ageProduit
