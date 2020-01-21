@@ -35,9 +35,8 @@ $nb_jeu          = 0;
                         foreach ($bibliotheque as $jeu):
                             ?>
                             <tr>
-                                <td> <?php
-                                    echo $jeu['titre'];
-                                    ?>
+                                <td>
+                                    <a style="color: black" href="<?= strtolower(str_replace(' ', '_', $jeu['titre']))?>"><?=$jeu['titre'] ?></a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
