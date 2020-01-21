@@ -339,9 +339,9 @@ CREATE TRIGGER promotion_Pourcentage
 BEGIN
     DECLARE pourcentageTotale TINYINT;
 
-    SELECT SUM(pourcentage) INTO pourcentageTotale
-    FROM Promotion
-    WHERE NEW.titreProduit = titreProduit;
+    SELECT SUM(Promotion.pourcentage) INTO pourcentageTotale
+              FROM Promotion
+    WHERE CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin;
 
     if(pourcentageTotale IS NULL) THEN
         if(new.pourcentage > 100) THEN
@@ -757,7 +757,10 @@ $$
 
 DELIMITER $$
 CREATE VIEW vueContenu(titre, prixInitial, age, prixFinal, promotion, franchise, developpeur, editeur, description) AS
-SELECT Contenu.titre, Contenu.prix AS prixInital, Contenu.ageLegal AS age, calculPrixPromo(Contenu.titre, Contenu.prix) AS prixFinal, SUM(Promotion.pourcentage) AS promotion,
+SELECT Contenu.titre, Contenu.prix AS prixInital, Contenu.ageLegal AS age, calculPrixPromo(Contenu.titre, Contenu.prix) AS prixFinal, COALESCE((SELECT SUM(Promotion.pourcentage)
+                                                                                                                                                            FROM Promotion
+                                                                                                                                                            WHERE Promotion.titreProduit = Contenu.titre AND
+                                                                                                                                                            CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin), 0) AS promotion,
        Jeu.franchise AS franchise,
        Jeu.developpeur AS developpeur,
        Jeu.editeur AS editeur,
@@ -769,7 +772,10 @@ FROM Contenu
                     ON Jeu.titre = Contenu.titre
 GROUP BY Contenu.titre
 UNION
-SELECT Contenu.titre, Contenu.prix AS prixInital, Contenu.ageLegal AS age, calculPrixPromo(Contenu.titre, Contenu.prix) AS prixFinal, SUM(Promotion.pourcentage) AS promotion,
+SELECT Contenu.titre, Contenu.prix AS prixInital, Contenu.ageLegal AS age, calculPrixPromo(Contenu.titre, Contenu.prix) AS prixFinal, COALESCE((SELECT SUM(Promotion.pourcentage)
+                                                                                                                                                            FROM Promotion
+                                                                                                                                                            WHERE Promotion.titreProduit = Contenu.titre AND
+                                                                                                                                                            CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin), 0) AS promotion,
        vueDlc.franchise AS franchise,
        vueDlc.developpeur AS developpeur,
        vueDlc.editeur AS editeur,
@@ -873,17 +879,17 @@ INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Egr
 INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Becaud", "Arthur", "test3@gmail.com", 100, '1999-04-03');
 
 INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Borderlands", '2010-04-03');
-INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Borderlands", '2010-04-04');
+INSERT INTO Achat(idCompte, titreProduit, date) VALUES (3, "Borderlands", '2010-04-04');
 
 # DEBUG
 INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Bundle Root Test", '2010-04-04');
 INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Bundle Monster Hunter World", '2010-04-04');
 
 
-INSERT INTO EstNote(titreProduit, idCompte, note) VALUES ("Monster Hunter Iceborne", 1, 6);
+INSERT INTO EstNote(titreProduit, idCompte, note) VALUES ("Monster Hunter Iceborne", 1, 5);
 
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 50, '2010-05-06', '2010-06-06');
-INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 60, '2010-05-06', '2010-06-06');
+INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 10, '2010-05-06', '2010-06-06');
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Bundle Monster Hunter World", 60, '2010-05-06', '2010-06-06');
 
 INSERT INTO Entreprise(nom) VALUES ("Capcom");
