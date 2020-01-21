@@ -45,10 +45,10 @@ function getCompte($id) {
 }
 
 function getAchatsCompte($idCompte) {
-    return "SELECT * FROM stome.vueAchats WHERE  vueAchats.idCompte = \"" . $idCompte . "\"";
+    return "SELECT * FROM stome.vueAchats WHERE  vueAchats.id = \"" . $idCompte . "\"";
 }
 
-function getJeuxCompte($idCompte){
+function getJeuxCompte($idCompte) {
     return "WITH RECURSIVE cte_COB(titre) AS (
                 SELECT DISTINCT vPC.titreProduit FROM stome.vueProduitsComptes AS vPC
                     WHERE vPC.idProprietaire = ". $idCompte . "
