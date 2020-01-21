@@ -789,8 +789,15 @@ DELIMITER $$
 CREATE VIEW vueAchats(id, titre, prixInitial, prixFinal, promotion, date, idAmi) AS
 SELECT Achat.idCompte, vueProduit.titre, vueProduit.prixInitial, vueProduit.prixFinal, vueProduit.promotion, Achat.date, AchatAmi.idAmi
 FROM Achat
-         LEFT JOIN AchatAmi
-                   ON Achat.id = AchatAmi.id
+         INNER JOIN AchatAmi
+                    ON Achat.id = AchatAmi.id
+         INNER JOIN vueProduit
+                    ON vueProduit.titre = Achat.titreProduit
+UNION
+SELECT Achat.idCompte, vueProduit.titre, vueProduit.prixInitial, vueProduit.prixFinal, vueProduit.promotion, Achat.date, null
+FROM Achat
+         INNER JOIN AchatPersonnel
+                    ON Achat.id = AchatPersonnel.id
          INNER JOIN vueProduit
                     ON vueProduit.titre = Achat.titreProduit;
 $$
@@ -808,7 +815,7 @@ FROM stome.Achat
 $$
 
 DELIMITER $$
-CREATE TRIGGER Verifachat
+CREATE TRIGGER verifAchat
     BEFORE INSERT
     ON Achat
     FOR EACH ROW
@@ -817,43 +824,104 @@ BEGIN
     DECLARE ageProduit TINYINT;
     DECLARE porteMonnaieUser INT;
 
-    SELECT TIMESTAMPDIFF(YEAR ,Compte.dateNaissance, CURRENT_DATE()) INTO ageCompte
-    FROM Compte
-    WHERE id= NEW.idCompte;
-
-    #Calcul de l'âge d'achat pour un bundle
-    SELECT MAX(Contenu.ageLegal) INTO ageProduit
-    FROM BundleComprend
-             INNER JOIN Produit
-                        ON BundleComprend.titreProduit = Produit.titre
-             INNER JOIN Bundle
-                        ON BundleComprend.titreBundle = Bundle.titre
-             INNER JOIN Contenu
-                        ON Contenu.titre = Produit.titre
-    WHERE BundleComprend.titreBundle = NEW.titreProduit;
-
-    #Si l'âge du produit veut null cela veut dire que le produit acheter n'est pas un bundle
-    if(ageProduit IS NULL) THEN
-        #Calcul de l'âge d'achat pour un jeu
-        SELECT ageLegal INTO ageProduit
-        FROM Contenu
-        WHERE titre = NEW.titreProduit;
-    END IF;
-
     SELECT porteMonnaie INTO porteMonnaieUser
     FROM Compte
     WHERE id = NEW.idCompte;
 
+    IF (porteMonnaieUser - (SELECT prixFinal FROM vueProduit WHERE NEW.titreProduit = vueProduit.titre) < 0) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Porte Monnaie < 0';
+    ELSE
+        UPDATE Compte
+        SET Compte.porteMonnaie = Compte.PorteMonnaie - (SELECT prixFinal FROM vueProduit WHERE NEW.titreProduit = vueProduit.titre)
+        WHERE NEW.idCompte = id;
+    END IF;
+END
+$$
+
+DELIMITER $$
+CREATE TRIGGER verifAchatAmi
+    BEFORE INSERT
+    ON AchatAmi
+    FOR EACH ROW
+BEGIN
+    DECLARE ageCompte TINYINT;
+    DECLARE ageProduit TINYINT;
+
+    /*Permet de trouver l'âge du compte de l'ami entré*/
+    SELECT DISTINCT TIMESTAMPDIFF(YEAR ,Compte.dateNaissance, CURRENT_DATE()) INTO ageCompte
+    FROM Compte
+             INNER JOIN EstAmi
+                        ON EstAmi.idAmi = NEW.idAmi
+    WHERE Compte.id = NEW.idAmi;
+
+    /*Si l'âge est nul cela veut dire qu'aucun ami n'a été trouvé donc le compte entré ne fait pas parti des amis*/
+    IF(ageCompte IS NULL) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Pas ami';
+    END IF;
+
+    /*Trouve l'âge du produit grâce à la vue sur les Produits*/
+    SELECT vueProduit.age INTO ageProduit
+    FROM vueProduit
+             INNER JOIN Achat
+                        ON vueProduit.titre = Achat.titreProduit
+    WHERE Achat.id = NEW.id;
+
+    /*Vérification que l'âge du compte Ami est inférieur à l'age du produit acheté*/
     IF (ageCompte < ageProduit) THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Compte trop jeune';
-    ELSE
-        IF (porteMonnaieUser - (SELECT prixFinal FROM vueProduit WHERE NEW.titreProduit = vueProduit.titre) < 0) THEN
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Porte Monnaie < 0';
-        ELSE
-            UPDATE Compte
-            SET Compte.porteMonnaie = Compte.PorteMonnaie - (SELECT prixFinal FROM vueProduit WHERE NEW.titreProduit = vueProduit.titre)
-            WHERE NEW.idCompte = id;
-        END IF;
+    END IF;
+END
+$$
+
+DELIMITER $$
+CREATE TRIGGER doubleAchatProduitAmi
+    BEFORE INSERT
+    ON AchatAmi
+    FOR EACH ROW
+BEGIN
+    DECLARE idAchat TINYINT;
+    DECLARE idAchatPerso TINYINT;
+    DECLARE titreProduitAchat VARCHAR(80);
+
+    SELECT titreProduit INTO titreProduitAchat
+    FROM Achat
+    WHERE Achat.id = NEW.id;
+
+    SELECT id INTO idAchat
+    FROM Achat
+    WHERE titreProduitAchat = titreProduit AND new.idAmi = idCompte;
+
+    IF (idAchat IS NOT NULL AND idAchatPerso IS NOT NULL) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Déjà acheté';
+    END IF;
+END
+$$
+
+
+DELIMITER $$
+CREATE TRIGGER verifAchatPerso
+    BEFORE INSERT
+    ON AchatPersonnel
+    FOR EACH ROW
+BEGIN
+    DECLARE ageCompte TINYINT;
+    DECLARE ageProduit TINYINT;
+
+    #Permet de calculer trouver l'âge du compte qui achète le jeu
+    SELECT TIMESTAMPDIFF(YEAR ,Compte.dateNaissance, CURRENT_DATE()) INTO ageCompte
+    FROM Compte
+             INNER JOIN Achat
+                        ON Achat.idCompte = Compte.id
+    WHERE Achat.id = NEW.id;
+
+    SELECT vueProduit.age INTO ageProduit
+    FROM vueProduit
+             INNER JOIN Achat
+                        ON vueProduit.titre = Achat.titreProduit
+    WHERE Achat.id = NEW.id;
+
+    IF (ageCompte < ageProduit) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Compte trop jeune';
     END IF;
 END
 $$
@@ -973,11 +1041,13 @@ INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Monster Hunter Iceborn
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 50, '2010-05-06', '2010-06-06');
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 10, '2010-05-06', '2010-06-06');
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Bundle Monster Hunter World", 60, '2010-05-06', '2010-06-06');
-INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Borderlands", 60, NOW(), '2020-01-22');
 
 INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Borderlands", '2010-04-03');
 
-
+INSERT INTO estAmi (idCompte, idAmi) VALUES (1,2);
+INSERT INTO estAmi (idCompte, idAmi) VALUES (1,3);
+INSERT INTO estAmi (idCompte, idAmi) VALUES (2,3);
+INSERT INTO estAmi (idCompte, idAmi) VALUES (3,2);
 
 #CREATE VIEW promotionActu AS
 #DROP VIEW IF EXISTS vueProduitsComptes;
