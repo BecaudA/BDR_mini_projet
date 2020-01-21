@@ -721,9 +721,9 @@ $$
 
 DELIMITER $$
 CREATE VIEW vueDLC(titre, developpeur, editeur, franchise) AS
-SELECT Dlc.titre, Jeu.Editeur, Jeu.Developpeur, Jeu.Franchise
+SELECT DLC.titre, Jeu.Editeur, Jeu.Developpeur, Jeu.Franchise
 FROM DLC
-         INNER JOIN Jeu ON Jeu.titre = Dlc.titreJeu;
+         INNER JOIN Jeu ON Jeu.titre = DLC.titreJeu;
 $$
 
 DELIMITER $$
