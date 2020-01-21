@@ -16,7 +16,6 @@ class ControllerBundle {
     private function showDetailsContenu($titre) {
         $this->_bundleManager = new BundleManager();
         $bundles = $this->_bundleManager->getBundle($titre);
-
         //
         $this->_view = new View('Bundle');
         $this->_view->generate(array('bundles' => $bundles));
