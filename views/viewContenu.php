@@ -13,7 +13,7 @@
             } else {
                 $this->_comptes = $this->_AchatManager->setAchatAmi($idAcheteur,$titre, $idReceveur);
             }
-            header("Location: Boutique");
+            //header("Location: Boutique");
         }
     }
 

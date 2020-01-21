@@ -70,16 +70,16 @@ function getAmisCompte($id) {
                 WHERE EstAmi.idCompte = ".$id;
 }
 
-function addNewAchat($idCompte, $titreProduit){
-    return "INSERT INTO Achat(idCompte, titreProduit, date) VALUES (". $idCompte .", \"". $titreProduit . "\", NOW())";
+function addNewAchatAmi($idAmi, $idCompte, $titreProduit){
+    return "START TRANSACTION;
+            INSERT INTO Achat(idCompte, titreProduit, date) VALUES (\"". $idCompte ."\", \"". $titreProduit . "\", NOW());
+            INSERT INTO AchatAmi(id, idAmi) VALUES ((". getAchatLastId() . "), ".$idAmi.")".";COMMIT;";
 }
 
-function addNewAchatAmi($idAchat, $idCompte){
-    return "INSERT INTO AchatAmi(id, idAmi) VALUES (".$idAchat . ", ".$idCompte.")";
-}
-
-function addNewAchatPerso($idAchat){
-    return "INSERT INTO AchatPersonnel(id) VALUES (".$idAchat . ")";
+function addNewAchatPerso($idCompte, $titreProduit){
+    return "START TRANSACTION;
+            INSERT INTO Achat(idCompte, titreProduit, date) VALUES (\"". $idCompte ."\", \"". $titreProduit . "\", NOW());
+            INSERT INTO AchatAmi(id, idAmi) VALUES ((".getAchatLastId()."))".";COMMIT;";
 }
 
 function getAchatLastId(){
