@@ -888,15 +888,7 @@ INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Root Test"
 
 INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Teixeira Carvalho", "Stephane", "test@gmail.com", 100, '2010-04-02');
 INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Egremy", "Bruno", "test2@gmail.com", 100, '1999-04-02');
-INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Becaud", "Arthur", "test3@gmail.com", 100, '1999-04-03');
-
-INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Borderlands", '2010-04-03');
-INSERT INTO Achat(idCompte, titreProduit, date) VALUES (3, "Borderlands", '2010-04-04');
-
-# DEBUG
-INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Bundle Root Test", '2010-04-04');
-INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Bundle Monster Hunter World", '2010-04-04');
-
+INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Becaud", "Arthur", "test3@gmail.com", 400, '1999-04-03');
 
 INSERT INTO EstNote(titreProduit, idCompte, note) VALUES ("Monster Hunter Iceborne", 1, 5);
 
@@ -909,6 +901,8 @@ INSERT INTO Entreprise(nom) VALUES ("2K");
 INSERT INTO Entreprise(nom) VALUES ("Gearbox Software");
 INSERT INTO Entreprise(nom) VALUES ("Coffee Stain Publishing");
 INSERT INTO Entreprise(nom) VALUES ("Ghost Ship Games");
+
+
 
 INSERT INTO Franchise(titre, nomEntreprise) VALUES ("Monster Hunter", "Capcom");
 INSERT INTO Franchise(titre, nomEntreprise) VALUES ("Borderlands", "2K");
@@ -936,6 +930,13 @@ INSERT INTO Genre(nom) VALUES ("Horreur");
 
 INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Borderlands", "Action");
 INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Borderlands", "RPG");
+
+INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Borderlands", '2010-04-03');
+INSERT INTO Achat(idCompte, titreProduit, date) VALUES (3, "Borderlands", '2010-04-04');
+
+# DEBUG
+INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Bundle Root Test", '2010-04-04');
+INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Bundle Monster Hunter World", '2010-04-04');
 
 #CREATE VIEW promotionActu AS
 #DROP VIEW IF EXISTS vueProduitsComptes;
