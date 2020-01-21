@@ -5,10 +5,10 @@
             $nom    = $_POST['nom'];
             $prenom = $_POST['prenom'];
             $email  = $_POST['email'];
-            $date   = $_POST['date']
+            $date   = $_POST['date'];
             $compteManager = new CompteManager();
             $compteManager->creerCompte($nom, $prenom, $email, $date);
-            //header("Location: Boutique");
+            header("Location: Boutique");
         }
     }
 ?>
@@ -34,7 +34,7 @@
         </div>
         <div class="col-4 mb-3">
           <label for="validationDefault04">Date de naissance</label>
-          <input type="date" class="form-control" id="validationDefault04" required>
+          <input name="date" type="date" class="form-control" id="validationDefault04" required>
         </div>
       </div>
       <button class="btn btn-primary" type="submit">Créer compte</button>

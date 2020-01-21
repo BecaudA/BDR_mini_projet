@@ -6,7 +6,6 @@ class ControllerCreerCompte {
     private $_view;
 
     public function __construct($url) {
-        echo "HERE";
         if (isset($url) && count($url) > 1) {
             throw new Exception('Page introuvable');
         } else {

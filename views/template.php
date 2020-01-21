@@ -41,7 +41,8 @@
                         <?php foreach($comptes as $compte) {
                             echo "<a class=\"dropdown-item\" href=\"" . $compte->id() ."\">" . $compte->nom() . " " . $compte->prenom() . "</a>";
                         }?>
-
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="CreerCompte">Créer un compte</a>
                     </div>
                 </div>
                 <button class="navbar-toggler p-2" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
