@@ -28,6 +28,7 @@
     $developpeur = $contenus[0]->developpeur();
     $editeur     = $contenus[0]->editeur();
     $franchise   = $contenus[0]->franchise();
+    $note        = $contenus[0]->note();
 ?>
     <style type="text/css">
         .jumbotron {
@@ -95,39 +96,38 @@
                 </div>
                 <div class="p-3 mb-3 bg-light rounded">
                     <h4 class="font-italic">Détails</h4>
+                    <h6>Note :
+                        <?php if ($note == null): ?>
+                        aucune
+                        <?php else: ?>
+                        <?= $note ?> / 5.0
+                        <?php endif; ?>
+                    </h6>
                     <h6>Age légal : <?= $age; ?> ans</h6>
-                    <h6>Langue
+                    <h6>Langue(s) :
                         <?php
                         $sizeTradArray = sizeof($traductions);
-                        if ($sizeTradArray > 1) {
-                            echo "s";
-                        }
-                        echo " : ";
                         if ($sizeTradArray == 0) {
                             echo "aucune";
                         } else {
-                            for ($i = 0; $i < sizeof($traductions); ++$i) {
+                            for ($i = 0; $i < $sizeTradArray; ++$i) {
                                 echo $traductions[$i];
-                                if ($i < sizeof($traductions) - 1) {
+                                if ($i < $sizeTradArray - 1) {
                                     echo ", ";
                                 }
                             }
                         }
                         ?>
 
-                        <h6>Genre
+                        <h6>Genre(s) :
                             <?php
                             $sizeGenreArray = sizeof($genres);
-                            if ($sizeGenreArray > 1) {
-                                echo "s";
-                            }
-                            echo " : ";
                             if ($sizeGenreArray == 0) {
                                 echo "aucun";
                             } else {
-                                for ($i = 0; $i < sizeof($genres); ++$i) {
+                                for ($i = 0; $i < $sizeGenreArray; ++$i) {
                                     echo $genres[$i];
-                                    if ($i < sizeof($genres) - 1) {
+                                    if ($i < $sizeGenreArray - 1) {
                                         echo ", ";
                                     }
                                 }
