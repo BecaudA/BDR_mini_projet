@@ -662,7 +662,7 @@ END
 $$
 
 DELIMITER $$
-CREATE FUNCTION calculPrixInitialContenusBundle(titreB VARCHAR(80))
+CREATE FUNCTION calculPrixInitialBundle(titreB VARCHAR(80))
     RETURNS INT
     READS SQL DATA
     DETERMINISTIC
