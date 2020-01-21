@@ -141,7 +141,7 @@
                             Editeur : <?= $editeur; ?>
                         </h6>
                         <h6>
-                            Developpeur : <?= $developpeur; ?>
+                            Développeur : <?= $developpeur; ?>
                         </h6>
                 </div>
             </aside>
