@@ -970,6 +970,11 @@ INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Monster Hunter Iceborn
 INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Monster Hunter Iceborne", "Coopération");
 INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Monster Hunter Iceborne", "Multijoueur");
 
+INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 50, '2010-05-06', '2010-06-06');
+INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 10, '2010-05-06', '2010-06-06');
+INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Bundle Monster Hunter World", 60, '2010-05-06', '2010-06-06');
+INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Borderlands", 60, NOW(), '2020-01-22');
+
 INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Borderlands", '2010-04-03');
 INSERT INTO Achat(idCompte, titreProduit, date) VALUES (3, "Borderlands", '2010-04-04');
 
