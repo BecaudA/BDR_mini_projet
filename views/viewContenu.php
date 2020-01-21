@@ -1,17 +1,22 @@
 <?php
-    if(count($_REQUEST) >= 2){
-        $this->_AchatManager = new AchatManager();
-        //Si seulement 2 paramètres sont passés alors c'est un achat perso
-        if(count($_REQUEST) == 2){
-            $this->_comptes = $this->_AchatManager->setAchatPerso(2,"Borderlands 2");
-        }
-        //Si 3 argument sont passés alors c'est un achat pour un ami
-        elseif (count($_REQUEST) == 3){
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $nbParamPost = count($_POST);
+        if ($nbParamPost == 3) {
+            $titre = str_replace('_', ' ', $_POST['titre']);
+            $idAcheteur = $_POST['idAcheteur'];
+            $idReceveur = $_POST['idReceveur'];
+            $this->_AchatManager = new AchatManager();
+            echo "OK ".$nbParamPost;
 
-            $this->_comptes = $this->_AchatManager->setAchatAmi(idAcheteur,"Borderlands 2", idReceveur);
+            if ($idAcheteur == $idReceveur) {
+                $this->_comptes = $this->_AchatManager->setAchatPerso($idAcheteur, $titre);
+            } else {
+                $this->_comptes = $this->_AchatManager->setAchatAmi($idAcheteur,$titre, $idReceveur);
+            }
+            header("Location: Boutique");
         }
-
     }
+
     $titre       = $contenus[0]->titre();
     $prixInitial = $contenus[0]->prixInitial();
     $age         = $contenus[0]->age();
@@ -63,8 +68,8 @@
                 <div id="porteMonnaie"></div>
                 <button class="btn btn-primary btn-lg btn-block mb-2" type="submit" data-toggle="collapse" href="#acheter">Acheter</button>
                 <div class="collapse" id="acheter">
-                    <form action="" class="was-validated">
-                        <input type="hidden" name="titre" value="<?= $titre; ?>">
+                    <form action="<?= str_replace(' ', '_', $titre) ?>" class="was-validated" method="post">
+                        <input type="hidden" name="titre" value="<?= str_replace(' ', '_', $titre); ?>">
                         <div class="row">
                             <div class="form-group col">
                                 <select name="idAcheteur" class="custom-select" required onchange="majAcheteur(this.value)">

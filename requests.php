@@ -45,7 +45,7 @@ function getCompte($id) {
 }
 
 function getAchatsCompte($idCompte) {
-    return "SELECT * FROM stome.vueAchats WHERE  vueAchats.id = \"" . $idCompte . "\"";
+    return "SELECT * FROM stome.vueAchats WHERE  vueAchats.idCompte = \"" . $idCompte . "\"";
 }
 
 function getJeuxCompte($idCompte){
@@ -60,10 +60,6 @@ function getJeuxCompte($idCompte){
                 INNER JOIN stome.Contenu
                         ON Contenu.titre = cte_COB.titre
                 GROUP BY cte_COB.titre;";
-}
-
-function getAcheteurContenuCompte($titreContenu, $idCompte){
-    return "";
 }
 
 function getAmisCompte($id) {
