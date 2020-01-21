@@ -1044,6 +1044,7 @@ INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Bu
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Borderlands", 60, '2020-01-21', '2020-06-06');
 
 INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Borderlands", '2010-04-03');
+INSERT INTO AchatPersonnel(id) VALUES (1);
 
 INSERT INTO EstAmi (idCompte, idAmi) VALUES (1,2);
 INSERT INTO EstAmi (idCompte, idAmi) VALUES (1,3);
