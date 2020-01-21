@@ -89,3 +89,62 @@ function getAchatLastId(){
 function addCompte($nom, $prenom, $email, $date) {
     return "INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES(\"".$nom."\", \"".$prenom."\", \"".$email."\", 0, '".$date."')";
 }
+
+function getJeux() {
+    return "SELECT VP.* FROM stome.vueContenu AS VP 
+                INNER JOIN stome.Produit
+                    ON VP.titre = Produit.titre";
+}
+
+function addProduit($titre) {
+    return "INSERT INTO Produit(titre) VALUES (\"".$titre."\")";
+}
+
+function addContenu($titre, $age, $prix, $description) {
+    return "INSERT INTO Contenu(titre, agelegal, prix, description) VALUES (\"".$titre."\", ".$age.", ".$prix.", \"".$description."\")";
+}
+
+function addJeu($titre, $developpeur, $editeur, $franchise) {
+    return "INSERT INTO Jeu(titre, developpeur, editeur, franchise) VALUES (\"".$titre."\", \"".$developpeur."\",\"".$editeur."\", \"".$franchise."\");";
+}
+
+function addLanguesAJeu($titre, array $langues) {
+    $req = "INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ";
+    $size = sizeof($langues);
+    for ($i = 0; $i < $size; ++$i) {
+        $req .= "(\"".$titre."\", \"".$langues[$i]."\")";
+        if ($i < $size-1) {
+            $req .= ", ";
+        }
+    }
+    return $req;
+}
+
+function addGenresAJeu($titre, array $genres) {
+    $req = "INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ";
+    $size = sizeof($genres);
+    for ($i = 0; $i < $size; ++$i) {
+        $req .= "(\"".$titre."\", \"".$genres[$i]."\")";
+        if ($i < $size-1) {
+            $req .= ", ";
+        }
+    }
+    return $req;
+}
+
+function getGenres() {
+    return "SELECT * FROM stome.Genre";
+}
+
+function getLangues() {
+    return "SELECT * FROM stome.Langue";
+}
+
+
+function getEntreprises() {
+    return "SELECT * FROM stome.Entreprise";
+}
+
+function getFranchises() {
+    return "SELECT titre FROM stome.Franchise";
+}

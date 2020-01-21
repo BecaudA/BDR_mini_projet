@@ -18,6 +18,20 @@
     <hr>
     <form action="CreerCompte" method="post">
       <div class="form-row">
+        <div class="col-6 mb-3">
+          <label for="validationDefault01">Titre</label>
+          <input name="titre" type="text" class="form-control" id="validationDefault01" placeholder="titre du jeu" required>
+        </div>
+        <div class="col-3 mb-3">
+          <label for="validationDefault02">Titre</label>
+          <input name="titre" type="text" class="form-control" id="validationDefault02" placeholder="titre du jeu" required>
+        </div>
+        <div class="col-3 mb-3">
+          <label for="validationDefault03">Titre</label>
+          <input name="titre" type="text" class="form-control" id="validationDefault03" placeholder="titre du jeu" required>
+        </div>
+      </div>
+      <div class="form-row">
         <div class="col-md-6 mb-3">
           <label for="validationDefault01">Nom</label>
           <input name="nom" type="text" class="form-control" id="validationDefault01" placeholder="votre nom" required>
