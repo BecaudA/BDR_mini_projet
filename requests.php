@@ -38,6 +38,10 @@ function getBundle($titre) {
     return "SELECT * FROM stome.Bundle WHERE Bundle.titre = \"".$titre."\"";
 }
 
+function getJeu($titre) {
+    return "SELECT * FROM stome.Jeu WHERE Jeu.titre = \"".$titre."\"";
+}
+
 function getComptes() {
     return "SELECT * FROM stome.Compte";
 }

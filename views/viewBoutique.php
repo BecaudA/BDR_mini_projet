@@ -12,8 +12,11 @@
                         $prixInitial = $produit->prixInitial();
                         $prixFinal = $produit->prixFinal();
                         $promotion = $produit->promotion();
-                        $img = "img/thumbnails/" . strtolower(str_replace(' ', '', $titre)) . ".jpg";
-                        $link = str_replace(' ', '_', $titre);
+                        $img       = "img/thumbnails/" . strtolower(str_replace(' ', '', $titre)) . ".jpg";
+                        $link      = str_replace(' ', '_', $titre);
+                        if (!file_exists($img)) {
+                            $img = "img/thumbnails/unknown.jpg";
+                        }
                     ?>
                     <div class="col-md-4">
                         <div class="card mb-4 box-shadow">

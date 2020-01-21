@@ -12,6 +12,10 @@ class ContenuManager extends Model {
         return $contenus;
     }
 
+    public function doesJeuExist($titre) {
+        return !empty(getJeu($titre));
+    }
+
     public function getJeux() {
         return $this->reqSelectDB(getJeux(), "Contenu");
     }
@@ -24,9 +28,11 @@ class ContenuManager extends Model {
         // insert dans Jeu
         $this->insertElementDB(addJeu($titre, $developpeur, $editeur, $franchise));
         // insert dans PossedeGenre
-        $this->insertElementDB(addGenresAJeu($titre, $genres));
+        if (sizeof($langues))
+            $this->insertElementDB(addGenresAJeu($titre, $genres));
         // insert dans EstTraduit
-        $this->insertElementDB(addLanguesAJeu($titre, $langues));
+        if (sizeof($genres))
+            $this->insertElementDB(addLanguesAJeu($titre, $langues));
     }
 
     public function getGenres() {
@@ -36,7 +42,7 @@ class ContenuManager extends Model {
         $genres = array();
         foreach ($data as $row) {
             foreach ($row as $key => $value){
-                if($key == "genre")
+                if($key == "nom")
                     array_push($genres, $value);
             }
         }
@@ -45,12 +51,12 @@ class ContenuManager extends Model {
 
     public function getLangues() {
         // récupère toutes les langues
-        $data = $this->reqSelectDB_Tuples(getGenres());
+        $data = $this->reqSelectDB_Tuples(getLangues());
         // création d'un tableau de langues
         $langues = array();
         foreach ($data as $row) {
             foreach ($row as $key => $value){
-                if($key == "langue")
+                if($key == "nom")
                     array_push($langues, $value);
             }
         }

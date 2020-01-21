@@ -23,6 +23,10 @@
     $prix          = $bundles[0]->prixFinal();
     $promotion     = $bundles[0]->promotion();
     $listeProduits = $bundles[0]->listeProduits();
+    $img           = "img/thumbnails/" . strtolower(str_replace(' ', '', $titre)) . ".jpg";
+    if (!file_exists($img)) {
+        $img = "img/thumbnails/unknown.jpg";
+    }
 ?>
 
 
@@ -105,8 +109,8 @@
                         <input type="hidden" name="titre" value="<?= str_replace(' ', '_', $titre); ?>">
                         <div class="row">
                             <div class="form-group col">
+                                <label>Acheteur</label>
                                 <select name="idAcheteur" class="custom-select" required onchange="majAcheteur(this.value)">
-                                    <option value="">Acheteur</option>
                                     <?php foreach($comptes as $compte): ?>
                                         <option value="<?= $compte->id(); ?>"><?= $compte->nom()." ".$compte->prenom(); ?></option>
                                     <?php endforeach; ?>
@@ -114,8 +118,8 @@
                                 <div class="invalid-feedback">Sélectionnez un acheteur</div>
                             </div>
                             <div class="form-group col">
+                                <label>Receveur</label>
                                 <select name="idReceveur" class="custom-select" required>
-                                    <option value="">Receveur</option>
                                     <?php foreach($comptes as $compte): ?>
                                         <option value="<?= $compte->id(); ?>"><?= $compte->nom()." ".$compte->prenom(); ?></option>
                                     <?php endforeach; ?>

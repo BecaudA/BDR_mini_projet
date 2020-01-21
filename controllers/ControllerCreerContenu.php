@@ -23,7 +23,7 @@ class ControllerCreerContenu {
         $franchises  = $this->_contenuManager->getFranchises();
         $this->_view = new View('CreerContenu');
         $this->_view->generate(array('jeux' => $jeux,
-                                     'genres' =>$genres,
+                                     'genres' => $genres,
                                      'langues' => $langues,
                                      'entreprises' => $entreprises,
                                      'franchises' => $franchises));
