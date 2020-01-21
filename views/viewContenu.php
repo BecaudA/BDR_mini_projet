@@ -58,34 +58,34 @@
                         </span>
                     </h2>
                 <?php else: ?>
-                    <h2 class=text-center"><span class="badge badge-secondary"><?= $prix; ?> CHF </span></h2>
+                    <h2 class=text-center"><span class="badge badge-secondary" id="prix"><?= $prix; ?> CHF </span></h2>
                 <?php endif; ?>
                 <div id="porteMonnaie"></div>
                 <button class="btn btn-primary btn-lg btn-block mb-2" type="submit" data-toggle="collapse" href="#acheter">Acheter</button>
                 <div class="collapse" id="acheter">
-                    <form>
-                        <div class="form-row">
-                            <input type="hidden" name="titre" value="<?= $titre; ?>>">
-                            <div class="form-group col-md-4">
-                                <select id="inputState" class="form-control" name="idAcheteur" onchange="if (this.selectedIndex) majPorteMonnaieAcheteur(this.value)">
-                                    <option value="" disabled selected hidden oninput="">Acheteur</option>
-                                    <option value="1">Stéphane</option>
-                                    <option value="2">Bruno</option>
-                                    <!--TODO: lister les acheteurs -->
+                    <form action="" class="was-validated">
+                        <input type="hidden" name="titre" value="<?= $titre; ?>">
+                        <div class="row">
+                            <div class="form-group col">
+                                <select name="idAcheteur" class="custom-select" required onchange="majAcheteur(this.value)">
+                                    <option value="">Acheteur</option>
+                                    <?php foreach($comptes as $compte): ?>
+                                        <option value="<?= $compte->id(); ?>"><?= $compte->nom()." ".$compte->prenom(); ?></option>
+                                    <?php endforeach; ?>
                                 </select>
+                                <div class="invalid-feedback">Sélectionnez un acheteur</div>
                             </div>
-                            <div class="form-group col-md-4">
-                                <select id="inputState" class="form-control" name="idReceveur">
-                                    <option value="" disabled selected hidden oninput="">Receveur</option>
-                                    <option>...</option>
-                                    <!--TODO: lister les receveurs -->
+                            <div class="form-group col">
+                                <select name="idReceveur" class="custom-select" required>
+                                    <option value="">Receveur</option>
+                                    <?php foreach($comptes as $compte): ?>
+                                        <option value="<?= $compte->id(); ?>"><?= $compte->nom()." ".$compte->prenom(); ?></option>
+                                    <?php endforeach; ?>
                                 </select>
+                                <div class="invalid-feedback">Sélectionnez un receveur</div>
                             </div>
                         </div>
-                        <div class="form-row">
-                            <!--TODO: faire l'achat -->
-                            <button type="submit" class="btn btn-primary btn-lg btn-block mb-2" id="confirmerAchat">Confirmer l'achat</button>
-                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg btn-block mb-2" id="confirmerAchat">Confirmer l'achat</button>
                     </form>
                 </div>
                 <div class="p-3 mb-3 bg-light rounded">
@@ -144,26 +144,14 @@
     </div>
 <!-- TODO: tentative de script pour ajax-->
 <script>
-    function majPorteMonnaieAcheteur(nom) {
-        alert("maj porte monnaie en cours");
+    function majAcheteur(id) {
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 document.getElementById("porteMonnaie").innerHTML = this.responseText;
             }
         };
-        // j'arrive pas à ouvir majPorte...
-        xmlhttp.open("GET", "ajax\majPorteMonnaie.php?id=" + str, true);
-        xmlhttp.send();
-    }
-    function majBoutonConfirmerAchat(nom) {
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("confirmerAchat").innerHTML = this.responseText;
-            }
-        };
-        xmlhttp.open("GET", "ajax/gethint.php?id=" + str, true);
+        xmlhttp.open("GET", "Ajax/MajAcheteur/" + id, true);
         xmlhttp.send();
     }
 </script>

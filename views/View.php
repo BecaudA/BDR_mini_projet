@@ -24,7 +24,7 @@ class View {
 	}
 	
 	// génère un fichier vue et renvoie le résultat produit
-	private function generateFile($file, $data)
+	public function generateFile($file, $data)
     {
         if (file_exists($file)) {
             extract($data);
