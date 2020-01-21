@@ -5,7 +5,7 @@
             $nom    = $_POST['nom'];
             $prenom = $_POST['prenom'];
             $email  = $_POST['email'];
-            $date   = $_POST['date']
+            $date   = $_POST['date'];
             $compteManager = new CompteManager();
             $compteManager->creerCompte($nom, $prenom, $email, $date);
             //header("Location: Boutique");
