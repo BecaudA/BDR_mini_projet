@@ -749,32 +749,6 @@ GROUP BY BundleComprend.titreBundle;
 $$
 
 DELIMITER $$
-CREATE VIEW vueProduit(titre, prixInitial, age, prixFinal, promotion) AS
-
-SELECT DISTINCT Produit.titre, vueBundle.prixInitial AS prixInitial, vueBundle.age AS age, calculPrixPromo(Produit.titre, vueBundle.prixReel) AS prixFinal,
-                COALESCE((SELECT SUM(Promotion.pourcentage)
-                          FROM Promotion
-                          WHERE Promotion.titreProduit = Produit.titre AND
-                              CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin), 0) AS pourcentagePromo
-FROM Produit
-         INNER JOIN vueBundle
-                    ON Produit.titre = vueBundle.titre
-         LEFT JOIN Promotion
-                   ON Promotion.titreProduit = Produit.titre
-UNION
-SELECT DISTINCT Produit.titre, vueContenu.prixInitial AS prixInitial, vueContenu.age AS age, vueContenu.prixFinal AS prixFinal,
-                COALESCE((SELECT SUM(Promotion.pourcentage)
-                          FROM Promotion
-                          WHERE Promotion.titreProduit = Produit.titre AND
-                              CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin), 0) AS pourcentagePromo
-FROM Produit
-         INNER JOIN vueContenu
-                    ON Produit.titre = vueContenu.titre
-         LEFT JOIN Promotion
-                   ON Promotion.titreProduit = Produit.titre;
-$$
-
-DELIMITER $$
 CREATE VIEW vueDLC(titre, developpeur, editeur, franchise) AS
 SELECT Dlc.titre, Jeu.Editeur, Jeu.Developpeur, Jeu.Franchise
 FROM DLC
@@ -806,6 +780,32 @@ FROM Contenu
          INNER JOIN vueDlc
                     ON vueDlc.titre = Contenu.titre
 GROUP BY Contenu.titre;
+$$
+
+DELIMITER $$
+CREATE VIEW vueProduit(titre, prixInitial, age, prixFinal, promotion) AS
+
+SELECT DISTINCT Produit.titre, vueBundle.prixInitial AS prixInitial, vueBundle.age AS age, calculPrixPromo(Produit.titre, vueBundle.prixReel) AS prixFinal,
+                COALESCE((SELECT SUM(Promotion.pourcentage)
+                          FROM Promotion
+                          WHERE Promotion.titreProduit = Produit.titre AND
+                              CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin), 0) AS pourcentagePromo
+FROM Produit
+         INNER JOIN vueBundle
+                    ON Produit.titre = vueBundle.titre
+         LEFT JOIN Promotion
+                   ON Promotion.titreProduit = Produit.titre
+UNION
+SELECT DISTINCT Produit.titre, vueContenu.prixInitial AS prixInitial, vueContenu.age AS age, vueContenu.prixFinal AS prixFinal,
+                COALESCE((SELECT SUM(Promotion.pourcentage)
+                          FROM Promotion
+                          WHERE Promotion.titreProduit = Produit.titre AND
+                              CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin), 0) AS pourcentagePromo
+FROM Produit
+         INNER JOIN vueContenu
+                    ON Produit.titre = vueContenu.titre
+         LEFT JOIN Promotion
+                   ON Promotion.titreProduit = Produit.titre;
 $$
 
 DELIMITER $$
