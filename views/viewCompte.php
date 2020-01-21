@@ -34,7 +34,7 @@ $nb_jeu          = 0;
                             ++$nb_jeu; ?>
                             <tr>
                                 <td>
-                                    <a style="color: black" href="<?= strtolower(str_replace(' ', '_', $jeu['titre']))?>"><?=$jeu['titre'] ?></a>
+                                    <a style="sytle: black" href="<?= strtolower(str_replace(' ', '_', $jeu['titre']))?>"><?=$jeu['titre'] ?></a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

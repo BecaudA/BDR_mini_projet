@@ -1044,13 +1044,12 @@ INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Bu
 
 INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Borderlands", '2010-04-03');
 
-INSERT INTO estAmi (idCompte, idAmi) VALUES (1,2);
-INSERT INTO estAmi (idCompte, idAmi) VALUES (1,3);
-INSERT INTO estAmi (idCompte, idAmi) VALUES (2,3);
-INSERT INTO estAmi (idCompte, idAmi) VALUES (3,2);
+INSERT INTO EstAmi (idCompte, idAmi) VALUES (1,2);
+INSERT INTO EstAmi (idCompte, idAmi) VALUES (1,3);
+INSERT INTO EstAmi (idCompte, idAmi) VALUES (2,3);
+INSERT INTO EstAmi (idCompte, idAmi) VALUES (3,2);
 
-#CREATE VIEW promotionActu AS
-#DROP VIEW IF EXISTS vueProduitsComptes;
+
 #DROP VIEW IF EXISTS vueAchats;
 #DROP FUNCTION IF EXISTS calculPrixPromo;
 #DROP TRIGGER IF EXISTS bundle_luiMeme;
