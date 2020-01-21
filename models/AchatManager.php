@@ -6,16 +6,12 @@ class AchatManager extends Model {
     }
 
     public function setAchatPerso($idCompte, $titreProduit) {
-        echo addNewAchat($idCompte, $titreProduit);
-        $this->insertElementDB(addNewAchat($idCompte, $titreProduit));
-        $data = $this->reqSelectDB_Tuple(getAchatLastId());
-        $this->insertElementDB(addNewAchatPerso($data));
+        echo addNewAchatPerso($idCompte, $titreProduit);
+        $this->insertElementDB(addNewAchatPerso($idCompte, $titreProduit));
     }
 
     public function setAchatAmi($idCompte, $titreProduit, $idAmi) {
-        echo addNewAchat($idCompte, $titreProduit);
-        $this->insertElementDB(addNewAchat($idCompte, $titreProduit));
-        $data = $this->reqSelectDB_Tuple(getAchatLastId());
-        $this->insertElementDB(addNewAchatAmi($data,$idAmi));
+        echo addNewAchatAmi($idAmi,$idCompte, $titreProduit);
+        $this->insertElementDB(addNewAchatAmi($idAmi,$idCompte, $titreProduit));
     }
 }
