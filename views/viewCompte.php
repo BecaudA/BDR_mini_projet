@@ -33,10 +33,11 @@ $nb_jeu          = 0;
 
                         <?php
                         foreach ($bibliotheque as $jeu):
+                            var_dump($jeu);
                             ?>
                             <tr>
                                 <td> <?php
-                                    echo $jeu['titre'];
+                                    echo $jeu["titre"];
                                     ?>
                                 </td>
                             </tr>
