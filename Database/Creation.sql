@@ -670,7 +670,7 @@ BEGIN
     DECLARE prixInitialTotalContenu INT;
 
     WITH RECURSIVE cte_COB(titre) AS (
-        SELECT DISTINCT vPC.titreProduit FROM stome.bundlecomprend AS vPC
+        SELECT DISTINCT vPC.titreProduit FROM stome.BundleComprend AS vPC
         WHERE vPC.titreBundle = titreB
         UNION ALL
         SELECT BC.titreProduit
@@ -693,7 +693,7 @@ BEGIN
     DECLARE prixFinalTotalBundle INT;
 
     WITH RECURSIVE cte_COB(titre) AS (
-        SELECT DISTINCT vPC.titreProduit FROM stome.bundlecomprend AS vPC
+        SELECT DISTINCT vPC.titreProduit FROM stome.BundleComprend AS vPC
         WHERE vPC.titreBundle = titreB
         UNION ALL
         SELECT BC.titreProduit

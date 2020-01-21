@@ -13,7 +13,7 @@
             } else {
                 $this->_AchatManager->setAchatAmi($idAcheteur,$titre, $idReceveur);
             }
-            header("Location: Boutique");
+            //header("Location: Boutique");
         }
     }
 
@@ -141,7 +141,7 @@
                             Editeur : <?= $editeur; ?>
                         </h6>
                         <h6>
-                            Developpeur : <?= $developpeur; ?>
+                            Développeur : <?= $developpeur; ?>
                         </h6>
                 </div>
             </aside>

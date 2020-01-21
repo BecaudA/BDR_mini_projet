@@ -33,7 +33,9 @@ $nb_jeu          = 0;
                         <?php foreach ($bibliotheque as $jeu):
                             ++$nb_jeu; ?>
                             <tr>
-                                <td><?= $jeu["titre"]; ?></td>
+                                <td>
+                                    <a style="color: black" href="<?= strtolower(str_replace(' ', '_', $jeu['titre']))?>"><?=$jeu['titre'] ?></a>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>
@@ -74,6 +76,7 @@ $nb_jeu          = 0;
                     }
                     $total_depense += $achat_prixFinal;
                     $total_economise += $achat_prixInitial -$achat_prixFinal;
+                    $nb_jeu += 1;
                     ?>
                         <tr>
                             <td scope="row"><a class="black" href="<?= str_replace(' ', '_',$achat_titre) ?>"><?= $achat_titre; ?></a></td>
