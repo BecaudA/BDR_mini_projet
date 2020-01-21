@@ -388,6 +388,7 @@ CREATE TRIGGER achat_age
 BEGIN
     DECLARE ageCompte TINYINT;
     DECLARE ageProduit TINYINT;
+    DECLARE porteMonnaieUser TINYINT;
 
     SELECT TIMESTAMPDIFF(YEAR ,Compte.dateNaissance, CURRENT_DATE()) INTO ageCompte
     FROM Compte
@@ -412,12 +413,20 @@ BEGIN
         WHERE titre = NEW.titreProduit;
     END IF;
 
+    SELECT porteMonnaie INTO porteMonnaieUser
+    FROM Compte
+    WHERE id = NEW.idCompte;
+
     IF (ageCompte < ageProduit) THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Compte trop jeune';
     ELSE
-        UPDATE Compte
-        SET Compte.porteMonnaie = Compte.PorteMonnaie - (SELECT prixFinal FROM vueProduit WHERE NEW.titreProduit = vueProduit.titre)
-        WHERE NEW.idCompte = id;
+        IF (porteMonnaieUser - (SELECT prixFinal FROM vueProduit WHERE NEW.titreProduit = vueProduit.titre) < 0) THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Porte Monnaie < 0';
+        ELSE
+            UPDATE Compte
+            SET Compte.porteMonnaie = Compte.PorteMonnaie - (SELECT prixFinal FROM vueProduit WHERE NEW.titreProduit = vueProduit.titre)
+            WHERE NEW.idCompte = id;
+        END IF;
     END IF;
 END
 $$
@@ -923,8 +932,6 @@ INSERT INTO Genre(nom) VALUES ("Horreur");
 
 INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Borderlands", "Action");
 INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Borderlands", "RPG");
-
-UPDATE Compte SET porteMonnaie = 100 WHERE id = 2;
 
 #CREATE VIEW promotionActu AS
 #DROP VIEW IF EXISTS vueProduitsComptes;
