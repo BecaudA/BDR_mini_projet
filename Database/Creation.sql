@@ -423,74 +423,145 @@ UPDATE Compte SET porteMonnaie = 100 WHERE id = 2;
 
 DELIMITER $$
 CREATE TRIGGER promotion_Pourcentage
-BEFORE INSERT
-ON Promotion
-FOR EACH ROW
+    BEFORE INSERT
+    ON Promotion
+    FOR EACH ROW
 BEGIN
-	DECLARE pourcentageTotale TINYINT;
+    DECLARE pourcentageTotale TINYINT;
 
-	SELECT SUM(pourcentage) INTO pourcentageTotale
-	FROM Promotion
-	WHERE NEW.titreProduit = titreProduit;
+    SELECT SUM(pourcentage) INTO pourcentageTotale
+    FROM Promotion
+    WHERE NEW.titreProduit = titreProduit;
 
-	if(pourcentageTotale IS NULL) THEN
-		if(new.pourcentage > 100) THEN
-			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Promotion pas supérieur à 100';
-		END IF;
-	ELSE
-		if(pourcentageTotale + new.pourcentage > 100) THEN
-			SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Promotion pas supérieur à 100';
-		END IF;
+    if(pourcentageTotale IS NULL) THEN
+        if(new.pourcentage > 100) THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Promotion pas supérieur à 100';
+        END IF;
+    ELSE
+        if(pourcentageTotale + new.pourcentage > 100) THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Promotion pas supérieur à 100';
+        END IF;
     END IF;
 END
 $$
 
 DELIMITER $$
 CREATE TRIGGER note_Produit
-BEFORE INSERT
-ON EstNote
-FOR EACH ROW
+    BEFORE INSERT
+    ON EstNote
+    FOR EACH ROW
 BEGIN
-	if(new.note < 0 OR new.note > 5) THEN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Note entre 0 et 5';
-	END IF;
+    if(new.note < 0 OR new.note > 5) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Note entre 0 et 5';
+    END IF;
 END
 $$
 
 DELIMITER $$
 CREATE TRIGGER bundle_luiMeme
-BEFORE INSERT
-ON BundleComprend
-FOR EACH ROW
+    BEFORE INSERT
+    ON BundleComprend
+    FOR EACH ROW
 BEGIN
-	IF (NEW.titreBundle = NEW.titreProduit) THEN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ajout d\'un même bundle';
-	END IF;
+    IF (NEW.titreBundle = NEW.titreProduit) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ajout d\'un même bundle';
+    END IF;
 END
 $$
 
 
+DELIMITER $$
+CREATE TRIGGER achat_age
+    BEFORE INSERT
+    ON Achat
+    FOR EACH ROW
+BEGIN
+    DECLARE ageCompte TINYINT;
+    DECLARE ageProduit TINYINT;
+
+    SELECT TIMESTAMPDIFF(YEAR ,Compte.dateNaissance, CURRENT_DATE()) INTO ageCompte
+    FROM Compte
+    WHERE id= NEW.idCompte;
+
+    #Calcul de l'âge d'achat pour un bundle
+    SELECT MAX(Contenu.ageLegal) INTO ageProduit
+    FROM BundleComprend
+             INNER JOIN Produit
+                        ON BundleComprend.titreProduit = Produit.titre
+             INNER JOIN Bundle
+                        ON BundleComprend.titreBundle = Bundle.titre
+             INNER JOIN Contenu
+                        ON Contenu.titre = Produit.titre
+    WHERE BundleComprend.titreBundle = NEW.titreProduit;
+
+    #Si l'âge du produit veut null cela veut dire que le produit acheter n'est pas un bundle
+    if(ageProduit IS NULL) THEN
+        #Calcul de l'âge d'achat pour un jeu
+        SELECT ageLegal INTO ageProduit
+        FROM Contenu
+        WHERE titre = NEW.titreProduit;
+    END IF;
+
+    IF (ageCompte < ageProduit) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Compte trop jeune';
+    ELSE
+        UPDATE Compte
+        SET Compte.porteMonnaie = Compte.PorteMonnaie - (SELECT prixFinal FROM vueProduit WHERE NEW.titreProduit = vueProduit.titre)
+        WHERE NEW.idCompte = id;
+    END IF;
+END
+$$
 
 DELIMITER $$
 CREATE TRIGGER double_Achat_Produit
-BEFORE INSERT
-ON Achat
-FOR EACH ROW
+    BEFORE INSERT
+    ON Achat
+    FOR EACH ROW
 BEGIN
-	DECLARE idAchat TINYINT;
+    DECLARE idAchat TINYINT;
     DECLARE idAchatPerso TINYINT;
 
-	SELECT id INTO idAchat
+    SELECT id INTO idAchat
     FROM Achat
-    WHERE new.titreProduit = titreProduit;
+    WHERE new.titreProduit = titreProduit AND new.idCompte = idCompte;
 
     SELECT id INTO idAchatPerso
     FROM Achat
     WHERE idAchat = id;
 
-	IF (idAchat IS NOT NULL AND idAchatPerso IS NOT NULL) THEN
-		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Jeu déjà acheté';
-	END IF;
+    IF (idAchat IS NOT NULL AND idAchatPerso IS NOT NULL) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Jeu déjà acheté';
+    END IF;
+END
+$$
+
+DELIMITER $$
+CREATE TRIGGER offre_LuiMeme
+    BEFORE INSERT
+    ON AchatAmi
+    FOR EACH ROW
+BEGIN
+    IF (NEW.idAmi IN (SELECT idCompte FROM Achat WHERE NEW.id = id)) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Impossible de s\'offrir un jeu à soi-même';
+    END IF;
+END
+$$
+
+DELIMITER $$
+CREATE FUNCTION calculPrixPromo(titreP VARCHAR(80), prixT INT)
+    RETURNS INT
+    READS SQL DATA
+    DETERMINISTIC
+BEGIN
+    DECLARE pourcentage2 INT;
+
+    SELECT SUM(Promotion.pourcentage) INTO pourcentage2
+    FROM Promotion
+    WHERE titreProduit = titreP AND CURRENT_TIMESTAMP()	BETWEEN Promotion.dateDebut AND Promotion.dateFin;
+    IF (pourcentage2 IS NULL) THEN
+        RETURN prixT;
+    END IF;
+    RETURN prixT - (prixT * (pourcentage2 / 100));
 END
 $$
 
@@ -702,24 +773,6 @@ END
 $$
 
 DELIMITER $$
-CREATE FUNCTION calculPrixPromo(titreP VARCHAR(80), prixT INT)
-RETURNS INT
-READS SQL DATA
-DETERMINISTIC
-BEGIN
-    DECLARE pourcentage2 INT;
-
-	SELECT SUM(Promotion.pourcentage) INTO pourcentage2
-	FROM Promotion
-	WHERE titreProduit = titreP AND CURRENT_TIMESTAMP()	BETWEEN Promotion.dateDebut AND Promotion.dateFin;
-    IF (pourcentage2 IS NULL) THEN
-		RETURN prixT;
-	END IF;
-    RETURN prixT - (prixT * (pourcentage2 / 100));
-END
-$$
-
-DELIMITER $$
 CREATE FUNCTION calculPrixInitialBundlesBundle(titreB VARCHAR(80))
     RETURNS INT
     READS SQL DATA
@@ -814,9 +867,9 @@ $$
 
 DELIMITER $$
 CREATE VIEW vueDLC(titre, developpeur, editeur, franchise) AS
-SELECT DLC.titre, Jeu.Editeur, Jeu.Developpeur, Jeu.Franchise
+SELECT Dlc.titre, Jeu.Editeur, Jeu.Developpeur, Jeu.Franchise
 FROM DLC
-         INNER JOIN Jeu ON Jeu.titre = DLC.titreJeu;
+         INNER JOIN Jeu ON Jeu.titre = Dlc.titreJeu;
 $$
 
 DELIMITER $$
@@ -847,24 +900,25 @@ GROUP BY Contenu.titre;
 $$
 
 DELIMITER $$
-CREATE VIEW vueAchats(idCompte, titre, prixInitial, prixFinal, promotion, date, idAmi) AS
+CREATE VIEW vueAchats(id, titre, prixInitial, prixFinal, promotion, date, idAmi) AS
 SELECT Achat.idCompte, vueProduit.titre, vueProduit.prixInitial, vueProduit.prixFinal, vueProduit.promotion, Achat.date, AchatAmi.idAmi
 FROM Achat
          LEFT JOIN AchatAmi
-                   ON Achat.id = idAmi
+                   ON Achat.id = AchatAmi.id
          INNER JOIN vueProduit
                     ON vueProduit.titre = Achat.titreProduit;
 $$
 
 DELIMITER $$
-CREATE VIEW vueProduitsComptes(titreProduit, idProprietaire, idAcheteur) AS
-    SELECT Achat.titreProduit,
-    CASE
-        WHEN Achat.id = AA.id THEN AA.idAmi
-        ELSE Achat.idCompte
-    END, Achat.idCompte
-    FROM stome.Achat
-    LEFT JOIN AchatAmi AA on Achat.id = AA.id
+CREATE VIEW vueProduitsComptes(titreProduit, idProprietaire, dateAcquisition) AS
+SELECT Achat.titreProduit,
+       CASE
+           WHEN Achat.id = AA.id THEN AA.idAmi
+           ELSE Achat.idCompte
+           END,
+       Achat.date
+FROM stome.Achat
+         LEFT JOIN AchatAmi AA on Achat.id = AA.id
 $$
 
 #CREATE VIEW promotionActu AS
