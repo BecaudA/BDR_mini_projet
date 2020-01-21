@@ -85,3 +85,7 @@ function addNewAchatPerso($idCompte, $titreProduit){
 function getAchatLastId(){
     return "SELECT id FROM Achat ORDER BY id DESC LIMIT 1";
 }
+
+function addCompte($nom, $prenom, $email, $date) {
+    return "INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES(".$nom.", ".$prenom.", ".$email.", 0, ".$date.")";
+}

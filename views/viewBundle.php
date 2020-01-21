@@ -1,21 +1,21 @@
 <?php
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nbParamPost = count($_POST);
-    if ($nbParamPost == 3) {
-        $titre = str_replace('_', ' ', $_POST['titre']);
-        $idAcheteur = $_POST['idAcheteur'];
-        $idReceveur = $_POST['idReceveur'];
-        $this->_AchatManager = new AchatManager();
-        echo "OK ".$nbParamPost;
+        $nbParamPost = count($_POST);
+        if ($nbParamPost == 3) {
+            $titre = str_replace('_', ' ', $_POST['titre']);
+            $idAcheteur = $_POST['idAcheteur'];
+            $idReceveur = $_POST['idReceveur'];
+            $this->_AchatManager = new AchatManager();
+            echo "OK ".$nbParamPost;
 
-        if ($idAcheteur == $idReceveur) {
-            $this->_comptes = $this->_AchatManager->setAchatPerso($idAcheteur, $titre);
-        } else {
-            $this->_comptes = $this->_AchatManager->setAchatAmi($idAcheteur,$titre, $idReceveur);
+            if ($idAcheteur == $idReceveur) {
+                $this->_AchatManager->setAchatPerso($idAcheteur, $titre);
+            } else {
+                $this->_AchatManager->setAchatAmi($idAcheteur,$titre, $idReceveur);
+            }
+            header("Location: Boutique");
         }
-        header("Location: Boutique");
     }
-}
 
     $titre         = $bundles[0]->titre();
     $prixInitial   = $bundles[0]->prixInitial();
