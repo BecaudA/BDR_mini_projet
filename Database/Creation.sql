@@ -379,58 +379,6 @@ BEGIN
 END
 $$
 
-
-DELIMITER $$
-CREATE TRIGGER Verifachat
-    BEFORE INSERT
-    ON Achat
-    FOR EACH ROW
-BEGIN
-    DECLARE ageCompte TINYINT;
-    DECLARE ageProduit TINYINT;
-    DECLARE porteMonnaieUser TINYINT;
-
-    SELECT TIMESTAMPDIFF(YEAR ,Compte.dateNaissance, CURRENT_DATE()) INTO ageCompte
-    FROM Compte
-    WHERE id= NEW.idCompte;
-
-    #Calcul de l'âge d'achat pour un bundle
-    SELECT MAX(Contenu.ageLegal) INTO ageProduit
-    FROM BundleComprend
-             INNER JOIN Produit
-                        ON BundleComprend.titreProduit = Produit.titre
-             INNER JOIN Bundle
-                        ON BundleComprend.titreBundle = Bundle.titre
-             INNER JOIN Contenu
-                        ON Contenu.titre = Produit.titre
-    WHERE BundleComprend.titreBundle = NEW.titreProduit;
-
-    #Si l'âge du produit veut null cela veut dire que le produit acheter n'est pas un bundle
-    if(ageProduit IS NULL) THEN
-        #Calcul de l'âge d'achat pour un jeu
-        SELECT ageLegal INTO ageProduit
-        FROM Contenu
-        WHERE titre = NEW.titreProduit;
-    END IF;
-
-    SELECT porteMonnaie INTO porteMonnaieUser
-    FROM Compte
-    WHERE id = NEW.idCompte;
-
-    IF (ageCompte < ageProduit) THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Compte trop jeune';
-    ELSE
-        IF (porteMonnaieUser - (SELECT prixFinal FROM vueProduit WHERE NEW.titreProduit = vueProduit.titre) < 0) THEN
-            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Porte Monnaie < 0';
-        ELSE
-            UPDATE Compte
-            SET Compte.porteMonnaie = Compte.PorteMonnaie - (SELECT prixFinal FROM vueProduit WHERE NEW.titreProduit = vueProduit.titre)
-            WHERE NEW.idCompte = id;
-        END IF;
-    END IF;
-END
-$$
-
 DELIMITER $$
 CREATE TRIGGER double_Achat_Produit
     BEFORE INSERT
@@ -843,6 +791,57 @@ SELECT Achat.titreProduit,
        Achat.date
 FROM stome.Achat
          LEFT JOIN AchatAmi AA on Achat.id = AA.id
+$$
+
+DELIMITER $$
+CREATE TRIGGER Verifachat
+    BEFORE INSERT
+    ON Achat
+    FOR EACH ROW
+BEGIN
+    DECLARE ageCompte TINYINT;
+    DECLARE ageProduit TINYINT;
+    DECLARE porteMonnaieUser TINYINT;
+
+    SELECT TIMESTAMPDIFF(YEAR ,Compte.dateNaissance, CURRENT_DATE()) INTO ageCompte
+    FROM Compte
+    WHERE id= NEW.idCompte;
+
+    #Calcul de l'âge d'achat pour un bundle
+    SELECT MAX(Contenu.ageLegal) INTO ageProduit
+    FROM BundleComprend
+             INNER JOIN Produit
+                        ON BundleComprend.titreProduit = Produit.titre
+             INNER JOIN Bundle
+                        ON BundleComprend.titreBundle = Bundle.titre
+             INNER JOIN Contenu
+                        ON Contenu.titre = Produit.titre
+    WHERE BundleComprend.titreBundle = NEW.titreProduit;
+
+    #Si l'âge du produit veut null cela veut dire que le produit acheter n'est pas un bundle
+    if(ageProduit IS NULL) THEN
+        #Calcul de l'âge d'achat pour un jeu
+        SELECT ageLegal INTO ageProduit
+        FROM Contenu
+        WHERE titre = NEW.titreProduit;
+    END IF;
+
+    SELECT porteMonnaie INTO porteMonnaieUser
+    FROM Compte
+    WHERE id = NEW.idCompte;
+
+    IF (ageCompte < ageProduit) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Compte trop jeune';
+    ELSE
+        IF (porteMonnaieUser - (SELECT prixFinal FROM vueProduit WHERE NEW.titreProduit = vueProduit.titre) < 0) THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Porte Monnaie < 0';
+        ELSE
+            UPDATE Compte
+            SET Compte.porteMonnaie = Compte.PorteMonnaie - (SELECT prixFinal FROM vueProduit WHERE NEW.titreProduit = vueProduit.titre)
+            WHERE NEW.idCompte = id;
+        END IF;
+    END IF;
+END
 $$
 
 INSERT INTO Produit(titre) VALUES ("Borderlands");
