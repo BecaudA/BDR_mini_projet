@@ -147,7 +147,6 @@
             </aside>
         </div>
     </div>
-<!-- TODO: tentative de script pour ajax-->
 <script>
     function majAcheteur(id) {
         var xmlhttp = new XMLHttpRequest();

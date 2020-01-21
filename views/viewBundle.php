@@ -1,5 +1,23 @@
 <?php
-    $titre         = $bundles[0]->titre();
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nbParamPost = count($_POST);
+    if ($nbParamPost == 3) {
+        $titre = str_replace('_', ' ', $_POST['titre']);
+        $idAcheteur = $_POST['idAcheteur'];
+        $idReceveur = $_POST['idReceveur'];
+        $this->_AchatManager = new AchatManager();
+        echo "OK ".$nbParamPost;
+
+        if ($idAcheteur == $idReceveur) {
+            $this->_comptes = $this->_AchatManager->setAchatPerso($idAcheteur, $titre);
+        } else {
+            $this->_comptes = $this->_AchatManager->setAchatAmi($idAcheteur,$titre, $idReceveur);
+        }
+        header("Location: Boutique");
+    }
+}
+
+    $titre_bundle  = $bundles[0]->titre();
     $prixInitial   = $bundles[0]->prixInitial();
     $age           = $bundles[0]->age();
     $prix          = $bundles[0]->prixFinal();
@@ -32,12 +50,12 @@
                         <div class="row">
                             <?php
                             foreach ($listeProduits as $produit):
-                                $titre       = $produit->titre();
+                                $titreP       = $produit->titre();
                                 $prixInitialP = $produit->prixInitial();
                                 $prixFinalP   = $produit->prixFinal();
-                                $promotionProduit   = $produit->promotion();
-                                $img         = "img/thumbnails/" . strtolower(str_replace(' ', '', $titre)) . ".jpg";
-                                $link        = str_replace(' ', '_', $titre);
+                                $promotionP   = $produit->promotion();
+                                $img          = "img/thumbnails/" . strtolower(str_replace(' ', '', $titreP)) . ".jpg";
+                                $link         = str_replace(' ', '_', $titreP);
                                 ?>
                                 <div class="col-md-4">
                                     <div class="card mb-4 box-shadow">
@@ -45,15 +63,15 @@
                                             <img class="card-img-top" alt="Thumbnail [100%x225]" style="height: 140px; width: 100%; display: block;" src="<?php echo $img; ?>" data-holder-rendered="true">
                                         </a>
                                         <div class="card-body">
-                                            <h4 class="card-text"><?php echo $titre; ?></h4>
+                                            <h4 class="card-text"><?php echo $titreP; ?></h4>
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <!-- <div class="btn-group">
                                                     <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
                                                     <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
                                                 </div> -->
-                                                <?php if($promotionProduit): ?>
+                                                <?php if($promotionP): ?>
                                                     <small class="text-muted"><s><?php echo $prixInitialP; ?> CHF</s></small>
-                                                    <span class="badge badge-danger"><?php echo $prixFinalP; ?> CHF</small> <sup>-<?php echo $promotionProduit; ?>%</sup></span>
+                                                    <span class="badge badge-danger"><?php echo $prixFinalP; ?> CHF</small> <sup>-<?php echo $promotionP; ?>%</sup></span>
                                                 <?php else: ?>
                                                     <small class="text-muted"><?php echo $prixFinalP; ?> CHF</small>
                                                 <?php endif; ?>
@@ -80,8 +98,34 @@
                 <?php else: ?>
                     <h2 class=text-center"><span class="badge badge-secondary"><?= $prix; ?> CHF </span></h2>
                 <?php endif; ?>
-                <button class="btn btn-primary btn-lg btn-block" type="submit" href="#">Acheter pour moi</button>
-                <button class="btn btn-primary btn-lg btn-block mb-2" type="submit" href="#">Acheter pour un ami</button>
+                <div id="porteMonnaie"></div>
+                <button class="btn btn-primary btn-lg btn-block mb-2" type="submit" data-toggle="collapse" href="#acheter">Acheter</button>
+                <div class="collapse" id="acheter">
+                    <form action="<?= str_replace(' ', '_', $titre) ?>" class="was-validated" method="post">
+                        <input type="hidden" name="titre" value="<?= str_replace(' ', '_', $titre); ?>">
+                        <div class="row">
+                            <div class="form-group col">
+                                <select name="idAcheteur" class="custom-select" required onchange="majAcheteur(this.value)">
+                                    <option value="">Acheteur</option>
+                                    <?php foreach($comptes as $compte): ?>
+                                        <option value="<?= $compte->id(); ?>"><?= $compte->nom()." ".$compte->prenom(); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <div class="invalid-feedback">Sélectionnez un acheteur</div>
+                            </div>
+                            <div class="form-group col">
+                                <select name="idReceveur" class="custom-select" required>
+                                    <option value="">Receveur</option>
+                                    <?php foreach($comptes as $compte): ?>
+                                        <option value="<?= $compte->id(); ?>"><?= $compte->nom()." ".$compte->prenom(); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <div class="invalid-feedback">Sélectionnez un receveur</div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg btn-block mb-2" id="confirmerAchat">Confirmer l'achat</button>
+                    </form>
+                </div>
                 <div class="p-3 mb-3 bg-light rounded">
                     <h4 class="font-italic">Détails</h4>
                     <h6>Age légal : <?= $age; ?> ans</h6>
@@ -89,3 +133,15 @@
             </aside>
         </div>
     </div>
+<script>
+    function majAcheteur(id) {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("porteMonnaie").innerHTML = this.responseText;
+            }
+        };
+        xmlhttp.open("GET", "Ajax/MajAcheteur/" + id, true);
+        xmlhttp.send();
+    }
+</script>
