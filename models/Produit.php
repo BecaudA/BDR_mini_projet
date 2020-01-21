@@ -5,7 +5,8 @@ class Produit {
     private $_prixInitial;
     private $_prixFinal;
     private $_promotion;
-    private $age;
+    private $_age;
+    private $_note;
 
     // constructeur
     public function __construct(array $data) {
@@ -36,14 +37,16 @@ class Produit {
         $this->_prixFinal = $prixFinal;
     }
 
-    public function set_promotion($promotion)
-    {
+    public function set_promotion($promotion) {
         $this->_promotion = $promotion;
     }
 
-    public function set_age($age)
-    {
-        $this->age = $age;
+    public function set_age($age) {
+        $this->_age = $age;
+    }
+
+    public function set_note($note) {
+        $this->_note = $note;
     }
 
     // getters
@@ -59,13 +62,15 @@ class Produit {
         return $this->_prixFinal;
     }
 
-    public function promotion()
-    {
+    public function promotion() {
         return $this->_promotion;
     }
 
-    public function age()
-    {
-        return $this->age;
+    public function age() {
+        return $this->_age;
+    }
+
+    public function note() {
+        return $this->_note;
     }
 }

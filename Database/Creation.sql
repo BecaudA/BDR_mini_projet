@@ -708,7 +708,7 @@ $$
 
 DELIMITER $$
 CREATE VIEW vueBundle(titre, prixInitial, prixReel, age) AS
-SELECT titreBundle, calculPrixInitialContenusBundle(titreBundle) AS prixInitial,
+SELECT titreBundle, calculPrixInitialBundle(titreBundle) AS prixInitial,
        calculPrixReelBundle(titreBundle) AS prixReel,
        MAX(Contenu.ageLegal) AS age
 FROM BundleComprend
@@ -721,9 +721,9 @@ $$
 
 DELIMITER $$
 CREATE VIEW vueDLC(titre, developpeur, editeur, franchise) AS
-SELECT Dlc.titre, Jeu.Editeur, Jeu.Developpeur, Jeu.Franchise
+SELECT DLC.titre, Jeu.Editeur, Jeu.Developpeur, Jeu.Franchise
 FROM DLC
-         INNER JOIN Jeu ON Jeu.titre = Dlc.titreJeu;
+         INNER JOIN Jeu ON Jeu.titre = DLC.titreJeu;
 $$
 
 DELIMITER $$
@@ -900,7 +900,9 @@ INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Tei
 INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Egremy", "Bruno", "test2@gmail.com", 100, '1999-04-02');
 INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Becaud", "Arthur", "test3@gmail.com", 400, '1999-04-03');
 
-INSERT INTO EstNote(titreProduit, idCompte, note) VALUES ("Monster Hunter Iceborne", 1, 5);
+INSERT INTO EstNote(titreProduit, idCompte, note) VALUES ("Monster Hunter World", 2, 4.5);
+INSERT INTO EstNote(titreProduit, idCompte, note) VALUES ("Monster Hunter Iceborne", 2, 4.7);
+INSERT INTO EstNote(titreProduit, idCompte, note) VALUES ("Bundle Borderlands", 3, 4.6);a
 
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 50, '2010-05-06', '2010-06-06');
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 10, '2010-05-06', '2010-06-06');
@@ -911,8 +913,6 @@ INSERT INTO Entreprise(nom) VALUES ("2K");
 INSERT INTO Entreprise(nom) VALUES ("Gearbox Software");
 INSERT INTO Entreprise(nom) VALUES ("Coffee Stain Publishing");
 INSERT INTO Entreprise(nom) VALUES ("Ghost Ship Games");
-
-
 
 INSERT INTO Franchise(titre, nomEntreprise) VALUES ("Monster Hunter", "Capcom");
 INSERT INTO Franchise(titre, nomEntreprise) VALUES ("Borderlands", "2K");
@@ -932,14 +932,43 @@ INSERT INTO Langue(nom) VALUES ("Allemand");
 INSERT INTO Langue(nom) VALUES ("Italien");
 
 INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Borderlands", "Anglais");
+INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Borderlands", "Français");
+INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Borderlands", "Allemand");
+INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Borderlands 2", "Anglais");
+INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Borderlands 2", "Français");
+INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Borderlands 2", "Allemand");
+INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Borderlands 3", "Anglais");
+INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Borderlands 3", "Français");
+INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Borderlands 3", "Allemand");
+INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Borderlands 3", "Italien");
+INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Monster Hunter World", "Anglais");
+INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Monster Hunter World", "Français");
+INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Monster Hunter World", "Italien");
+INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Monster Hunter Iceborne", "Anglais");
+INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Monster Hunter Iceborne", "Français");
+INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Monster Hunter Iceborne", "Italien");
 
 INSERT INTO Genre(nom) VALUES ("Action");
 INSERT INTO Genre(nom) VALUES ("RPG");
 INSERT INTO Genre(nom) VALUES ("FPS");
 INSERT INTO Genre(nom) VALUES ("Horreur");
+INSERT INTO Genre(nom) VALUES ("Coopération");
+INSERT INTO Genre(nom) VALUES ("Multijoueur");
 
 INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Borderlands", "Action");
 INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Borderlands", "RPG");
+INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Borderlands 2", "Action");
+INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Borderlands 2", "RPG");
+INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Borderlands 3", "Action");
+INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Borderlands 3", "RPG");
+INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Monster Hunter World", "Action");
+INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Monster Hunter World", "RPG");
+INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Monster Hunter World", "Coopération");
+INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Monster Hunter World", "Multijoueur");
+INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Monster Hunter Iceborne", "Action");
+INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Monster Hunter Iceborne", "RPG");
+INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Monster Hunter Iceborne", "Coopération");
+INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Monster Hunter Iceborne", "Multijoueur");
 
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 50, '2010-05-06', '2010-06-06');
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 10, '2010-05-06', '2010-06-06');
@@ -947,11 +976,8 @@ INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Bu
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Borderlands", 60, NOW(), '2020-01-22');
 
 INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Borderlands", '2010-04-03');
-INSERT INTO Achat(idCompte, titreProduit, date) VALUES (3, "Borderlands", '2010-04-04');
 
-# DEBUG
-INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Bundle Root Test", '2010-04-04');
-INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Bundle Monster Hunter World", '2010-04-04');
+
 
 #CREATE VIEW promotionActu AS
 #DROP VIEW IF EXISTS vueProduitsComptes;
