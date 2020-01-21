@@ -1041,6 +1041,7 @@ INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Monster Hunter Iceborn
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 50, '2010-05-06', '2010-06-06');
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 10, '2010-05-06', '2010-06-06');
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Bundle Monster Hunter World", 60, '2010-05-06', '2010-06-06');
+INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Borderlands", 60, '2020-01-21', '2020-06-06');
 
 INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Borderlands", '2010-04-03');
 
@@ -1049,7 +1050,8 @@ INSERT INTO EstAmi (idCompte, idAmi) VALUES (1,3);
 INSERT INTO EstAmi (idCompte, idAmi) VALUES (2,3);
 INSERT INTO EstAmi (idCompte, idAmi) VALUES (3,2);
 
-
+#CREATE VIEW promotionActu AS
+#DROP VIEW IF EXISTS vueProduitsComptes;
 #DROP VIEW IF EXISTS vueAchats;
 #DROP FUNCTION IF EXISTS calculPrixPromo;
 #DROP TRIGGER IF EXISTS bundle_luiMeme;
