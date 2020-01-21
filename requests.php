@@ -48,7 +48,7 @@ function getAchatsCompte($idCompte) {
     return "SELECT * FROM stome.vueAchats WHERE  vueAchats.id = \"" . $idCompte . "\"";
 }
 
-function getJeuxCompte($idCompte){
+function getJeuxCompte($idCompte) {
     return "WITH RECURSIVE cte_COB(titre) AS (
                 SELECT DISTINCT vPC.titreProduit FROM stome.vueProduitsComptes AS vPC
                     WHERE vPC.idProprietaire = ". $idCompte . "
@@ -60,10 +60,6 @@ function getJeuxCompte($idCompte){
                 INNER JOIN stome.Contenu
                         ON Contenu.titre = cte_COB.titre
                 GROUP BY cte_COB.titre;";
-}
-
-function getAcheteurContenuCompte($titreContenu, $idCompte){
-    return "";
 }
 
 function getAmisCompte($id) {
