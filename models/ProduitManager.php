@@ -9,8 +9,6 @@ class ProduitManager extends Model {
 
     public function doesProduitExist($titre) {
         $var = $this->reqSelectDB(getProduit($titre), 'Produit');
-
-        echo $var.", ";
         return !empty($var);
     }
 }

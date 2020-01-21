@@ -76,7 +76,6 @@ $nb_jeu          = 0;
                     }
                     $total_depense += $achat_prixFinal;
                     $total_economise += $achat_prixInitial -$achat_prixFinal;
-                    $nb_jeu += 1;
                     ?>
                         <tr>
                             <td scope="row"><a style="color:black" href="<?= str_replace(' ', '_',$achat_titre) ?>"><?= $achat_titre; ?></a></td>

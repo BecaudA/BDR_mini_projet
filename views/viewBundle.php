@@ -6,7 +6,6 @@
             $idAcheteur = $_POST['idAcheteur'];
             $idReceveur = $_POST['idReceveur'];
             $this->_AchatManager = new AchatManager();
-            echo "OK ".$nbParamPost;
 
             if ($idAcheteur == $idReceveur) {
                 $this->_AchatManager->setAchatPerso($idAcheteur, $titre);
@@ -69,10 +68,6 @@
                                         <div class="card-body">
                                             <h4 class="card-text"><?php echo $titreP; ?></h4>
                                             <div class="d-flex justify-content-between align-items-center">
-                                                <!-- <div class="btn-group">
-                                                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                                </div> -->
                                                 <?php if($promotionP): ?>
                                                     <small class="text-muted"><s><?php echo $prixInitialP; ?> CHF</s></small>
                                                     <span class="badge badge-danger"><?php echo $prixFinalP; ?> CHF</small> <sup>-<?php echo $promotionP; ?>%</sup></span>

@@ -13,8 +13,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $genresF      = $_POST['genres'];
         $description = $_POST['description'];
         $franchise   = $_POST['franchise'];
-        var_dump($languesF);
-        var_dump($genresF);
         if ($prix > -1 && $age > 0 && $contenuManager->doesJeuExist($titre)) {
             if ($languesF == null)
                 $languesF = [];

@@ -6,7 +6,6 @@
             $idAcheteur = $_POST['idAcheteur'];
             $idReceveur = $_POST['idReceveur'];
             $this->_AchatManager = new AchatManager();
-            echo "OK ".$nbParamPost;
 
             if ($idAcheteur == $idReceveur) {
                 $this->_AchatManager->setAchatPerso($idAcheteur, $titre);
