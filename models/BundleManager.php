@@ -8,6 +8,7 @@ class BundleManager extends Model {
             return null;
         }
         $bundle[0]->set_listeProduits($this->reqSelectDB(getBundleProduits($titre), "Produit"));
+        echo var_dump($bundle[0]->listeProduits());
         return $bundle;
     }
 

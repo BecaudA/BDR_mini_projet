@@ -643,25 +643,6 @@ END
 $$
 
 DELIMITER $$
-CREATE FUNCTION calculPrixInitialBundlesBundle(titreB VARCHAR(80))
-    RETURNS INT
-    READS SQL DATA
-    DETERMINISTIC
-BEGIN
-    DECLARE prixInitialTotalBundle INT;
-
-    SELECT SUM(CASE WHEN BundleComprend.titreProduit IN (SELECT Bundle.titre FROM Bundle) THEN
-                        calculPrixPromo(BundleComprend.titreProduit, calculPrixInitialContenusBundle(BundleComprend.titreProduit)) ELSE 0 END) INTO prixInitialTotalBundle
-    FROM BundleComprend
-             INNER JOIN Produit
-                        ON Produit.titre = titreProduit
-    GROUP BY BundleComprend.titreBundle
-    HAVING titreBundle = titreB;
-    RETURN prixInitialTotalBundle;
-END
-$$
-
-DELIMITER $$
 CREATE FUNCTION calculPrixInitialBundle(titreB VARCHAR(80))
     RETURNS INT
     READS SQL DATA
@@ -681,6 +662,25 @@ BEGIN
                                                                                           ON vueContenu.titre = cte_COB.titre;
 
     RETURN prixInitialTotalContenu;
+END
+$$
+
+DELIMITER $$
+CREATE FUNCTION calculPrixInitialBundlesBundle(titreB VARCHAR(80))
+    RETURNS INT
+    READS SQL DATA
+    DETERMINISTIC
+BEGIN
+    DECLARE prixInitialTotalBundle INT;
+
+    SELECT SUM(CASE WHEN BundleComprend.titreProduit IN (SELECT Bundle.titre FROM Bundle) THEN
+                        calculPrixPromo(BundleComprend.titreProduit, calculPrixInitialContenusBundle(BundleComprend.titreProduit)) ELSE 0 END) INTO prixInitialTotalBundle
+    FROM BundleComprend
+             INNER JOIN Produit
+                        ON Produit.titre = titreProduit
+    GROUP BY BundleComprend.titreBundle
+    HAVING titreBundle = titreB;
+    RETURN prixInitialTotalBundle;
 END
 $$
 
@@ -747,15 +747,15 @@ SELECT Contenu.titre, Contenu.prix AS prixInital, Contenu.ageLegal AS age, calcu
                                                                                                                                                             FROM Promotion
                                                                                                                                                             WHERE Promotion.titreProduit = Contenu.titre AND
                                                                                                                                                             CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin), 0) AS promotion,
-       vueDlc.franchise AS franchise,
-       vueDlc.developpeur AS developpeur,
-       vueDlc.editeur AS editeur,
+       vueDLC.franchise AS franchise,
+       vueDLC.developpeur AS developpeur,
+       vueDLC.editeur AS editeur,
        Contenu.Description
 FROM Contenu
          LEFT JOIN Promotion
                    ON Promotion.titreProduit = Contenu.titre
-         INNER JOIN vueDlc
-                    ON vueDlc.titre = Contenu.titre
+         INNER JOIN vueDLC
+                    ON vueDLC.titre = Contenu.titre
 GROUP BY Contenu.titre;
 $$
 
@@ -902,7 +902,7 @@ INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Bec
 
 INSERT INTO EstNote(titreProduit, idCompte, note) VALUES ("Monster Hunter World", 2, 4.5);
 INSERT INTO EstNote(titreProduit, idCompte, note) VALUES ("Monster Hunter Iceborne", 2, 4.7);
-INSERT INTO EstNote(titreProduit, idCompte, note) VALUES ("Bundle Borderlands", 3, 4.6);a
+INSERT INTO EstNote(titreProduit, idCompte, note) VALUES ("Bundle Borderlands", 3, 4.6);
 
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 50, '2010-05-06', '2010-06-06');
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 10, '2010-05-06', '2010-06-06');
