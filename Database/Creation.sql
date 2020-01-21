@@ -643,25 +643,6 @@ END
 $$
 
 DELIMITER $$
-CREATE FUNCTION calculPrixInitialBundlesBundle(titreB VARCHAR(80))
-    RETURNS INT
-    READS SQL DATA
-    DETERMINISTIC
-BEGIN
-    DECLARE prixInitialTotalBundle INT;
-
-    SELECT SUM(CASE WHEN BundleComprend.titreProduit IN (SELECT Bundle.titre FROM Bundle) THEN
-                        calculPrixPromo(BundleComprend.titreProduit, calculPrixInitialContenusBundle(BundleComprend.titreProduit)) ELSE 0 END) INTO prixInitialTotalBundle
-    FROM BundleComprend
-             INNER JOIN Produit
-                        ON Produit.titre = titreProduit
-    GROUP BY BundleComprend.titreBundle
-    HAVING titreBundle = titreB;
-    RETURN prixInitialTotalBundle;
-END
-$$
-
-DELIMITER $$
 CREATE FUNCTION calculPrixInitialBundle(titreB VARCHAR(80))
     RETURNS INT
     READS SQL DATA
@@ -681,6 +662,25 @@ BEGIN
                                                                                           ON vueContenu.titre = cte_COB.titre;
 
     RETURN prixInitialTotalContenu;
+END
+$$
+
+DELIMITER $$
+CREATE FUNCTION calculPrixInitialBundlesBundle(titreB VARCHAR(80))
+    RETURNS INT
+    READS SQL DATA
+    DETERMINISTIC
+BEGIN
+    DECLARE prixInitialTotalBundle INT;
+
+    SELECT SUM(CASE WHEN BundleComprend.titreProduit IN (SELECT Bundle.titre FROM Bundle) THEN
+                        calculPrixPromo(BundleComprend.titreProduit, calculPrixInitialContenusBundle(BundleComprend.titreProduit)) ELSE 0 END) INTO prixInitialTotalBundle
+    FROM BundleComprend
+             INNER JOIN Produit
+                        ON Produit.titre = titreProduit
+    GROUP BY BundleComprend.titreBundle
+    HAVING titreBundle = titreB;
+    RETURN prixInitialTotalBundle;
 END
 $$
 
