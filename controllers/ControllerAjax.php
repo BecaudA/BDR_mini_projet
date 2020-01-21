@@ -2,7 +2,6 @@
 require_once('views/View.php');
 require_once('requests.php');
 
-// controlleur de la page Accueil, initialise les manageurs pour la vue Accueil
 class ControllerAjax {
     private $_compteManager;
     private $_view;

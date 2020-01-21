@@ -9,9 +9,9 @@
             echo "OK ".$nbParamPost;
 
             if ($idAcheteur == $idReceveur) {
-                $this->_comptes = $this->_AchatManager->setAchatPerso($idAcheteur, $titre);
+                $this->_AchatManager->setAchatPerso($idAcheteur, $titre);
             } else {
-                $this->_comptes = $this->_AchatManager->setAchatAmi($idAcheteur,$titre, $idReceveur);
+                $this->_AchatManager->setAchatAmi($idAcheteur,$titre, $idReceveur);
             }
             header("Location: Boutique");
         }
