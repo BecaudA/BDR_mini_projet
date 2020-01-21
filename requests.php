@@ -83,7 +83,7 @@ function addNewAchatAmi($idAmi, $idCompte, $titreProduit){
 function addNewAchatPerso($idCompte, $titreProduit){
     return "START TRANSACTION;
             INSERT INTO Achat(idCompte, titreProduit, date) VALUES (\"". $idCompte ."\", \"". $titreProduit . "\", NOW());
-            INSERT INTO AchatAmi(id, idAmi) VALUES ((".getAchatLastId()."))".";COMMIT;";
+            INSERT INTO AchatPersonnel(id) VALUES ((".getAchatLastId()."));COMMIT;";
 }
 
 function getAchatLastId(){

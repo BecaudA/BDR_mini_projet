@@ -1,4 +1,5 @@
 <?php
+    echo "coucou";
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $nbParamPost = count($_POST);
         if ($nbParamPost == 4) {
@@ -11,6 +12,7 @@
             header("Location: Boutique");
         }
     }
+
 ?>
 
 <div class="container mt-3">
