@@ -8,8 +8,10 @@ function getBundleById($id){
     return "SELECT * FROM stome.vueProduit WHERE titre = \"".$id."\"";
 }
 
-function getBundleProduits($id){
-    return "SELECT titreProduit FROM stome.BundleComprend WHERE titreBundle = \"".$id."\"";
+function getBundleProduits($id) {
+    return "SELECT VP.* FROM stome.BundleComprend AS BC 
+                INNER JOIN vueProduit AS VP 
+                    ON BC.titreProduit = VP.titre WHERE titreBundle = \"".$id."\"";
 }
 
 function getContenu($id){
