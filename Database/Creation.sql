@@ -789,36 +789,27 @@ $$
 DELIMITER $$
 CREATE VIEW vueProduit(titre, prixInitial, age, prixFinal, promotion) AS
 
-SELECT Produit.titre,
-       CASE WHEN Produit.titre = vueBundle.titre
-                THEN vueBundle.prixInitial
-            ELSE Contenu.prix
-           END AS prixInitial,
-
-       CASE WHEN Produit.titre = vueBundle.titre
-                THEN vueBundle.age
-            ELSE Contenu.ageLegal
-           END AS age,
-
-       CASE WHEN Produit.titre = vueBundle.titre
-                THEN calculPrixPromo(Produit.titre, vueBundle.prixReel)
-            ELSE calculPrixPromo(Produit.titre, Contenu.prix) END AS prixReel,
-       COALESCE((SELECT SUM(Promotion.pourcentage)
-                 FROM Promotion
-                 WHERE Promotion.titreProduit = Produit.titre AND
-                     CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin), 0) AS pourcentagePromo
+SELECT DISTINCT Produit.titre, vueBundle.prixInitial AS prixInitial, vueBundle.age AS age, calculPrixPromo(Produit.titre, vueBundle.prixReel) AS prixFinal,
+                COALESCE((SELECT SUM(Promotion.pourcentage)
+                          FROM Promotion
+                          WHERE Promotion.titreProduit = Produit.titre AND
+                              CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin), 0) AS pourcentagePromo
 FROM Produit
-         LEFT JOIN vueBundle
-                   ON Produit.titre = vueBundle.titre
-         LEFT JOIN Contenu
-                   ON Contenu.titre = Produit.titre
+         INNER JOIN vueBundle
+                    ON Produit.titre = vueBundle.titre
          LEFT JOIN Promotion
                    ON Promotion.titreProduit = Produit.titre
-         LEFT JOIN Jeu
-                   ON Jeu.titre = Contenu.titre
-         LEFT JOIN DLC
-                   ON DLC.titre = Contenu.titre
-GROUP BY Produit.titre
+UNION
+SELECT DISTINCT Produit.titre, vueContenu.prixInitial AS prixInitial, vueContenu.age AS age, vueContenu.prixFinal AS prixFinal,
+                COALESCE((SELECT SUM(Promotion.pourcentage)
+                          FROM Promotion
+                          WHERE Promotion.titreProduit = Produit.titre AND
+                              CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin), 0) AS pourcentagePromo
+FROM Produit
+         INNER JOIN vueContenu
+                    ON Produit.titre = vueContenu.titre
+         LEFT JOIN Promotion
+                   ON Promotion.titreProduit = Produit.titre;
 $$
 
 DELIMITER $$
@@ -830,22 +821,29 @@ $$
 
 DELIMITER $$
 CREATE VIEW vueContenu(titre, prixInitial, age, prixFinal, promotion, franchise, developpeur, editeur, description) AS
-SELECT vueProduit.titre, vueProduit.prixInitial, vueProduit.age, vueProduit.prixFinal, vueProduit.promotion,
-       CASE WHEN Contenu.titre = Jeu.titre THEN Jeu.franchise ELSE vueDLC.franchise END AS franchise,
-       CASE WHEN Contenu.titre = Jeu.titre THEN Jeu.developpeur ELSE vueDLC.developpeur END AS developpeur,
-       CASE WHEN Contenu.titre = Jeu.titre THEN Jeu.editeur ELSE vueDLC.editeur END AS editeur,
+SELECT Contenu.titre, Contenu.prix AS prixInital, Contenu.ageLegal AS age, calculPrixPromo(Contenu.titre, Contenu.prix) AS prixFinal, SUM(Promotion.pourcentage) AS promotion,
+       Jeu.franchise AS franchise,
+       Jeu.developpeur AS developpeur,
+       Jeu.editeur AS editeur,
        Contenu.Description
-FROM vueProduit
-         LEFT JOIN Contenu
-                   ON Contenu.titre = vueProduit.titre
+FROM Contenu
          LEFT JOIN Promotion
-                   ON Promotion.titreProduit = vueProduit.titre
-         LEFT JOIN Jeu
-                   ON Jeu.titre = Contenu.titre
-         LEFT JOIN vueDLC
-                   ON vueDLC.titre = Contenu.titre
-WHERE vueProduit.titre = Contenu.titre
-GROUP BY vueProduit.titre;
+                   ON Promotion.titreProduit = Contenu.titre
+         INNER JOIN Jeu
+                    ON Jeu.titre = Contenu.titre
+GROUP BY Contenu.titre
+UNION
+SELECT Contenu.titre, Contenu.prix AS prixInital, Contenu.ageLegal AS age, calculPrixPromo(Contenu.titre, Contenu.prix) AS prixFinal, SUM(Promotion.pourcentage) AS promotion,
+       vueDlc.franchise AS franchise,
+       vueDlc.developpeur AS developpeur,
+       vueDlc.editeur AS editeur,
+       Contenu.Description
+FROM Contenu
+         LEFT JOIN Promotion
+                   ON Promotion.titreProduit = Contenu.titre
+         INNER JOIN vueDlc
+                    ON vueDlc.titre = Contenu.titre
+GROUP BY Contenu.titre;
 $$
 
 DELIMITER $$
