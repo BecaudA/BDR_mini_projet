@@ -12,328 +12,327 @@ CREATE SCHEMA stome DEFAULT CHARACTER SET utf8 ;
 -- Schema Labo2
 -- -----------------------------------------------------
 USE stome ;
-
 -- -----------------------------------------------------
 -- Table Compte
 -- -----------------------------------------------------
 CREATE TABLE Compte (
-  id INT AUTO_INCREMENT,
-  nom VARCHAR(45) NOT NULL,
-  prenom VARCHAR(45) NOT NULL,
-  email VARCHAR(45) NOT NULL,
-  porteMonnaie INT UNSIGNED NULL,
-  dateNaissance DATE NOT NULL,
-  PRIMARY KEY (id))
-ENGINE = InnoDB;
+                        id INT AUTO_INCREMENT,
+                        nom VARCHAR(45) NOT NULL,
+                        prenom VARCHAR(45) NOT NULL,
+                        email VARCHAR(45) NOT NULL,
+                        porteMonnaie INT UNSIGNED NULL,
+                        dateNaissance DATE NOT NULL,
+                        PRIMARY KEY (id))
+    ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table Produit
 -- -----------------------------------------------------
 CREATE TABLE Produit (
-  titre VARCHAR(80),
-  PRIMARY KEY (titre))
-ENGINE = InnoDB;
+                         titre VARCHAR(80),
+                         PRIMARY KEY (titre))
+    ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table Achat
 -- -----------------------------------------------------
 CREATE TABLE Achat (
-  id INT AUTO_INCREMENT,
-  idCompte INT,
-  titreProduit VARCHAR(80) NOT NULL,
-  date DATE NOT NULL,
-  PRIMARY KEY (id),
-  CONSTRAINT FK_Compte_idCompte
-    FOREIGN KEY (idCompte)
-    REFERENCES Compte (id)
-    ON DELETE SET NULL
-    ON UPDATE CASCADE,
-  CONSTRAINT FK_Produit_titre
-    FOREIGN KEY (titreProduit)
-    REFERENCES Produit (titre)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
+                       id INT AUTO_INCREMENT,
+                       idCompte INT,
+                       titreProduit VARCHAR(80) NOT NULL,
+                       date DATE NOT NULL,
+                       PRIMARY KEY (id),
+                       CONSTRAINT FK_Compte_idCompte
+                           FOREIGN KEY (idCompte)
+                               REFERENCES Compte (id)
+                               ON DELETE SET NULL
+                               ON UPDATE CASCADE,
+                       CONSTRAINT FK_Produit_titre
+                           FOREIGN KEY (titreProduit)
+                               REFERENCES Produit (titre)
+                               ON DELETE RESTRICT
+                               ON UPDATE CASCADE)
+    ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table AchatAmi
 -- -----------------------------------------------------
 CREATE TABLE AchatAmi (
-  id INT,
-  idAmi INT NOT NULL,
-  PRIMARY KEY (id),
-  CONSTRAINT FK_Achat_idAchat_Ami
-    FOREIGN KEY (id)
-    REFERENCES Achat (id)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT FK_Compte_idAmiAchat
-    FOREIGN KEY (idAmi)
-    REFERENCES Compte (id)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
+                          id INT,
+                          idAmi INT NOT NULL,
+                          PRIMARY KEY (id),
+                          CONSTRAINT FK_Achat_idAchat_Ami
+                              FOREIGN KEY (id)
+                                  REFERENCES Achat (id)
+                                  ON DELETE CASCADE
+                                  ON UPDATE CASCADE,
+                          CONSTRAINT FK_Compte_idAmiAchat
+                              FOREIGN KEY (idAmi)
+                                  REFERENCES Compte (id)
+                                  ON DELETE CASCADE
+                                  ON UPDATE CASCADE)
+    ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table AchatPersonnel
 -- -----------------------------------------------------
 CREATE TABLE AchatPersonnel (
-  id INT,
-  PRIMARY KEY (id),
-  CONSTRAINT FK_Achat_idAchat_Personnel
-    FOREIGN KEY (id)
-    REFERENCES Achat (id)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
+                                id INT,
+                                PRIMARY KEY (id),
+                                CONSTRAINT FK_Achat_idAchat_Personnel
+                                    FOREIGN KEY (id)
+                                        REFERENCES Achat (id)
+                                        ON DELETE CASCADE
+                                        ON UPDATE CASCADE)
+    ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table Bundle
 -- -----------------------------------------------------
 CREATE TABLE Bundle (
-  titre VARCHAR(80) NOT NULL,
-  PRIMARY KEY (titre),
-  CONSTRAINT FK_Produit_titre_Bundle
-    FOREIGN KEY (titre)
-    REFERENCES Produit (titre)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
+                        titre VARCHAR(80) NOT NULL,
+                        PRIMARY KEY (titre),
+                        CONSTRAINT FK_Produit_titre_Bundle
+                            FOREIGN KEY (titre)
+                                REFERENCES Produit (titre)
+                                ON DELETE CASCADE
+                                ON UPDATE CASCADE)
+    ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table Contenu
 -- -----------------------------------------------------
 CREATE TABLE Contenu (
-  titre VARCHAR(80),
-  ageLegal INT UNSIGNED NOT NULL,
-  prix FLOAT UNSIGNED NOT NULL,
-  description LONGTEXT NULL,
-  PRIMARY KEY (titre),
-  CONSTRAINT FK_Produit_titre_Contenu
-    FOREIGN KEY (titre)
-    REFERENCES Produit (titre)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
+                         titre VARCHAR(80),
+                         ageLegal INT UNSIGNED NOT NULL,
+                         prix FLOAT UNSIGNED NOT NULL,
+                         description LONGTEXT NULL,
+                         PRIMARY KEY (titre),
+                         CONSTRAINT FK_Produit_titre_Contenu
+                             FOREIGN KEY (titre)
+                                 REFERENCES Produit (titre)
+                                 ON DELETE CASCADE
+                                 ON UPDATE CASCADE)
+    ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table Langue
 -- -----------------------------------------------------
 CREATE TABLE Langue (
-  nom VARCHAR(45),
-  PRIMARY KEY (nom))
-ENGINE = InnoDB;
+                        nom VARCHAR(45),
+                        PRIMARY KEY (nom))
+    ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table Genre
 -- -----------------------------------------------------
 CREATE TABLE Genre (
-  nom VARCHAR(45),
-  PRIMARY KEY (nom))
-ENGINE = InnoDB;
+                       nom VARCHAR(45),
+                       PRIMARY KEY (nom))
+    ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table Promotion
 -- -----------------------------------------------------
 CREATE TABLE Promotion (
-  id INT AUTO_INCREMENT,
-  titreProduit VARCHAR(80) NOT NULL,
-  pourcentage DECIMAL UNSIGNED NOT NULL,
-  dateDebut DATE NOT NULL,
-  dateFin DATE NOT NULL,
-  PRIMARY KEY (id),
-  CONSTRAINT FK_Produit_titre_Promotion
-    FOREIGN KEY (titreProduit)
-    REFERENCES Produit (titre)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
+                           id INT AUTO_INCREMENT,
+                           titreProduit VARCHAR(80) NOT NULL,
+                           pourcentage DECIMAL UNSIGNED NOT NULL,
+                           dateDebut DATE NOT NULL,
+                           dateFin DATE NOT NULL,
+                           PRIMARY KEY (id),
+                           CONSTRAINT FK_Produit_titre_Promotion
+                               FOREIGN KEY (titreProduit)
+                                   REFERENCES Produit (titre)
+                                   ON DELETE CASCADE
+                                   ON UPDATE CASCADE)
+    ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table Entreprise
 -- -----------------------------------------------------
 CREATE TABLE Entreprise (
-  nom VARCHAR(80),
-  PRIMARY KEY (nom))
-ENGINE = InnoDB;
+                            nom VARCHAR(80),
+                            PRIMARY KEY (nom))
+    ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table Franchise
 -- -----------------------------------------------------
 CREATE TABLE Franchise (
-  titre VARCHAR(80),
-  nomEntreprise VARCHAR(45) NOT NULL,
-  PRIMARY KEY (titre),
-  CONSTRAINT FK_Entreprise_nom
-    FOREIGN KEY (nomEntreprise)
-    REFERENCES Entreprise (nom)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
+                           titre VARCHAR(80),
+                           nomEntreprise VARCHAR(45) NOT NULL,
+                           PRIMARY KEY (titre),
+                           CONSTRAINT FK_Entreprise_nom
+                               FOREIGN KEY (nomEntreprise)
+                                   REFERENCES Entreprise (nom)
+                                   ON DELETE RESTRICT
+                                   ON UPDATE CASCADE)
+    ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table Jeu
 -- -----------------------------------------------------
 CREATE TABLE Jeu (
-  titre VARCHAR(80),
-  developpeur VARCHAR(80) NOT NULL,
-  editeur VARCHAR(80) NOT NULL,
-  franchise VARCHAR(80) NULL,
-  PRIMARY KEY (titre),
-  CONSTRAINT FK_Contenu_titre_Jeu
-    FOREIGN KEY (titre)
-    REFERENCES Contenu (titre)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT FK_Entreprise_nomDeveloppeur
-    FOREIGN KEY (developpeur)
-    REFERENCES Entreprise (nom)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE,
-  CONSTRAINT FK_Entreprise_nomEditeur
-    FOREIGN KEY (editeur)
-    REFERENCES Entreprise (nom)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE,
-  CONSTRAINT FK_Franchise_titre
-    FOREIGN KEY (franchise)
-    REFERENCES Franchise (titre)
-    ON DELETE SET NULL
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
+                     titre VARCHAR(80),
+                     developpeur VARCHAR(80) NOT NULL,
+                     editeur VARCHAR(80) NOT NULL,
+                     franchise VARCHAR(80) NULL,
+                     PRIMARY KEY (titre),
+                     CONSTRAINT FK_Contenu_titre_Jeu
+                         FOREIGN KEY (titre)
+                             REFERENCES Contenu (titre)
+                             ON DELETE CASCADE
+                             ON UPDATE CASCADE,
+                     CONSTRAINT FK_Entreprise_nomDeveloppeur
+                         FOREIGN KEY (developpeur)
+                             REFERENCES Entreprise (nom)
+                             ON DELETE RESTRICT
+                             ON UPDATE CASCADE,
+                     CONSTRAINT FK_Entreprise_nomEditeur
+                         FOREIGN KEY (editeur)
+                             REFERENCES Entreprise (nom)
+                             ON DELETE RESTRICT
+                             ON UPDATE CASCADE,
+                     CONSTRAINT FK_Franchise_titre
+                         FOREIGN KEY (franchise)
+                             REFERENCES Franchise (titre)
+                             ON DELETE SET NULL
+                             ON UPDATE CASCADE)
+    ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table DLC
 -- -----------------------------------------------------
 CREATE TABLE DLC (
-  titre VARCHAR(80),
-  titreJeu VARCHAR(80) NOT NULL,
-  PRIMARY KEY (titre),
-  CONSTRAINT FK_Contenu_titre_DLC
-    FOREIGN KEY (titre)
-    REFERENCES Contenu (titre)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT FK_Jeu_titre
-    FOREIGN KEY (titreJeu)
-    REFERENCES Jeu (titre)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
+                     titre VARCHAR(80),
+                     titreJeu VARCHAR(80) NOT NULL,
+                     PRIMARY KEY (titre),
+                     CONSTRAINT FK_Contenu_titre_DLC
+                         FOREIGN KEY (titre)
+                             REFERENCES Contenu (titre)
+                             ON DELETE CASCADE
+                             ON UPDATE CASCADE,
+                     CONSTRAINT FK_Jeu_titre
+                         FOREIGN KEY (titreJeu)
+                             REFERENCES Jeu (titre)
+                             ON DELETE CASCADE
+                             ON UPDATE CASCADE)
+    ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table BundleComprend
 -- -----------------------------------------------------
 CREATE TABLE BundleComprend (
-  titreBundle VARCHAR(80),
-  titreProduit VARCHAR(80) NOT NULL,
-  PRIMARY KEY (titreBundle, titreProduit),
-  CONSTRAINT FK_Bundle_titre_BundleComprend
-    FOREIGN KEY (titreBundle)
-    REFERENCES Bundle (titre)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT FK_Produit_titre_BundleComprend
-    FOREIGN KEY (titreProduit)
-    REFERENCES Produit (titre)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
+                                titreBundle VARCHAR(80),
+                                titreProduit VARCHAR(80) NOT NULL,
+                                PRIMARY KEY (titreBundle, titreProduit),
+                                CONSTRAINT FK_Bundle_titre_BundleComprend
+                                    FOREIGN KEY (titreBundle)
+                                        REFERENCES Bundle (titre)
+                                        ON DELETE CASCADE
+                                        ON UPDATE CASCADE,
+                                CONSTRAINT FK_Produit_titre_BundleComprend
+                                    FOREIGN KEY (titreProduit)
+                                        REFERENCES Produit (titre)
+                                        ON DELETE CASCADE
+                                        ON UPDATE CASCADE)
+    ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table EstTraduit
 -- -----------------------------------------------------
 CREATE TABLE EstTraduit (
-  titreContenu VARCHAR(80),
-  nomLangue VARCHAR(45) NOT NULL,
-  PRIMARY KEY (titreContenu, nomLangue),
-  CONSTRAINT FK_Contenu_titre
-    FOREIGN KEY (titreContenu)
-    REFERENCES Contenu (titre)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT FK_Langue_nom
-    FOREIGN KEY (nomLangue)
-    REFERENCES Langue (nom)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
+                            titreContenu VARCHAR(80),
+                            nomLangue VARCHAR(45) NOT NULL,
+                            PRIMARY KEY (titreContenu, nomLangue),
+                            CONSTRAINT FK_Contenu_titre
+                                FOREIGN KEY (titreContenu)
+                                    REFERENCES Contenu (titre)
+                                    ON DELETE CASCADE
+                                    ON UPDATE CASCADE,
+                            CONSTRAINT FK_Langue_nom
+                                FOREIGN KEY (nomLangue)
+                                    REFERENCES Langue (nom)
+                                    ON DELETE CASCADE
+                                    ON UPDATE CASCADE)
+    ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table PossedeGenre
 -- -----------------------------------------------------
 CREATE TABLE PossedeGenre (
-  titreContenu VARCHAR(80),
-  nomGenre VARCHAR(45) NOT NULL,
-  PRIMARY KEY (titreContenu, nomGenre),
-  CONSTRAINT FK_Contenu_titre_Genre
-    FOREIGN KEY (titreContenu)
-    REFERENCES Contenu (titre)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT FK_Genre_nom
-    FOREIGN KEY (nomGenre)
-    REFERENCES Genre (nom)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
+                              titreContenu VARCHAR(80),
+                              nomGenre VARCHAR(45) NOT NULL,
+                              PRIMARY KEY (titreContenu, nomGenre),
+                              CONSTRAINT FK_Contenu_titre_Genre
+                                  FOREIGN KEY (titreContenu)
+                                      REFERENCES Contenu (titre)
+                                      ON DELETE CASCADE
+                                      ON UPDATE CASCADE,
+                              CONSTRAINT FK_Genre_nom
+                                  FOREIGN KEY (nomGenre)
+                                      REFERENCES Genre (nom)
+                                      ON DELETE CASCADE
+                                      ON UPDATE CASCADE)
+    ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table EstNote
 -- -----------------------------------------------------
 CREATE TABLE EstNote (
-  titreProduit VARCHAR(80),
-  idCompte INT NOT NULL,
-  note DOUBLE UNSIGNED NOT NULL,
-  PRIMARY KEY (titreProduit, idCompte),
-  CONSTRAINT FK_Produit_titre_EstNote
-    FOREIGN KEY (titreProduit)
-    REFERENCES Produit (titre)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT FK_Compte_idCompte_EstNote
-    FOREIGN KEY (idCompte)
-    REFERENCES Compte (id)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
+                         titreProduit VARCHAR(80),
+                         idCompte INT NOT NULL,
+                         note DOUBLE UNSIGNED NOT NULL,
+                         PRIMARY KEY (titreProduit, idCompte),
+                         CONSTRAINT FK_Produit_titre_EstNote
+                             FOREIGN KEY (titreProduit)
+                                 REFERENCES Produit (titre)
+                                 ON DELETE CASCADE
+                                 ON UPDATE CASCADE,
+                         CONSTRAINT FK_Compte_idCompte_EstNote
+                             FOREIGN KEY (idCompte)
+                                 REFERENCES Compte (id)
+                                 ON DELETE CASCADE
+                                 ON UPDATE CASCADE)
+    ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table EstAmi
 -- -----------------------------------------------------
 CREATE TABLE EstAmi (
-  idCompte INT,
-  idAmi INT NOT NULL,
-  PRIMARY KEY (idCompte, idAmi),
-  CONSTRAINT FK_Compte_idCompte_EstAmi
-    FOREIGN KEY (idCompte)
-    REFERENCES Compte (id)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT FK_Compte_idAmi
-    FOREIGN KEY (idAmi)
-    REFERENCES Compte (id)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
+                        idCompte INT,
+                        idAmi INT NOT NULL,
+                        PRIMARY KEY (idCompte, idAmi),
+                        CONSTRAINT FK_Compte_idCompte_EstAmi
+                            FOREIGN KEY (idCompte)
+                                REFERENCES Compte (id)
+                                ON DELETE CASCADE
+                                ON UPDATE CASCADE,
+                        CONSTRAINT FK_Compte_idAmi
+                            FOREIGN KEY (idAmi)
+                                REFERENCES Compte (id)
+                                ON DELETE CASCADE
+                                ON UPDATE CASCADE)
+    ENGINE = InnoDB;
 
 DELIMITER $$
 CREATE TRIGGER promotionPourcentage
@@ -344,7 +343,7 @@ BEGIN
     DECLARE pourcentageTotale TINYINT;
 
     SELECT SUM(Promotion.pourcentage) INTO pourcentageTotale
-              FROM Promotion
+    FROM Promotion
     WHERE CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin;
 
     if(pourcentageTotale IS NULL) THEN
@@ -379,29 +378,6 @@ CREATE TRIGGER bundleLuiMeme
 BEGIN
     IF (NEW.titreBundle = NEW.titreProduit) THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ajout d\'un même bundle';
-    END IF;
-END
-$$
-
-DELIMITER $$
-CREATE TRIGGER doubleAchatProduit
-    BEFORE INSERT
-    ON Achat
-    FOR EACH ROW
-BEGIN
-    DECLARE idAchat TINYINT;
-    DECLARE idAchatPerso TINYINT;
-
-    SELECT id INTO idAchat
-    FROM Achat
-    WHERE new.titreProduit = titreProduit AND new.idCompte = idCompte;
-
-    SELECT id INTO idAchatPerso
-    FROM Achat
-    WHERE idAchat = id;
-
-    IF (idAchat IS NOT NULL AND idAchatPerso IS NOT NULL) THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Jeu déjà acheté';
     END IF;
 END
 $$
@@ -643,29 +619,6 @@ END
 $$
 
 DELIMITER $$
-CREATE FUNCTION calculPrixInitialBundle(titreB VARCHAR(80))
-    RETURNS INT
-    READS SQL DATA
-    DETERMINISTIC
-BEGIN
-    DECLARE prixInitialTotalContenu INT;
-
-    WITH RECURSIVE cte_COB(titre) AS (
-        SELECT DISTINCT vPC.titreProduit FROM stome.BundleComprend AS vPC
-        WHERE vPC.titreBundle = titreB
-        UNION ALL
-        SELECT BC.titreProduit
-        FROM cte_COB JOIN stome.BundleComprend as BC
-                          ON cte_COB.titre = BC.titreBundle
-    ) SELECT SUM(vueContenu.prixInitial) INTO prixInitialTotalContenu FROM cte_COB
-                                                                               INNER JOIN stome.vueContenu
-                                                                                          ON vueContenu.titre = cte_COB.titre;
-
-    RETURN prixInitialTotalContenu;
-END
-$$
-
-DELIMITER $$
 CREATE FUNCTION calculPrixInitialBundlesBundle(titreB VARCHAR(80))
     RETURNS INT
     READS SQL DATA
@@ -684,6 +637,35 @@ BEGIN
 END
 $$
 
+
+
+
+
+DELIMITER $$
+CREATE FUNCTION calculPrixInitialContenusBundle(titreB VARCHAR(80))
+    RETURNS INT
+    READS SQL DATA
+    DETERMINISTIC
+BEGIN
+    DECLARE prixInitialTotalContenu INT;
+
+    WITH RECURSIVE cte_COB(titre) AS (
+        SELECT DISTINCT vPC.titreProduit FROM stome.bundlecomprend AS vPC
+        WHERE vPC.titreBundle = titreB
+        UNION ALL
+        SELECT BC.titreProduit
+        FROM cte_COB JOIN stome.BundleComprend as BC
+                          ON cte_COB.titre = BC.titreBundle
+    ) SELECT SUM(vueContenu.prixInitial) INTO prixInitialTotalContenu FROM cte_COB
+                                                                               INNER JOIN stome.vueContenu
+                                                                                          ON vueContenu.titre = cte_COB.titre;
+
+    RETURN prixInitialTotalContenu;
+END
+$$
+
+
+
 DELIMITER $$
 CREATE FUNCTION calculPrixReelBundle(titreB VARCHAR(80))
     RETURNS INT
@@ -693,7 +675,7 @@ BEGIN
     DECLARE prixFinalTotalBundle INT;
 
     WITH RECURSIVE cte_COB(titre) AS (
-        SELECT DISTINCT vPC.titreProduit FROM stome.BundleComprend AS vPC
+        SELECT DISTINCT vPC.titreProduit FROM stome.bundlecomprend AS vPC
         WHERE vPC.titreBundle = titreB
         UNION ALL
         SELECT BC.titreProduit
@@ -706,9 +688,11 @@ BEGIN
 END
 $$
 
+
+
 DELIMITER $$
 CREATE VIEW vueBundle(titre, prixInitial, prixReel, age) AS
-SELECT titreBundle, calculPrixInitialBundle(titreBundle) AS prixInitial,
+SELECT titreBundle, calculPrixInitialContenusBundle(titreBundle) AS prixInitial,
        calculPrixReelBundle(titreBundle) AS prixReel,
        MAX(Contenu.ageLegal) AS age
 FROM BundleComprend
@@ -721,17 +705,17 @@ $$
 
 DELIMITER $$
 CREATE VIEW vueDLC(titre, developpeur, editeur, franchise) AS
-SELECT DLC.titre, Jeu.Editeur, Jeu.Developpeur, Jeu.Franchise
+SELECT Dlc.titre, Jeu.Editeur, Jeu.Developpeur, Jeu.Franchise
 FROM DLC
-         INNER JOIN Jeu ON Jeu.titre = DLC.titreJeu;
+         INNER JOIN Jeu ON Jeu.titre = Dlc.titreJeu;
 $$
 
 DELIMITER $$
 CREATE VIEW vueContenu(titre, prixInitial, age, prixFinal, promotion, franchise, developpeur, editeur, description) AS
 SELECT Contenu.titre, Contenu.prix AS prixInital, Contenu.ageLegal AS age, calculPrixPromo(Contenu.titre, Contenu.prix) AS prixFinal, COALESCE((SELECT SUM(Promotion.pourcentage)
-                                                                                                                                                            FROM Promotion
-                                                                                                                                                            WHERE Promotion.titreProduit = Contenu.titre AND
-                                                                                                                                                            CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin), 0) AS promotion,
+                                                                                                                                                FROM Promotion
+                                                                                                                                                WHERE Promotion.titreProduit = Contenu.titre AND
+                                                                                                                                                    CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin), 0) AS promotion,
        Jeu.franchise AS franchise,
        Jeu.developpeur AS developpeur,
        Jeu.editeur AS editeur,
@@ -744,18 +728,18 @@ FROM Contenu
 GROUP BY Contenu.titre
 UNION
 SELECT Contenu.titre, Contenu.prix AS prixInital, Contenu.ageLegal AS age, calculPrixPromo(Contenu.titre, Contenu.prix) AS prixFinal, COALESCE((SELECT SUM(Promotion.pourcentage)
-                                                                                                                                                            FROM Promotion
-                                                                                                                                                            WHERE Promotion.titreProduit = Contenu.titre AND
-                                                                                                                                                            CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin), 0) AS promotion,
-       vueDLC.franchise AS franchise,
-       vueDLC.developpeur AS developpeur,
-       vueDLC.editeur AS editeur,
+                                                                                                                                                FROM Promotion
+                                                                                                                                                WHERE Promotion.titreProduit = Contenu.titre AND
+                                                                                                                                                    CURRENT_TIMESTAMP() BETWEEN Promotion.dateDebut AND Promotion.dateFin), 0) AS promotion,
+       vueDlc.franchise AS franchise,
+       vueDlc.developpeur AS developpeur,
+       vueDlc.editeur AS editeur,
        Contenu.Description
 FROM Contenu
          LEFT JOIN Promotion
                    ON Promotion.titreProduit = Contenu.titre
-         INNER JOIN vueDLC
-                    ON vueDLC.titre = Contenu.titre
+         INNER JOIN vueDlc
+                    ON vueDlc.titre = Contenu.titre
 GROUP BY Contenu.titre;
 $$
 
@@ -789,17 +773,17 @@ DELIMITER $$
 CREATE VIEW vueAchats(id, titre, prixInitial, prixFinal, promotion, date, idAmi) AS
 SELECT Achat.idCompte, vueProduit.titre, vueProduit.prixInitial, vueProduit.prixFinal, vueProduit.promotion, Achat.date, AchatAmi.idAmi
 FROM Achat
-INNER JOIN AchatAmi
-      ON Achat.id = AchatAmi.id
-INNER JOIN vueProduit
-      ON vueProduit.titre = Achat.titreProduit
+         INNER JOIN AchatAmi
+                    ON Achat.id = AchatAmi.id
+         INNER JOIN vueProduit
+                    ON vueProduit.titre = Achat.titreProduit
 UNION
 SELECT Achat.idCompte, vueProduit.titre, vueProduit.prixInitial, vueProduit.prixFinal, vueProduit.promotion, Achat.date, null
 FROM Achat
-INNER JOIN AchatPersonnel
-      ON Achat.id = AchatPersonnel.id
-INNER JOIN vueProduit
-        ON vueProduit.titre = Achat.titreProduit;
+         INNER JOIN AchatPersonnel
+                    ON Achat.id = AchatPersonnel.id
+         INNER JOIN vueProduit
+                    ON vueProduit.titre = Achat.titreProduit;
 $$
 
 DELIMITER $$
@@ -848,8 +832,8 @@ BEGIN
     /*Permet de trouver l'âge du compte de l'ami entré*/
     SELECT DISTINCT TIMESTAMPDIFF(YEAR ,Compte.dateNaissance, CURRENT_DATE()) INTO ageCompte
     FROM Compte
-    INNER JOIN EstAmi
-            ON EstAmi.idAmi = NEW.idAmi
+             INNER JOIN EstAmi
+                        ON EstAmi.idAmi = NEW.idAmi
     WHERE Compte.id = NEW.idAmi;
 
     /*Si l'âge est nul cela veut dire qu'aucun ami n'a été trouvé donc le compte entré ne fait pas parti des amis*/
@@ -860,8 +844,8 @@ BEGIN
     /*Trouve l'âge du produit grâce à la vue sur les Produits*/
     SELECT vueProduit.age INTO ageProduit
     FROM vueProduit
-    INNER JOIN Achat
-          ON vueProduit.titre = Achat.titreProduit
+             INNER JOIN Achat
+                        ON vueProduit.titre = Achat.titreProduit
     WHERE Achat.id = NEW.id;
 
     /*Vérification que l'âge du compte Ami est inférieur à l'age du produit acheté*/
@@ -908,8 +892,8 @@ BEGIN
     #Permet de calculer trouver l'âge du compte qui achète le jeu
     SELECT TIMESTAMPDIFF(YEAR ,Compte.dateNaissance, CURRENT_DATE()) INTO ageCompte
     FROM Compte
-    INNER JOIN Achat
-            ON Achat.idCompte = Compte.id
+             INNER JOIN Achat
+                        ON Achat.idCompte = Compte.id
     WHERE Achat.id = NEW.id;
 
     SELECT vueProduit.age INTO ageProduit
@@ -966,9 +950,7 @@ INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Tei
 INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Egremy", "Bruno", "test2@gmail.com", 100, '1999-04-02');
 INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Becaud", "Arthur", "test3@gmail.com", 400, '1999-04-03');
 
-INSERT INTO EstNote(titreProduit, idCompte, note) VALUES ("Monster Hunter World", 2, 4.5);
-INSERT INTO EstNote(titreProduit, idCompte, note) VALUES ("Monster Hunter Iceborne", 2, 4.7);
-INSERT INTO EstNote(titreProduit, idCompte, note) VALUES ("Bundle Borderlands", 3, 4.6);
+INSERT INTO EstNote(titreProduit, idCompte, note) VALUES ("Monster Hunter Iceborne", 1, 5);
 
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 50, '2010-05-06', '2010-06-06');
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 10, '2010-05-06', '2010-06-06');
@@ -979,6 +961,8 @@ INSERT INTO Entreprise(nom) VALUES ("2K");
 INSERT INTO Entreprise(nom) VALUES ("Gearbox Software");
 INSERT INTO Entreprise(nom) VALUES ("Coffee Stain Publishing");
 INSERT INTO Entreprise(nom) VALUES ("Ghost Ship Games");
+
+
 
 INSERT INTO Franchise(titre, nomEntreprise) VALUES ("Monster Hunter", "Capcom");
 INSERT INTO Franchise(titre, nomEntreprise) VALUES ("Borderlands", "2K");
@@ -998,51 +982,26 @@ INSERT INTO Langue(nom) VALUES ("Allemand");
 INSERT INTO Langue(nom) VALUES ("Italien");
 
 INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Borderlands", "Anglais");
-INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Borderlands", "Français");
-INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Borderlands", "Allemand");
-INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Borderlands 2", "Anglais");
-INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Borderlands 2", "Français");
-INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Borderlands 2", "Allemand");
-INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Borderlands 3", "Anglais");
-INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Borderlands 3", "Français");
-INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Borderlands 3", "Allemand");
-INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Borderlands 3", "Italien");
-INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Monster Hunter World", "Anglais");
-INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Monster Hunter World", "Français");
-INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Monster Hunter World", "Italien");
-INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Monster Hunter Iceborne", "Anglais");
-INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Monster Hunter Iceborne", "Français");
-INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Monster Hunter Iceborne", "Italien");
 
 INSERT INTO Genre(nom) VALUES ("Action");
 INSERT INTO Genre(nom) VALUES ("RPG");
 INSERT INTO Genre(nom) VALUES ("FPS");
 INSERT INTO Genre(nom) VALUES ("Horreur");
-INSERT INTO Genre(nom) VALUES ("Coopération");
-INSERT INTO Genre(nom) VALUES ("Multijoueur");
 
 INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Borderlands", "Action");
 INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Borderlands", "RPG");
-INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Borderlands 2", "Action");
-INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Borderlands 2", "RPG");
-INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Borderlands 3", "Action");
-INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Borderlands 3", "RPG");
-INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Monster Hunter World", "Action");
-INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Monster Hunter World", "RPG");
-INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Monster Hunter World", "Coopération");
-INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Monster Hunter World", "Multijoueur");
-INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Monster Hunter Iceborne", "Action");
-INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Monster Hunter Iceborne", "RPG");
-INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Monster Hunter Iceborne", "Coopération");
-INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Monster Hunter Iceborne", "Multijoueur");
 
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 50, '2010-05-06', '2010-06-06');
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 10, '2010-05-06', '2010-06-06');
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Bundle Monster Hunter World", 60, '2010-05-06', '2010-06-06');
-INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Borderlands", 60, '2020-01-21', '2020-06-06');
+INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Borderlands", 60, NOW(), '2020-01-22');
 
 INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Borderlands", '2010-04-03');
-INSERT INTO AchatPersonnel(id) VALUES (1);
+INSERT INTO Achat(idCompte, titreProduit, date) VALUES (3, "Borderlands", '2010-04-04');
+
+# DEBUG
+#INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Bundle Root Test", '2010-04-04');
+#INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Bundle Monster Hunter World", '2010-04-04');
 
 INSERT INTO EstAmi (idCompte, idAmi) VALUES (1,2);
 INSERT INTO EstAmi (idCompte, idAmi) VALUES (1,3);
