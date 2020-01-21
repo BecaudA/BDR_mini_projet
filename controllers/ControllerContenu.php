@@ -3,6 +3,7 @@ require_once('views/View.php');
 
 class ControllerContenu {
     private $_contenuManager;
+    private $_compteManager;
     private $_view;
 
     public function __construct($url) {
@@ -18,8 +19,10 @@ class ControllerContenu {
         $this->_contenuManager = new ContenuManager();
         $contenus = $this->_contenuManager->getContenu($titre);
 
+        $this->_compteManager = new CompteManager();
+        $comptes = $this->_compteManager->getComptes();
         //
         $this->_view = new View('Contenu');
-        $this->_view->generate(array('contenus' => $contenus));
+        $this->_view->generate(array('contenus' => $contenus, 'comptes' => $comptes));
     }
 }
