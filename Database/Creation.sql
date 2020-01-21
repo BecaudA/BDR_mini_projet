@@ -970,7 +970,7 @@ INSERT INTO Compte(nom, prenom, email, porteMonnaie, dateNaissance) VALUES ("Bec
 
 INSERT INTO EstNote(titreProduit, idCompte, note) VALUES ("Monster Hunter World", 2, 4.5);
 INSERT INTO EstNote(titreProduit, idCompte, note) VALUES ("Monster Hunter Iceborne", 2, 4.7);
-INSERT INTO EstNote(titreProduit, idCompte, note) VALUES ("Bundle Borderlands", 3, 4.6);a
+INSERT INTO EstNote(titreProduit, idCompte, note) VALUES ("Bundle Borderlands", 3, 4.6);
 
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 50, '2010-05-06', '2010-06-06');
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 10, '2010-05-06', '2010-06-06');
@@ -1041,7 +1041,6 @@ INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Monster Hunter Iceborn
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 50, '2010-05-06', '2010-06-06');
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 10, '2010-05-06', '2010-06-06');
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Bundle Monster Hunter World", 60, '2010-05-06', '2010-06-06');
-INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Borderlands", 60, NOW(), '2020-01-22');
 
 INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Borderlands", '2010-04-03');
 

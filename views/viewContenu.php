@@ -29,7 +29,7 @@
     $editeur     = $contenus[0]->editeur();
     $franchise   = $contenus[0]->franchise();
     $note        = $contenus[0]->note();
-    $img         = "img/thumbnails/".str_replace(' ', '', strtolower($titre))."jpg";
+    $img         = "img/thumbnails/".str_replace(' ', '', strtolower($titre)).".jpg";
     if (!file_exists($img)) {
         $img = "img/thumbnails/unknown.jpg";
     }

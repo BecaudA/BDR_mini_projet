@@ -23,7 +23,7 @@
     $prix          = $bundles[0]->prixFinal();
     $promotion     = $bundles[0]->promotion();
     $listeProduits = $bundles[0]->listeProduits();
-    $img           = "img/thumbnails/" . strtolower(str_replace(' ', '', $titre)) . ".jpg";
+    $img           = "img/thumbnails/".str_replace(' ', '', strtolower($titre)).".jpg";
     if (!file_exists($img)) {
         $img = "img/thumbnails/unknown.jpg";
     }
@@ -33,7 +33,7 @@
     <style type="text/css">
         .jumbotron {
             height: 30vh;
-            background-image: url('img/thumbnails/<?= str_replace(' ', '', strtolower($titre)); ?>.jpg');
+            background-image: url(<?= $img; ?>);
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
