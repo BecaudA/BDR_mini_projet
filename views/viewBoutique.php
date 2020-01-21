@@ -3,7 +3,7 @@
             <h1 class="font-weight-light text-center text-lg-left mt-4 mb-0">Boutique</h1>
             <hr class="mt-2 mb-5">
         </div>
-        <div class="album py-5 bg-light">
+        <div class="album py-1 bg-light">
             <div class="container">
                 <div class="row">
                     <?php
