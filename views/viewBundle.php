@@ -128,6 +128,13 @@
                 </div>
                 <div class="p-3 mb-3 bg-light rounded">
                     <h4 class="font-italic">Détails</h4>
+                    <h6>Note :
+                        <?php if ($note == null): ?>
+                            aucune
+                        <?php else: ?>
+                            <?= $note ?> / 5.0
+                        <?php endif; ?>
+                    </h6>
                     <h6>Age légal : <?= $age; ?> ans</h6>
                 </div>
             </aside>
