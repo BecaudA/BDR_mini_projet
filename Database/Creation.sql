@@ -945,7 +945,7 @@ INSERT INTO Contenu(titre, agelegal, prix, description) VALUES ("Deep Rock Galac
 
 INSERT INTO Bundle(titre) VALUES ("Bundle Borderlands");
 INSERT INTO Bundle(titre) VALUES ("Bundle Monster Hunter World");
-# DEBUG
+
 INSERT INTO Bundle(titre) VALUES ("Bundle Root Test");
 INSERT INTO Bundle(titre) VALUES ("Bundle Child Test");
 
@@ -956,7 +956,6 @@ INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Borderland
 INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Monster Hunter World", "Monster Hunter World");
 INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Monster Hunter World", "Monster Hunter Iceborne");
 
-# DEBUG
 INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Child Test", "Borderlands");
 INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Child Test", "Borderlands 2");
 INSERT INTO BundleComprend(titreBundle, titreProduit) VALUES ("Bundle Root Test", "Bundle Child Test");
@@ -979,10 +978,13 @@ INSERT INTO Entreprise(nom) VALUES ("2K");
 INSERT INTO Entreprise(nom) VALUES ("Gearbox Software");
 INSERT INTO Entreprise(nom) VALUES ("Coffee Stain Publishing");
 INSERT INTO Entreprise(nom) VALUES ("Ghost Ship Games");
+INSERT INTO Entreprise(nom) VALUES ("Bethesda Softworks");
+
 
 INSERT INTO Franchise(titre, nomEntreprise) VALUES ("Monster Hunter", "Capcom");
 INSERT INTO Franchise(titre, nomEntreprise) VALUES ("Borderlands", "2K");
 INSERT INTO Franchise(titre, nomEntreprise) VALUES ("Deep Rock Galactic", "Ghost Ship Games");
+INSERT INTO Franchise(titre, nomEntreprise) VALUES ("The Elder Scrolls", "Bethesda Softworks");
 
 INSERT INTO Jeu(titre, developpeur, editeur, franchise) VALUES ("Monster Hunter World", "Capcom","Capcom", "Monster Hunter");
 INSERT INTO Jeu(titre, developpeur, editeur, franchise) VALUES ("Borderlands", "Gearbox Software", "2K", "Borderlands");
@@ -996,6 +998,7 @@ INSERT INTO Langue(nom) VALUES ("Français");
 INSERT INTO Langue(nom) VALUES ("Anglais");
 INSERT INTO Langue(nom) VALUES ("Allemand");
 INSERT INTO Langue(nom) VALUES ("Italien");
+INSERT INTO Langue(nom) VALUES ("Japonais");
 
 INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Borderlands", "Anglais");
 INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Borderlands", "Français");
@@ -1013,6 +1016,7 @@ INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Monster Hunter World", 
 INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Monster Hunter Iceborne", "Anglais");
 INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Monster Hunter Iceborne", "Français");
 INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Monster Hunter Iceborne", "Italien");
+INSERT INTO EstTraduit(titreContenu, nomLangue) VALUES ("Deep Rock Galactic", "Anglais");
 
 INSERT INTO Genre(nom) VALUES ("Action");
 INSERT INTO Genre(nom) VALUES ("RPG");
@@ -1020,6 +1024,7 @@ INSERT INTO Genre(nom) VALUES ("FPS");
 INSERT INTO Genre(nom) VALUES ("Horreur");
 INSERT INTO Genre(nom) VALUES ("Coopération");
 INSERT INTO Genre(nom) VALUES ("Multijoueur");
+INSERT INTO Genre(nom) VALUES ("Monde ouvert");
 
 INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Borderlands", "Action");
 INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Borderlands", "RPG");
@@ -1035,6 +1040,9 @@ INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Monster Hunter Iceborn
 INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Monster Hunter Iceborne", "RPG");
 INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Monster Hunter Iceborne", "Coopération");
 INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Monster Hunter Iceborne", "Multijoueur");
+INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Deep Rock Galactic", "Multijoueur");
+INSERT INTO PossedeGenre(titreContenu, nomGenre) VALUES ("Deep Rock Galactic", "Action");
+
 
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 50, '2010-05-06', '2010-06-06');
 INSERT INTO Promotion(titreProduit, pourcentage, dateDebut, dateFin) VALUES ("Monster Hunter Iceborne", 10, '2010-05-06', '2010-06-06');
@@ -1045,16 +1053,6 @@ INSERT INTO Achat(idCompte, titreProduit, date) VALUES (2, "Borderlands", '2010-
 INSERT INTO AchatPersonnel(id) VALUES (1);
 
 INSERT INTO EstAmi (idCompte, idAmi) VALUES (1,2);
-INSERT INTO EstAmi (idCompte, idAmi) VALUES (1,3);
+INSERT INTO EstAmi (idCompte, idAmi) VALUES (2,1);
 INSERT INTO EstAmi (idCompte, idAmi) VALUES (2,3);
 INSERT INTO EstAmi (idCompte, idAmi) VALUES (3,2);
-
-#CREATE VIEW promotionActu AS
-#DROP VIEW IF EXISTS vueProduitsComptes;
-#DROP VIEW IF EXISTS vueAchats;
-#DROP FUNCTION IF EXISTS calculPrixPromo;
-#DROP TRIGGER IF EXISTS bundle_luiMeme;
-#DROP TRIGGER IF EXISTS achat_age;
-#DROP TRIGGER IF EXISTS note_Produit;
-#DROP TRIGGER IF EXISTS promotion_Pourcentage;
-#DROP TRIGGER IF EXISTS double_Achat_Produit;
