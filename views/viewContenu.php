@@ -57,7 +57,7 @@
             </div>
 
             <aside class="col-md-4 blog-sidebar">
-                <?php if($prixFinalP == 0): ?>
+                <?php if($prix == 0): ?>
                     <h2 class=text-center"><span class="badge badge-secondary">Gratuit</span></h2>
                 <?php else: ?>
                     <?php if($promotion): ?>
