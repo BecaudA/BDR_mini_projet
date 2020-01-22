@@ -68,11 +68,15 @@
                                         <div class="card-body">
                                             <h4 class="card-text"><?php echo $titreP; ?></h4>
                                             <div class="d-flex justify-content-between align-items-center">
-                                                <?php if($promotionP): ?>
-                                                    <small class="text-muted"><s><?php echo $prixInitialP; ?> CHF</s></small>
-                                                    <span class="badge badge-danger"><?php echo $prixFinalP; ?> CHF</small> <sup>-<?php echo $promotionP; ?>%</sup></span>
+                                                <?php if($prixFinalP == 0): ?>
+                                                    <small class="text-muted">Gratuit</small>
                                                 <?php else: ?>
-                                                    <small class="text-muted"><?php echo $prixFinalP; ?> CHF</small>
+                                                    <?php if($promotionP): ?>
+                                                        <small class="text-muted"><s><?php echo $prixInitialP; ?> CHF</s></small>
+                                                        <span class="badge badge-danger"><?php echo $prixFinalP; ?> CHF</small> <sup>-<?php echo $promotionP; ?>%</sup></span>
+                                                    <?php else: ?>
+                                                        <small class="text-muted"><?php echo $prixFinalP; ?> CHF</small>
+                                                    <?php endif; ?>
                                                 <?php endif; ?>
                                             </div>
                                         </div>
@@ -85,17 +89,21 @@
             </div>
 
             <aside class="col-md-4 blog-sidebar">
-                <?php if($promotion): ?>
-                    <h2 class=text-center"><span class="badge badge-danger"><small class="text-muted">
-                        <s><?php echo $prixInitial; ?> CHF</s></small> <?= $prix; ?> CHF</span>
-                        <span class="badge badge-danger">
-                            <span class="glyphicon glyphicon-align-left" aria-hidden="true">
-                                <?= $promotion; ?>%
-                            </span>
-                        </span>
-                    </h2>
+                <?php if($prixFinalP == 0): ?>
+                    <h2 class=text-center"><span class="badge badge-secondary">Gratuit</span></h2>
                 <?php else: ?>
-                    <h2 class=text-center"><span class="badge badge-secondary"><?= $prix; ?> CHF </span></h2>
+                    <?php if($promotion): ?>
+                        <h2 class=text-center"><span class="badge badge-danger"><small class="text-muted">
+                            <s><?php echo $prixInitial; ?> CHF</s></small> <?= $prix; ?> CHF</span>
+                            <span class="badge badge-danger">
+                                <span class="glyphicon glyphicon-align-left" aria-hidden="true">
+                                    <?= $promotion; ?>%
+                                </span>
+                            </span>
+                        </h2>
+                    <?php else: ?>
+                        <h2 class=text-center"><span class="badge badge-secondary"><?= $prix; ?> CHF </span></h2>
+                    <?php endif; ?>
                 <?php endif; ?>
                 <div id="porteMonnaie"></div>
                 <button class="btn btn-primary btn-lg btn-block mb-2" type="submit" data-toggle="collapse" href="#acheter">Acheter</button>

@@ -81,13 +81,17 @@ $nb_jeu          = 0;
                             <td scope="row"><a style="color:black" href="<?= str_replace(' ', '_',$achat_titre) ?>"><?= $achat_titre; ?></a></td>
                             <td><?= $achat_date; ?></td>
                             <td>
-                            <?php if($achat_promotion): ?>
-                                <s><?php echo $achat_prixInitial; ?> CHF</s>
-                                <span class="badge badge-danger"><?php echo $achat_prixFinal; ?> CHF
-                                    <sup>-<?php echo $achat_promotion; ?>%</sup></span>
-                            <?php else: ?>
-                                <?php echo $achat_prixFinal; ?> CHF
-                            <?php endif; ?>
+                                <?php if($prixFinalP == 0): ?>
+                                    Gratuit
+                                <?php else: ?>
+                                    <?php if($achat_promotion): ?>
+                                        <s><?php echo $achat_prixInitial; ?> CHF</s>
+                                        <span class="badge badge-danger"><?php echo $achat_prixFinal; ?> CHF
+                                            <sup>-<?php echo $achat_promotion; ?>%</sup></span>
+                                    <?php else: ?>
+                                        <?php echo $achat_prixFinal; ?> CHF
+                                    <?php endif; ?>
+                                <?php endif; ?>
                             </td>
                             <td>
                             <?php if($achat_promotion): ?>

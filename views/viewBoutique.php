@@ -26,15 +26,15 @@
                             <div class="card-body">
                                 <h1 class="card-text"><?php echo $titre; ?></h1>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <!-- <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                    </div> -->
-                                    <?php if($promotion): ?>
-                                        <small class="text-muted"><s><?php echo $prixInitial; ?> CHF</s></small>
-                                        <span class="badge badge-danger"><?php echo $prixFinal; ?> CHF</small> <sup>-<?php echo $promotion; ?>%</sup></span>
+                                    <?php if($prixFinal == 0): ?>
+                                        <small class="text-muted">Gratuit</small>
                                     <?php else: ?>
-                                        <small class="text-muted"><?php echo $prixFinal; ?> CHF</small>
+                                        <?php if($promotion): ?>
+                                            <small class="text-muted"><s><?php echo $prixInitial; ?> CHF</s></small>
+                                            <span class="badge badge-danger"><?php echo $prixFinal; ?> CHF</small> <sup>-<?php echo $promotion; ?>%</sup></span>
+                                        <?php else: ?>
+                                            <small class="text-muted"><?php echo $prixFinal; ?> CHF</small>
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                 </div>
                             </div>

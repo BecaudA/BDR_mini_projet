@@ -57,17 +57,21 @@
             </div>
 
             <aside class="col-md-4 blog-sidebar">
-                <?php if($promotion): ?>
-                    <h2 class=text-center"><span class="badge badge-danger"><small class="text-muted">
-                        <s><?php echo $prixInitial; ?> CHF</s></small> <?= $prix; ?> CHF</span>
-                        <span class="badge badge-danger">
-                            <span class="glyphicon glyphicon-align-left" aria-hidden="true">
-                                <?= $promotion; ?>%
-                            </span>
-                        </span>
-                    </h2>
+                <?php if($prixFinalP == 0): ?>
+                    <h2 class=text-center"><span class="badge badge-secondary">Gratuit</span></h2>
                 <?php else: ?>
-                    <h2 class=text-center"><span class="badge badge-secondary" id="prix"><?= $prix; ?> CHF </span></h2>
+                    <?php if($promotion): ?>
+                        <h2 class=text-center"><span class="badge badge-danger"><small class="text-muted">
+                            <s><?php echo $prixInitial; ?> CHF</s></small> <?= $prix; ?> CHF</span>
+                            <span class="badge badge-danger">
+                                <span class="glyphicon glyphicon-align-left" aria-hidden="true">
+                                    <?= $promotion; ?>%
+                                </span>
+                            </span>
+                        </h2>
+                    <?php else: ?>
+                        <h2 class=text-center"><span class="badge badge-secondary" id="prix"><?= $prix; ?> CHF </span></h2>
+                    <?php endif; ?>
                 <?php endif; ?>
                 <div id="porteMonnaie"></div>
                 <button class="btn btn-primary btn-lg btn-block mb-2" type="submit" data-toggle="collapse" href="#acheter">Acheter</button>
