@@ -34,12 +34,7 @@
                     <strong>Stome</strong>
                 </a>
                 <div class="btn-group p-1">
-                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Ajout
-                    </button>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="CreerContenu">Jeu</a>
-                    </div>
+                    <a class="btn btn-info" href="CreerContenu" role="button">Ajouter un jeu</a>
                 </div>
                 <div class="btn-group p-1">
                     <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

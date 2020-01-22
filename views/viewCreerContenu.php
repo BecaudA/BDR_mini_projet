@@ -21,12 +21,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $contenuManager->addJeu($titre, $age, $prix, $description, $genresF, $languesF, $developpeur, $editeur, $franchise);
         } else echo "<script>alert(\"Votre entrée est invalide\")</script>";
     }
-
 }
 ?>
 
 <div class="container mt-3">
-    <h2>Ajout d'un jeu</h2>
+    <h2>Ajouter un jeu</h2>
     <hr>
     <form action="CreerContenu" method="post">
         <input hidden name="typeForm" value="jeu">
