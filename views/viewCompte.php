@@ -34,7 +34,7 @@ $nb_jeu          = 0;
                             ++$nb_jeu; ?>
                             <tr>
                                 <td>
-                                    <a style="sytle: black" href="<?= strtolower(str_replace(' ', '_', $jeu['titre']))?>"><?=$jeu['titre'] ?></a>
+                                    <a style="color:black" href="<?= strtolower(str_replace(' ', '_', $jeu['titre']))?>"><?=$jeu['titre'] ?></a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -102,7 +102,7 @@ $nb_jeu          = 0;
                             </td>
                             <td>
                                 <?php if($achat_idAmi != null): ?>
-                                    <a href="<?= $achat_idAmi ?>"><?= $achat_nomAmi; ?></a>
+                                    <a style="color:black" href="<?= $achat_idAmi ?>"><?= $achat_nomAmi; ?></a>
                                 <?php else: ?>
                                     -
                                 <?php endif; ?>
@@ -145,7 +145,7 @@ $nb_jeu          = 0;
                 <?php if(!empty($amis)):
                     foreach ($amis as $ami) {
                         ?>
-                    <h6><?= $ami->prenom()." ".$ami->nom();; ?></h6>
+                    <h6><a style="color:black" href="<?= $ami->id(); ?>"><?= $ami->prenom()." ".$ami->nom(); ?></a></h6>
                 <?php    }
                 else: ?>
                     Vous n'avez pas encore d'amis.
