@@ -81,7 +81,7 @@ $nb_jeu          = 0;
                             <td scope="row"><a style="color:black" href="<?= str_replace(' ', '_',$achat_titre) ?>"><?= $achat_titre; ?></a></td>
                             <td><?= $achat_date; ?></td>
                             <td>
-                                <?php if($prixFinalP == 0): ?>
+                                <?php if($achat_prixFinal == 0): ?>
                                     Gratuit
                                 <?php else: ?>
                                     <?php if($achat_promotion): ?>
