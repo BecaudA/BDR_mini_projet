@@ -1,0 +1,1 @@
+Veuillez suivre la procédure d'installation fournit dans le rapport (Rapport_BDR_Stome.pdf).
